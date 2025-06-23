@@ -9,3 +9,6 @@ no este ya registrado
 
 -el usuario que si es admin va a poder moderar, elimar un posteo o comentario que afecte la sensibilidad
 del usuario como a su vez banear al usuario
+
+-Denuncias, poner un boton para que el usuario puede hacer una denuncia, se abrira un formulario
+donde pondra el motivo
