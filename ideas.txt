@@ -1,0 +1,11 @@
+Usuario: va a poder poner su foto de perfil o si no quiere hacerlo se le pondra una default
+todos sus datos seran obligatorios excepto el sobreMi. La pregunta y respuesta me sirvira si el dia de maniana implemento logica por si se olvido su password, 
+
+-checar que no hay duplicado, formulario vacio, usar expressiones reguales para verificar
+que los campos sean validos, hacer uso del lowerCase y uppercase y trim para controlar que ese nombre
+no este ya registrado
+
+-el usuario que no es aministrador puede postear, editar, pero no eliminar
+
+-el usuario que si es admin va a poder moderar, elimar un posteo o comentario que afecte la sensibilidad
+del usuario como a su vez banear al usuario
