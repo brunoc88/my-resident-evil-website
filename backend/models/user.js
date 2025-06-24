@@ -21,8 +21,7 @@ const userSchema = mongoose.Schema({
         minlength: 5
     },
     rol:{
-        type: String,
-        required: true
+        type: String
     },
     pregunta:{
         type: String,

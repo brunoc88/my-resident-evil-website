@@ -4,6 +4,8 @@ const { MONGODB_URI } = require('./utils/config')
 const logger = require('./utils/loggers')
 const path = require('path')
 const mongoose = require('mongoose')
+const userRouter = require('./router/user')
+
 
 // conectando a la DB
 mongoose.set('strictQuery', false)
@@ -22,5 +24,6 @@ mongoose.connect(MONGODB_URI)
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
 app.use(express.json())
 
+app.use('/user',userRouter)
 
 module.exports = app
