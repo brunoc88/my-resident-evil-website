@@ -1,10 +1,7 @@
-const express = require('express')
-const app = express()
+const app = require('./app')
+const { PORT } = require('./utils/config')
+const logger = require('./utils/loggers')
 
-app.get('/', (req, res)=>{
-    res.send('Hola!')
-})
-
-app.listen(3000, ()=>{
-    console.log('Escuchando pueto::', 3000)
+app.listen(PORT, () => {
+    logger.info(`Escuchando puerto: ${PORT}`)
 })
