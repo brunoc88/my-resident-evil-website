@@ -5,7 +5,9 @@ const validarRegistro = async (req, res, next) => {
   const errores = []
 
   // Sanitizar
-  data.userName = data.userName?.trim()
+
+  // Usamos el operador ?. para evitar errores si userName es undefined o null
+  data.userName = data.userName?.trim() 
   data.email = data.email?.trim().toLowerCase()
   data.password = data.password?.trim()
   data.pregunta = data.pregunta?.trim()
@@ -30,6 +32,7 @@ const validarRegistro = async (req, res, next) => {
     if (data.userName.trim().length === 0) {
       errores.push('El nombre de usuario no puede estar vacío')
     }
+    //"/\s/" por ejemplo "juan carlos" o "juan/carlos"
     if (/\s/.test(data.userName)) {
       errores.push('El nombre de usuario no debe contener espacios')
     }
