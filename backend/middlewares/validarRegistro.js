@@ -26,11 +26,20 @@ const validarRegistro = async (req, res, next) => {
   if (data.userName && (data.userName.length > 10 || data.userName.length < 5)) {
     errores.push('El nombre de usuario debe tener entre 5 y 10 caracteres')
   }
-  if (data.userName && data.userName.trim().length === 0) {
+  if (!data.userName || data.userName.trim().length === 0) {
     errores.push('El nombre de usuario no puede estar vacío')
   }
   if (/\s/.test(data.userName)) {
     errores.push('El nombre de usuario no debe contener espacios')
+  }
+  if (!data.email || data.email.trim().length === 0) {
+    errores.push('El email no puede estar vacío');
+  }
+  if (/\s/.test(data.email)) {
+    errores.push('El email no debe contener espacios');
+  }
+  if (/\s/.test(data.email)) {
+  errores.push('El email no debe contener espacios');
   }
   if (data.password && data.password.length < 5) {
     errores.push('La contraseña debe tener al menos 5 caracteres')
