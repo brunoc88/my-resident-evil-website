@@ -49,6 +49,10 @@ const validarRegistro = async (req, res, next) => {
     errores.push('La contraseña debe tener al menos 5 caracteres')
   }
 
+  if (data.password && /\s/.test(data.password)) {
+    errores.push('El password no debe contener espacios')
+  }
+
 
   if (errores.length > 0) {
     return res.status(400).json({ error: errores, data })

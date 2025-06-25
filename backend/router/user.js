@@ -5,4 +5,6 @@ const userController = require('../controller/user')
 
 router.post('/registro', upload.single('picture'), validarRegistro, userController.altaUser)
 
+router.post('/registroAdmin', upload.single('picture'), validarRegistro, userController.altaUserAdmin)
+
 module.exports = router

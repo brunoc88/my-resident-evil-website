@@ -6,8 +6,11 @@ const PORT = process.env.PORT
 
 const SECRET = process.env.SECRET
 
+const CLAVE_SECRETA_ADMIN = process.env.CLAVE_SECRETA_ADMIN
+
 module.exports = {
     MONGODB_URI,
     PORT,
-    SECRET
+    SECRET,
+    CLAVE_SECRETA_ADMIN
 }

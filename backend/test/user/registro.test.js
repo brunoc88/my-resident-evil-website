@@ -18,6 +18,7 @@ beforeEach(async () => {
         userName: 'bruno88',
         email: 'brunocerutti88@gmail.com',
         rol: 'admin',
+        sobreMi: 'amo resident evil!',
         password: passwordHash,
         pregunta: 'Resident Evil Favorito?',
         respuesta: 'Resident Evil 2'
@@ -57,7 +58,7 @@ describe('POST /user/registro', () => {
 
     })
 
-    test.only('Creando usuario con imagen', async () => {
+    test('Creando usuario con imagen', async () => {
 
         const usersBefore = await getUsers()
 
@@ -353,6 +354,25 @@ describe('POST /user/registro', () => {
         expect(res.body.error).toContain('Falta la contraseña')
     })
 
+    test('Mandar password con espacios ver2', async () => {
+        const user = {
+            userName: 'bruno123',
+            email: 'bruno@gmail.com',
+            password: '123 345',
+            pregunta: 'RE favorito?',
+            respuesta: 'RE4'
+        }
+
+        const res = await api
+            .post('/user/registro')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('El password no debe contener espacios')
+    })
+
     test('La contraseña debe tener al menos 5 caracteres', async () => {
         const user = {
             userName: 'bruno123',
@@ -452,6 +472,88 @@ describe('POST /user/registro', () => {
         expect(res.body).toHaveProperty('data')
         expect(res.body.error).toContain("El email 'brunocerutti88@gmail.com' ya está registrado")
         expect(res.body.error).toContain(`El email '${user.email}' ya está registrado`)
+    })
+})
+
+//user Admin
+
+describe('POST /user/registroAdmin', () => {
+    test('Registrar usuario Admin', async () => {
+        const user = {
+            userName: 'jorge60',
+            email: 'jorge60@gmail.com',
+            password: '123456',
+            pregunta: 'Resident Evil Favorito?',
+            respuesta: 'Resident Evil 2',
+            secreto: 'miClaveSecreta123'
+        }
+        const res = await api
+            .post('/user/registroAdmin')
+            .send(user)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('msj')
+        expect(res.body.msj).toContain('Usuario creado con éxito')
+        expect(res.body).toHaveProperty('user')
+
+    })
+
+    test('Falta la clave secreta o se hizo espacio', async () => {
+        const user = {
+            userName: 'jorge60',
+            email: 'jorge60@gmail.com',
+            password: '123456',
+            pregunta: 'Resident Evil Favorito?',
+            respuesta: 'Resident Evil 2',
+            secreto: ''
+        }
+        const res = await api
+            .post('/user/registroAdmin')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('Debe ingresa clave secreta!')
+    })
+
+    test('Clave secreta incorrecta!', async () => {
+        const user = {
+            userName: 'jorge60',
+            email: 'jorge60@gmail.com',
+            password: '123456',
+            pregunta: 'Resident Evil Favorito?',
+            respuesta: 'Resident Evil 2',
+            secreto: 'abcdscf'
+        }
+        const res = await api
+            .post('/user/registroAdmin')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('Clave secreta incorrecta!')
+    })
+
+    test('El password no debe contener espacios', async () => {
+        const user = {
+            userName: 'jorge60',
+            email: 'jorge60@gmail.com',
+            password: '123 456',
+            pregunta: 'Resident Evil Favorito?',
+            respuesta: 'Resident Evil 2',
+            secreto: 'abcdscf'
+        }
+        const res = await api
+            .post('/user/registroAdmin')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('El password no debe contener espacios')
     })
 })
 
