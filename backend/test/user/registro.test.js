@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 const User = require('../../models/user')
 const path = require('path') // Necesario para ruta a la imagen
 const fs = require('fs')
-const uploadDir = path.join(__dirname,'../../public/uploads')
+const uploadDir = path.join(__dirname, '../../public/uploads')
 const { getUsers } = require('../test_helper')
 
 const api = supertest(app)
@@ -371,6 +371,44 @@ describe('POST /user/registro', () => {
         expect(res.body).toHaveProperty('error')
         expect(res.body.error).toContain('La contraseña debe tener al menos 5 caracteres')
     })
+
+    test('Falta la pregunta de seguridad', async () => {
+        const user = {
+            userName: 'bruno123',
+            email: 'bruno@gmail.com',
+            password: '1234',
+            pregunta: '',
+            respuesta: 'RE4'
+        }
+
+        const res = await api
+            .post('/user/registro')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('Falta la pregunta de seguridad')
+    })
+
+    test('Falta la respuesta de seguridad', async () => {
+        const user = {
+            userName: 'bruno123',
+            email: 'bruno@gmail.com',
+            password: '1234',
+            pregunta: 'Cual es tu Re Favorito?',
+            respuesta: ''
+        }
+
+        const res = await api
+            .post('/user/registro')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('Falta la respuesta de seguridad')
+    })
 })
 
 //validaciones de duplicado
@@ -397,7 +435,7 @@ describe('POST /user/registro', () => {
 
     test('Duplicado de email', async () => {
         const user = {
-            userName: 'jorge60', 
+            userName: 'jorge60',
             email: 'brunocerutti88@gmail.com',// Ya existente por el beforeEach
             password: '123456',
             pregunta: 'Resident Evil Favorito?',

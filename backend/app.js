@@ -5,6 +5,7 @@ const logger = require('./utils/loggers')
 const path = require('path')
 const mongoose = require('mongoose')
 const errorHandler = require('./middlewares/errorHandler')
+const unknownEndpoint = require('./middlewares/unknowEndpoint')
 const userRouter = require('./router/user')
 
 
@@ -27,6 +28,8 @@ app.use(express.json())
 
 app.use('/user',userRouter)
 
-app.use(errorHandler) 
+app.use(unknownEndpoint) 
+app.use(errorHandler)
+
 
 module.exports = app
