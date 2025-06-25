@@ -6,7 +6,7 @@
     "start": "cross-env NODE_ENV=start node index.js",
     "dev": "cross-env NODE_ENV=dev nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
-    "test:watch": "cross-env NODE_ENV=test jest --watch" 
+    "test:watch": "cross-env NODE_ENV=test jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "jest": "^30.0.2",
+    "morgan": "^1.10.0",
     "nodemon": "^3.1.10",
     "supertest": "^7.1.1"
   }

@@ -4,6 +4,7 @@ const { MONGODB_URI } = require('./utils/config')
 const logger = require('./utils/loggers')
 const path = require('path')
 const mongoose = require('mongoose')
+const morgan = require('morgan')
 const errorHandler = require('./middlewares/errorHandler')
 const unknownEndpoint = require('./middlewares/unknowEndpoint')
 const userRouter = require('./router/user')
@@ -26,9 +27,14 @@ mongoose.connect(MONGODB_URI)
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
 app.use(express.json())
 
-app.use('/user',userRouter)
+// Solo usar morgan en desarrollo
+if (process.env.NODE_ENV === 'dev') {
+    app.use(morgan('dev'))
+}
 
-app.use(unknownEndpoint) 
+app.use('/user', userRouter)
+
+app.use(unknownEndpoint)
 app.use(errorHandler)
 
 
