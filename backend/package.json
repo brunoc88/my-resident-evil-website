@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=start node index.js",
     "dev": "cross-env NODE_ENV=dev nodemon index.js",
-    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
+    "test:watch": "cross-env NODE_ENV=test jest --watch" 
   },
   "keywords": [],
   "author": "",

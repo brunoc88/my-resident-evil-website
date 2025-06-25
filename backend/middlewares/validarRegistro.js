@@ -5,7 +5,7 @@ const validarRegistro = async (req, res, next) => {
   // Sanitizar
 
   // Usamos el operador ?. para evitar errores si userName es undefined o null
-  data.userName = data.userName?.trim() 
+  data.userName = data.userName?.trim()
   data.email = data.email?.trim().toLowerCase()
   data.password = data.password?.trim()
   data.pregunta = data.pregunta?.trim()
@@ -16,9 +16,9 @@ const validarRegistro = async (req, res, next) => {
     errores.push('Formulario incompleto')
     return res.status(400).json({ error: errores })
   }
-  if (!data.userName) errores.push('Falta el nombre de usuario')
-  if (!data.email) errores.push('Falta el email')
-  if (!data.password) errores.push('Falta la contraseña')
+  if (!data.userName || data.userName.trim().length === 0) errores.push('Falta el nombre de usuario')
+  if (!data.email || data.email.trim().length === 0) errores.push('Falta el email')
+  if (!data.password || data.password.trim().length === 0) errores.push('Falta la contraseña')
   if (!data.pregunta) errores.push('Falta la pregunta de seguridad')
   if (!data.respuesta) errores.push('Falta la respuesta de seguridad')
 
@@ -26,9 +26,6 @@ const validarRegistro = async (req, res, next) => {
   if (data.userName) {
     if (data.userName.length > 10 || data.userName.length < 5) {
       errores.push('El nombre de usuario debe tener entre 5 y 10 caracteres')
-    }
-    if (data.userName.trim().length === 0) {
-      errores.push('El nombre de usuario no puede estar vacío')
     }
     //"/\s/" por ejemplo "juan carlos" o "juan/carlos"
     if (/\s/.test(data.userName)) {
@@ -38,9 +35,6 @@ const validarRegistro = async (req, res, next) => {
 
   // Validación de email
   if (data.email) {
-    if (data.email.trim().length === 0) {
-      errores.push('El email no puede estar vacío')
-    }
     if (/\s/.test(data.email)) {
       errores.push('El email no debe contener espacios')
     }
