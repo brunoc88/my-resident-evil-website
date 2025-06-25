@@ -4,6 +4,7 @@ const { MONGODB_URI } = require('./utils/config')
 const logger = require('./utils/loggers')
 const path = require('path')
 const mongoose = require('mongoose')
+const errorHandler = require('./middlewares/errorHandler')
 const userRouter = require('./router/user')
 
 
@@ -25,5 +26,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
 app.use(express.json())
 
 app.use('/user',userRouter)
+
+app.use(errorHandler) 
 
 module.exports = app

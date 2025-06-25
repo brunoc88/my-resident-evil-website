@@ -2,7 +2,7 @@ const User = require('../models/user')
 const logger = require('../utils/loggers')
 const bcrypt = require('bcrypt')
 
-exports.altaUser = async (req, res) => {
+exports.altaUser = async (req, res, next) => {
   try {
     const data = req.body
 
@@ -22,7 +22,6 @@ exports.altaUser = async (req, res) => {
     const savedUser = await newUser.save()
     return res.status(201).json({ msj: 'Usuario creado con éxito', user: savedUser })
   } catch (error) {
-    logger.error(error)
-    return res.status(500).json({ error: 'Error al crear el usuario' })
+    return next(error)// Delega el manejo al middleware de errores
   }
 }

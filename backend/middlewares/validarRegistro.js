@@ -1,5 +1,3 @@
-const User = require('../models/user')
-
 const validarRegistro = async (req, res, next) => {
   const data = req.body
   const errores = []
@@ -57,16 +55,9 @@ const validarRegistro = async (req, res, next) => {
     errores.push('La contraseña debe tener al menos 5 caracteres')
   }
 
-  // Chequeo duplicados solo si no hay errores previos
-  if (errores.length === 0) {
-    const existingUser = await User.findOne({ userName: data.userName })
-    const existingEmail = await User.findOne({ email: data.email })
-    if (existingUser) errores.push('Ese nombre de usuario ya está en uso')
-    if (existingEmail) errores.push('Ese email ya está registrado')
-  }
 
   if (errores.length > 0) {
-    return res.status(400).json({ error: errores, user: data })
+    return res.status(400).json({ error: errores, data })
   }
 
   next()
