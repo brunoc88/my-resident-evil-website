@@ -439,7 +439,7 @@ describe('POST /user/registro', () => {
             email: 'otro@email.com',
             password: '123456',
             pregunta: 'Resident Evil Favorito?',
-            respuesta: 'RE2'
+            respuesta: 'RESIDENT EVIL 2'
         }
 
         const res = await api
@@ -459,7 +459,7 @@ describe('POST /user/registro', () => {
             email: 'brunocerutti88@gmail.com',// Ya existente por el beforeEach
             password: '123456',
             pregunta: 'Resident Evil Favorito?',
-            respuesta: 'RE2'
+            respuesta: 'RESIDENT EVIL 2'
         }
 
         const res = await api
@@ -554,6 +554,48 @@ describe('POST /user/registroAdmin', () => {
 
         expect(res.body).toHaveProperty('error')
         expect(res.body.error).toContain('El password no debe contener espacios')
+        
+    })
+
+    test('La respuesta debe tener entre 5 y 60 caracteres', async () => {
+        const user = {
+            userName: 'jorge60',
+            email: 'jorge60@gmail.com',
+            password: '123 456',
+            pregunta: 'Resident Evil Favorito?',
+            respuesta: 'Re',
+            secreto: 'abcdscf'
+        }
+        const res = await api
+            .post('/user/registroAdmin')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('La respuesta debe tener entre 5 y 60 caracteres')
+        
+    })
+
+    test('Superaste el límite de caracteres permitido!', async () => {
+        const user = {
+            userName: 'jorge60',
+            email: 'jorge60@gmail.com',
+            password: '123 456',
+            pregunta: 'Resident Evil Favorito?',
+            respuesta: 'Re',
+            secreto: 'abcdscf',
+            sobreMi: 'Hola, me llamo Bruno. Soy desarrollador backend autodidacta, apasionado por la escritura de código limpio y el testing. Amante de Resident Evil.'
+        }
+        const res = await api
+            .post('/user/registroAdmin')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('La respuesta debe tener entre 5 y 60 caracteres')
+        
     })
 })
 

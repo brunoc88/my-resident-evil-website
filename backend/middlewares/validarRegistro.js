@@ -9,16 +9,20 @@ const validarRegistro = async (req, res, next) => {
   data.email = data.email?.trim().toLowerCase()
   data.password = data.password?.trim()
   data.pregunta = data.pregunta?.trim()
-  data.respuesta = data.respuesta?.trim()
+  //ej:"esta es mi respuesta"
+  //Eso evita problemas por tildes o mayúsculas cuando compares más adelante.
+  data.respuesta = data.respuesta?.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 
-  // Validación de vacíos
+
+
+  // Validación de presencia (después de sanitizar)
   if (!data.userName && !data.email && !data.password && !data.pregunta && !data.respuesta) {
     errores.push('Formulario incompleto')
     return res.status(400).json({ error: errores })
   }
-  if (!data.userName || data.userName.trim().length === 0) errores.push('Falta el nombre de usuario')
-  if (!data.email || data.email.trim().length === 0) errores.push('Falta el email')
-  if (!data.password || data.password.trim().length === 0) errores.push('Falta la contraseña')
+  if (!data.userName) errores.push('Falta el nombre de usuario')
+  if (!data.email) errores.push('Falta el email')
+  if (!data.password) errores.push('Falta la contraseña')
   if (!data.pregunta) errores.push('Falta la pregunta de seguridad')
   if (!data.respuesta) errores.push('Falta la respuesta de seguridad')
 
@@ -51,6 +55,17 @@ const validarRegistro = async (req, res, next) => {
 
   if (data.password && /\s/.test(data.password)) {
     errores.push('El password no debe contener espacios')
+  }
+
+  //validacion de respuesta
+  if (data.respuesta) {
+    if (data.respuesta.length > 60 || data.respuesta.length < 5) {
+      errores.push('La respuesta debe tener entre 5 y 60 caracteres')
+    }
+  }
+
+  if (data.sobreMi && data.sobreMi.length > 150) {
+    errores.push('Superaste el límite de caracteres permitido!')
   }
 
 

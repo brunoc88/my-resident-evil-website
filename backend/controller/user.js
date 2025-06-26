@@ -1,5 +1,4 @@
 const User = require('../models/user')
-const logger = require('../utils/loggers')
 const bcrypt = require('bcrypt')
 const { CLAVE_SECRETA_ADMIN } = require('../utils/config')
 

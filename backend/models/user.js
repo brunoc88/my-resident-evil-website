@@ -29,7 +29,9 @@ const userSchema = mongoose.Schema({
     },
     respuesta:{
         type: String,
-        required: true
+        required: true,
+        maxLength: 60,
+        minlength:5
     },
     sobreMi:{
         type: String,
