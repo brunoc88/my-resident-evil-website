@@ -35,13 +35,16 @@ const userExtractor = async (req, res, next) => {
   }
 }
 
-const verifyRole = (rol) = (req, res, next) => {
+const verifyRole = (rolPermitido) => (req, res, next) => {
   const user = req.user
 
-  if (!user || user.rol !== rolPermitido) return res.status(403).json({ error: 'Acceso denegado: rol no autorizado' })
-    
+  if (!user || user.rol !== rolPermitido) {
+    return res.status(403).json({ error: 'Acceso denegado: permisos insuficientes' })
+  }
+
   next()
 }
+
 
 module.exports = {
   tokenExtractor,
