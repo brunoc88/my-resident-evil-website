@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const errorHandler = require('./middlewares/errorHandler')
 const unknownEndpoint = require('./middlewares/unknowEndpoint')
+const loginRouter = require('./router/login')
 const userRouter = require('./router/user')
 
 
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV === 'dev') {
     app.use(morgan('dev'))
 }
 
+app.use('/', loginRouter)
 app.use('/user', userRouter)
 
 app.use(unknownEndpoint)
