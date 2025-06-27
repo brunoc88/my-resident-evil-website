@@ -8,8 +8,8 @@ router.post('/registro', upload.single('picture'), validarRegistro, userControll
 
 router.post('/registroAdmin', upload.single('picture'), validarRegistro, userController.altaUserAdmin)
 
-router.get('/perfil/:id', userExtractor, userController.perfil)
+router.get('/perfil/:userName', userExtractor, userController.perfil)
 
-router.get('/miPerfil/:id', userExtractor, userController.miPerfil)
+router.get('/miPerfil', userExtractor, userController.miPerfil)
 
 module.exports = router

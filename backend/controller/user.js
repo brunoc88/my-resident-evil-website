@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const { CLAVE_SECRETA_ADMIN } = require('../utils/config')
-const { error } = require('console')
+
 
 exports.altaUser = async (req, res, next) => {
   try {
@@ -56,14 +56,15 @@ exports.altaUserAdmin = async (req, res, next) => {
   }
 }
 
+//todos pueden ver el perfil de todos siempre que este logueado
 exports.perfil = async (req, res, next) => {
   try {
-    const id = req.params.id
+    const userName = req.params.userName
 
-    const perfil = await User.findById(id)
+    const perfil = await User.findOne({userName})
 
-    if(!perfil){
-      return res.status(404).json({error: 'Usuario no encontrado!'})
+    if (!perfil || perfil.estado === false) {
+      return res.status(404).json({ error: 'Usuario no encontrado o cuenta eliminada' })
     }
 
     return res.status(200).json({user: perfil})        
@@ -72,22 +73,18 @@ exports.perfil = async (req, res, next) => {
   }
 }
 
+//solo yo & el admin podemos verlo 
 exports.miPerfil = async (req, res, next) => {
   try {
-    const id = req.params.id
+    const perfil = req.user;
 
-    const perfil = await User.findById(id)
-    
-    if (!perfil) {
-      return res.status(404).json({ error: 'Usuario no encontrado!' })
+    if (!perfil || perfil.estado === false) {
+      return res.status(404).json({ error: 'Usuario no encontrado o cuenta inactiva' });
     }
 
-    if (perfil._id.toString() !== req.user.id.toString()) {
-      return res.status(401).json({ error: 'Sin autorización!' })
-    }
-
-    return res.status(200).json({ perfil })
+    return res.status(200).json({ user:perfil });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
+
