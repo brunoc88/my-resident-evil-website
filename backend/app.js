@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const morgan = require('morgan')
 const errorHandler = require('./middlewares/errorHandler')
 const unknownEndpoint = require('./middlewares/unknowEndpoint')
+const { tokenExtractor } = require('./middlewares/authMiddleware')
 const loginRouter = require('./router/login')
 const userRouter = require('./router/user')
 
@@ -27,6 +28,7 @@ mongoose.connect(MONGODB_URI)
 // middlewares
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
 app.use(express.json())
+app.use(tokenExtractor)
 
 // Solo usar morgan en desarrollo
 if (process.env.NODE_ENV === 'dev') {
