@@ -31,10 +31,10 @@ exports.altaUserAdmin = async (req, res, next) => {
   try {
     const data = req.body
 
-    if (!data.secreto || data.secreto.trim().length === 0) return res.status(400).json({error: 'Debe ingresa clave secreta!'})
-    if (data.secreto !== CLAVE_SECRETA_ADMIN) return res.status(400).json({error: 'Clave secreta incorrecta!'})
+    if (!data.secreto || data.secreto.trim().length === 0) return res.status(400).json({ error: 'Debe ingresa clave secreta!' })
+    if (data.secreto !== CLAVE_SECRETA_ADMIN) return res.status(400).json({ error: 'Clave secreta incorrecta!' })
     if (data.secreto && /\s/.test(data.secreto)) {
-      return res.status(400).json({error: 'El password no debe contener espacios'})
+      return res.status(400).json({ error: 'El password no debe contener espacios' })
     }
     const passwordHash = await bcrypt.hash(data.password, 10)
 
@@ -61,13 +61,13 @@ exports.perfil = async (req, res, next) => {
   try {
     const userName = req.params.userName
 
-    const perfil = await User.findOne({userName})
+    const perfil = await User.findOne({ userName })
 
     if (!perfil || perfil.estado === false) {
       return res.status(404).json({ error: 'Usuario no encontrado o cuenta eliminada' })
     }
 
-    return res.status(200).json({user: perfil})        
+    return res.status(200).json({ user: perfil })
   } catch (error) {
     next(error)
   }
@@ -85,7 +85,7 @@ exports.miPerfil = async (req, res, next) => {
       return res.status(404).json({ error: 'Usuario no encontrado o cuenta inactiva' });
     }
 
-    return res.status(200).json({ user:perfil })
+    return res.status(200).json({ user: perfil })
   } catch (error) {
     next(error)
   }
@@ -142,7 +142,7 @@ exports.reactivarCuenta = async (req, res, next) => {
       return res.status(400).json({ error: 'La cuenta ya está activa' })
     }
 
-    
+
     await User.findByIdAndUpdate(id, { estado: true }, { new: true })
 
     return res.status(200).json({ msj: 'Cuenta reactivada!' })
@@ -151,3 +151,35 @@ exports.reactivarCuenta = async (req, res, next) => {
   }
 }
 
+exports.recuperarPassword = async (req, res, next) => {
+  try {
+    const { user, pregunta, respuesta } = req.body
+
+    // Buscar usuario por userName o email
+    const checkUser = await User.findOne({
+      $or: [
+        { userName: user },
+        { email: user }
+      ]
+    })
+
+    if(!checkUser){
+      return res.status(404).json({error: 'Usuario incorrecto o inexsitente'})
+    }
+
+    if(checkUser && !checkUser.estado){
+      return res.status(400).json({error: 'Usuario eliminado o inactivo'})
+    }
+
+    if(pregunta !== checkUser.pregunta && respuesta !== checkUser.respuesta){
+      return res.status(400).json({error: 'Pregunta o respuesta incorrecta'})
+    }
+
+    await User.findByIdAndUpdate(id, { password }, { new: true })
+
+    return res.status(200).json({ msj: 'Password recuperado!' })
+
+  } catch (error) {
+    next(error)
+  }
+}
