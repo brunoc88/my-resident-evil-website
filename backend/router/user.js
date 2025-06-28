@@ -8,8 +8,13 @@ router.post('/registro', upload.single('picture'), validarRegistro, userControll
 
 router.post('/registroAdmin', upload.single('picture'), validarRegistro, userController.altaUserAdmin)
 
-router.get('/perfil/:userName', userExtractor, userController.perfil)
+//rutas protegidas
+router.use(userExtractor)
 
-router.get('/miPerfil', userExtractor, userController.miPerfil)
+router.get('/perfil/:userName', userController.perfil)
+
+router.get('/miPerfil', userController.miPerfil)
+
+router.patch('/eliminar/:id', userController.eliminarCuenta)
 
 module.exports = router

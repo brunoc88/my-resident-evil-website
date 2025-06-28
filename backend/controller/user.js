@@ -73,7 +73,10 @@ exports.perfil = async (req, res, next) => {
   }
 }
 
-//solo yo & el admin podemos verlo 
+//solo yo puedo verlo 
+//aqui no hace falta validar si el id buscado coinciden con el logueado
+//porque ya obtengo del req.user
+//por lo que solo 
 exports.miPerfil = async (req, res, next) => {
   try {
     const perfil = req.user;
@@ -82,9 +85,45 @@ exports.miPerfil = async (req, res, next) => {
       return res.status(404).json({ error: 'Usuario no encontrado o cuenta inactiva' });
     }
 
-    return res.status(200).json({ user:perfil });
+    return res.status(200).json({ user:perfil })
   } catch (error) {
-    next(error);
+    next(error)
+  }
+}
+
+//El usuario comun podra eliminar solo su misma cuenta
+//El usuario admin podra eliminar tambien su misma cuenta y la de un
+//usuario comun
+
+exports.eliminarCuenta = async (req, res, next) => {
+  try {
+    const { id } = req.params
+
+    const user = await User.findById(id)
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' })
+    }
+
+    if (!user.estado) {
+      return res.status(400).json({ error: 'La cuenta ya está inactiva' })
+    }
+
+    // Solo el dueño de la cuenta o un admin pueden eliminar
+    if (req.user.id !== user.id && req.user.rol !== 'admin') {
+      return res.status(403).json({ error: 'Sin autorización!' })
+    }
+
+    // Un admin no puede eliminar a otro admin
+    if (req.user.id !== user.id && req.user.rol === user.rol) {
+      return res.status(403).json({ error: 'No puedes eliminar un usuario con tu mismo rol' })
+    }
+
+    await User.findByIdAndUpdate(id, { estado: false }, { new: true })
+
+    return res.status(200).json({ msj: 'Cuenta eliminada!' })
+  } catch (error) {
+    next(error)
   }
 }
 
