@@ -143,10 +143,6 @@ exports.reactivarCuenta = async (req, res, next) => {
     }
 
     
-    if (req.user.rol !== 'admin') {
-      return res.status(403).json({ error: 'Sin autorización' })
-    }
-
     await User.findByIdAndUpdate(id, { estado: true }, { new: true })
 
     return res.status(200).json({ msj: 'Cuenta reactivada!' })

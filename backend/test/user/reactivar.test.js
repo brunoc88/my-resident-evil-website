@@ -44,11 +44,11 @@ describe('PATCH /user/reActivar/:id', () => {
     test('La cuenta ya está activa', async () => {
 
         const users = await getUsers()
-        const id = users[1].id
+        const id = users[1].id//id user comun activo
 
         const res = await api
             .patch(`/user/reActivar/${id}`)
-            .set('Authorization', `Bearer ${token}`)
+            .set('Authorization', `Bearer ${token}`)//user admin
             .expect('Content-Type', /application\/json/)
             .expect(400)
 
@@ -56,7 +56,7 @@ describe('PATCH /user/reActivar/:id', () => {
         expect(res.body.error).toContain('La cuenta ya está activa')
     })
 
-    test('Sin autorización', async () => {
+    test('Acceso denegado: permisos insuficientes', async () => {
 
         const users = await getUsers()
         const id = users[2].id //id user comun desactivado
@@ -68,7 +68,7 @@ describe('PATCH /user/reActivar/:id', () => {
             .expect(403)
 
         expect(res.body).toHaveProperty('error')
-        expect(res.body.error).toContain('Sin autorización')
+        expect(res.body.error).toContain('Acceso denegado: permisos insuficientes')
     })
 
     test('Cuenta reactivada!', async () => {
@@ -78,7 +78,7 @@ describe('PATCH /user/reActivar/:id', () => {
 
         const res = await api
             .patch(`/user/reActivar/${id}`)
-            .set('Authorization', `Bearer ${token}`)//user comun
+            .set('Authorization', `Bearer ${token}`)//user admin
             .expect('Content-Type', /application\/json/)
             .expect(200)
 
