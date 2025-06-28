@@ -2,60 +2,64 @@ const mongoose = require('mongoose')
 const validator = require('validator')//para que el email sea valido 
 
 const userSchema = mongoose.Schema({
-    userName:{
+    userName: {
         type: String,
         required: true,
         unique: true,
         maxLength: 10,
-        minlength:5
+        minlength: 5
     },
-    email:{
+    email: {
         type: String,
         required: true,
         unique: true,
         validate: [validator.isEmail, 'Email inválido']
     },
-    password:{
+    password: {
         type: String,
         required: true,
         minlength: 5
     },
-    rol:{
+    rol: {
         type: String
     },
-    pregunta:{
+    pregunta: {
         type: String,
         required: true
     },
-    respuesta:{
+    respuesta: {
         type: String,
         required: true,
         maxLength: 60,
-        minlength:5
+        minlength: 5
     },
-    sobreMi:{
+    sobreMi: {
         type: String,
         maxLength: 150
     },
-    estado:{
+    estado: {
         type: Boolean,
         default: true
     },
     picture: {
-      type: String,
-      default: 'default.png'
+        type: String,
+        default: 'default.png'
+    },
+    fechaCreacion: {
+        type: Date,
+        default: Date.now
     }
 })
 
 
 userSchema.set('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString()
-    delete returnedObject._id
-    delete returnedObject.__v
-    // el passwordHash no debe mostrarse
-    delete returnedObject.password
-  }
+    transform: (document, returnedObject) => {
+        returnedObject.id = returnedObject._id.toString()
+        delete returnedObject._id
+        delete returnedObject.__v
+        // el passwordHash no debe mostrarse
+        delete returnedObject.password
+    }
 })
 
 const User = mongoose.model('User', userSchema)
