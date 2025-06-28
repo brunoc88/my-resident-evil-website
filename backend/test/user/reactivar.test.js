@@ -26,13 +26,13 @@ beforeEach(async () => {
     token2 = res2.body.token
 })
 
-describe('PATCH /user/eliminar/:id', () => {
+describe('PATCH /user/reActivar/:id', () => {
     test('Usuario no encontrado', async () => {
-        // genero un ObjectId válido que se que no está en la base
+
         const nonExistingId = new mongoose.Types.ObjectId()
 
         const res = await api
-            .patch(`/user/eliminar/${nonExistingId}`)
+            .patch(`/user/reActivar/${nonExistingId}`)
             .set('Authorization', `Bearer ${token}`)
             .expect('Content-Type', /application\/json/)
             .expect(404)
@@ -41,67 +41,49 @@ describe('PATCH /user/eliminar/:id', () => {
         expect(res.body.error).toContain('Usuario no encontrado')
     })
 
-    test('La cuenta ya está inactiva', async () => {
+    test('La cuenta ya está activa', async () => {
+
         const users = await getUsers()
-        const id = users[2].id
+        const id = users[1].id
 
         const res = await api
-            .patch(`/user/eliminar/${id}`)
-            .set('Authorization', `Bearer ${token}`)//este el token de admin
+            .patch(`/user/reActivar/${id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect('Content-Type', /application\/json/)
             .expect(400)
 
         expect(res.body).toHaveProperty('error')
-        expect(res.body.error).toContain('La cuenta ya está inactiva')
+        expect(res.body.error).toContain('La cuenta ya está activa')
     })
 
-    test('Sin autorización!', async () => {
+    test('Sin autorización', async () => {
 
         const users = await getUsers()
-        const id = users[0].id //id de un admin
+        const id = users[2].id //id user comun desactivado
 
         const res = await api
-            .patch(`/user/eliminar/${id}`)
-            .set('Authorization', `Bearer ${token2}`)//este el token de un user comun
+            .patch(`/user/reActivar/${id}`)
+            .set('Authorization', `Bearer ${token2}`)//user comun
             .expect('Content-Type', /application\/json/)
             .expect(403)
 
         expect(res.body).toHaveProperty('error')
-        expect(res.body.error).toContain('Sin autorización!')
+        expect(res.body.error).toContain('Sin autorización')
     })
 
-    test('No puedes eliminar un usuario con tu mismo rol', async () => {
+    test('Cuenta reactivada!', async () => {
 
         const users = await getUsers()
-        const id = users[3].id //id de un admin
+        const id = users[2].id //id user comun desactivado
 
         const res = await api
-            .patch(`/user/eliminar/${id}`)
-            .set('Authorization', `Bearer ${token}`)//este el token otro admin
-            .expect('Content-Type', /application\/json/)
-            .expect(403)
-
-        expect(res.body).toHaveProperty('error')
-        expect(res.body.error).toContain('No puedes eliminar un usuario con tu mismo rol')
-    })
-
-    test('Cuenta eliminada!', async () => {
-
-        const users = await getUsers()
-        const id = users[0].id //id de un admin
-
-        const res = await api
-            .patch(`/user/eliminar/${id}`)
-            .set('Authorization', `Bearer ${token}`)//token del admin
+            .patch(`/user/reActivar/${id}`)
+            .set('Authorization', `Bearer ${token}`)//user comun
             .expect('Content-Type', /application\/json/)
             .expect(200)
 
         expect(res.body).toHaveProperty('msj')
-        expect(res.body.msj).toContain('Cuenta eliminada!')
-
-        // Comprobar que estado es false en la base
-        const userUpdated = await User.findById(id)
-        expect(userUpdated.estado).toBe(false)
+        expect(res.body.msj).toContain('Cuenta reactivada!')
     })
 })
 

@@ -17,4 +17,7 @@ router.get('/miPerfil', userController.miPerfil)
 
 router.patch('/eliminar/:id', userController.eliminarCuenta)
 
+router.patch('/reActivar/:id', userController.reactivarCuenta)
+
+
 module.exports = router

@@ -127,3 +127,31 @@ exports.eliminarCuenta = async (req, res, next) => {
   }
 }
 
+// Solo los administradores pueden reactivar cuentas
+exports.reactivarCuenta = async (req, res, next) => {
+  try {
+    const { id } = req.params
+
+    const user = await User.findById(id)
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' })
+    }
+
+    if (user.estado === true) {
+      return res.status(400).json({ error: 'La cuenta ya está activa' })
+    }
+
+    
+    if (req.user.rol !== 'admin') {
+      return res.status(403).json({ error: 'Sin autorización' })
+    }
+
+    await User.findByIdAndUpdate(id, { estado: true }, { new: true })
+
+    return res.status(200).json({ msj: 'Cuenta reactivada!' })
+  } catch (error) {
+    next(error)
+  }
+}
+
