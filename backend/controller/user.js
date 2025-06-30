@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const bcrypt = require('bcrypt')
+const crypto = require('crypto') // para generar clave mas segura
 const { CLAVE_SECRETA_ADMIN } = require('../utils/config')
 
 
@@ -151,35 +152,42 @@ exports.reactivarCuenta = async (req, res, next) => {
   }
 }
 
+//cualquier usuario puede recuperarla
 exports.recuperarPassword = async (req, res, next) => {
   try {
-    const { user, pregunta, respuesta } = req.body
+    const { email, pregunta, respuesta } = req.body
 
-    // Buscar usuario por userName o email
-    const checkUser = await User.findOne({
-      $or: [
-        { userName: user },
-        { email: user }
-      ]
+    const checkUser = await User.findOne({ email })
+
+    if (!checkUser) {
+      return res.status(404).json({ error: 'Usuario incorrecto o inexistente' })
+    }
+
+    if (!checkUser.estado) {
+      return res.status(400).json({ error: 'Usuario eliminado o inactivo' })
+    }
+
+    
+    if (pregunta !== checkUser.pregunta || respuesta !== checkUser.respuesta) {
+      return res.status(400).json({ error: 'Pregunta o respuesta incorrecta' })
+    }
+    
+    const nuevaPassword = generarPasswordAleatoria()
+    const passwordHasheada = await bcrypt.hash(nuevaPassword, 10)
+
+    await User.findByIdAndUpdate(checkUser._id, { password: passwordHasheada })
+
+    return res.status(200).json({
+      msj: 'Password recuperado!',
+      nuevaPassword // esta deberías mostrarla solo temporalmente del lado del frontend
     })
-
-    if(!checkUser){
-      return res.status(404).json({error: 'Usuario incorrecto o inexsitente'})
-    }
-
-    if(checkUser && !checkUser.estado){
-      return res.status(400).json({error: 'Usuario eliminado o inactivo'})
-    }
-
-    if(pregunta !== checkUser.pregunta && respuesta !== checkUser.respuesta){
-      return res.status(400).json({error: 'Pregunta o respuesta incorrecta'})
-    }
-
-    await User.findByIdAndUpdate(id, { password }, { new: true })
-
-    return res.status(200).json({ msj: 'Password recuperado!' })
 
   } catch (error) {
     next(error)
   }
 }
+
+const generarPasswordAleatoria = (longitud = 12) => {
+  return crypto.randomBytes(longitud).toString('hex').slice(0, longitud)  // ej: "a9d0e3f1b2c4"
+}
+

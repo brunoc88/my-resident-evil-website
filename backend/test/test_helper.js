@@ -14,8 +14,8 @@ const upLoadUsers = async () => {
     rol: 'admin',
     sobreMi: 'amo resident evil!',
     password: passwordHash,
-    pregunta: 'Resident Evil Favorito?',
-    respuesta: 'Resident Evil 2'
+    pregunta: 'resident evil favorito?',
+    respuesta: 'resident evil 2'
   })
 
   const user2 = new User({
@@ -23,17 +23,17 @@ const upLoadUsers = async () => {
     email: 'unkonw88@gmail.com',
     rol: 'comun',
     password: passwordHash,
-    pregunta: 'Resident Evil Favorito?',
-    respuesta: 'Resident Evil 4'
+    pregunta: 'resident evil favorito?',
+    respuesta: 'resident evil 4'
   })
 
   const user3 = new User({
     userName: 'comunUser',
-    email: 'comunUser@gmail.com',
+    email: 'comunuser@gmail.com',
     rol: 'comun',
     password: passwordHash,
-    pregunta: 'Resident Evil Favorito?',
-    respuesta: 'Resident Evil 5',
+    pregunta: 'resident evil favorito?',
+    respuesta: 'resident evil 5',
     estado: false
   })
 
@@ -43,8 +43,8 @@ const upLoadUsers = async () => {
     rol: 'admin',
     sobreMi: 'amo resident evil!',
     password: passwordHash,
-    pregunta: 'Resident Evil Favorito?',
-    respuesta: 'Resident Evil 5'
+    pregunta: 'resident evil favorito?',
+    respuesta: 'resident evil 5'
   })
   await user1.save()
   await user2.save()
