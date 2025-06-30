@@ -10,7 +10,7 @@ const unknownEndpoint = require('./middlewares/unknowEndpoint')
 const { tokenExtractor } = require('./middlewares/authMiddleware')
 const loginRouter = require('./router/login')
 const userRouter = require('./router/user')
-
+const personajeRouter = require('./router/personaje')
 
 // conectando a la DB
 mongoose.set('strictQuery', false)
@@ -37,6 +37,7 @@ if (process.env.NODE_ENV === 'dev') {
 
 app.use('/', loginRouter)
 app.use('/user', userRouter)
+app.use('/personaje', personajeRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)

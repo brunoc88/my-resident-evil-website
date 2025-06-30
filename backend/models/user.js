@@ -21,10 +21,10 @@ const userSchema = mongoose.Schema({
         minlength: 5
     },
     rol: {
-        type: String
+        type: String //hardcodeado segun la ruta
     },
     pregunta: {
-        type: String,
+        type: String, //hardcodeada select/options
         required: true
     },
     respuesta: {
@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema({
         maxLength: 60,
         minlength: 5
     },
-    sobreMi: {
+    sobreMi: { //no es obligacion, si es vacia se guada como sin descripcion
         type: String,
         maxLength: 150
     },
@@ -43,7 +43,7 @@ const userSchema = mongoose.Schema({
     },
     picture: {
         type: String,
-        default: 'default.png'
+        default: 'default.png'//no es obligacion, si es vacia se guada con la imagen default en public
     },
     fechaCreacion: {
         type: Date,
