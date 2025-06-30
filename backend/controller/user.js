@@ -187,6 +187,20 @@ exports.recuperarPassword = async (req, res, next) => {
   }
 }
 
+exports.editarUsuario = async(req, res, next) => {
+  try {
+    const id = req.params.id
+    const cambios = req.cambios
+    await User.findByIdAndUpdate(id, cambios)
+    return res.status(200).json({
+      msj: 'Usuario Actualizado!'
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+
 const generarPasswordAleatoria = (longitud = 12) => {
   return crypto.randomBytes(longitud).toString('hex').slice(0, longitud)  // ej: "a9d0e3f1b2c4"
 }

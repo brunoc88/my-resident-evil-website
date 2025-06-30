@@ -2,6 +2,8 @@ const router = require('express').Router()
 const upload = require('../utils/multer')
 const validarRegistro = require('../middlewares/user/validarRegistro')//middleware para comprobar los datos
 const validarRecuperarPassword = require('../middlewares/user/validarRecuperarPassword')
+const validarCambios = require('../middlewares/user/validarCambios')
+const validarEdicionUser = require('../middlewares/user/validarEdicionUser')
 const { userExtractor, verifyRole } = require('../middlewares/authMiddleware')
 const userController = require('../controller/user')
 
@@ -23,5 +25,6 @@ router.patch('/eliminar/:id', userController.eliminarCuenta)
 
 router.patch('/reActivar/:id', verifyRole('admin'), userController.reactivarCuenta)
 
+router.put('/editar/:id', validarCambios, validarEdicionUser, userController.editarUsuario)
 
 module.exports = router
