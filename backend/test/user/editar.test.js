@@ -135,6 +135,26 @@ describe('PUT /user/editar/:id', () => {
         expect(res.body.error).toContain('Falta el nombre de usuario')
 
     })
+
+    test('Usuario Actualizado!', async () => {
+        const users = await getUsers()
+        const id = users[0].id //user id
+
+        const user = {
+            password:'wesker'
+        }
+
+        const res = await api
+            .put(`/user/editar/${id}`)
+            .send(user)
+            .expect(200)
+            .set('Authorization', `Bearer ${token}`) //token del mismo usuario
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('msj')
+        expect(res.body.msj).toContain('Usuario Actualizado!')
+
+    })
 })
 
 afterAll(async () => {
