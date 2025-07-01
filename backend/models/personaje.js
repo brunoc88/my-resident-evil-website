@@ -10,7 +10,7 @@ const personajeSchema = mongoose.Schema({
     },
     //campos opcionales y hardcodeados en el controlador
     fechaNacimiento: {
-        type: Date 
+        type: Date
     },
     edad: {
         type: String
@@ -61,6 +61,10 @@ const personajeSchema = mongoose.Schema({
     biografia: {
         type: String,
         maxlength: 500
+    },
+    estado: {
+        type: Boolean,
+        default: true
     }
 })
 

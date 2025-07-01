@@ -1,9 +1,15 @@
 const User = require('../models/user')
+const Personaje = require('../models/personaje')
 const bcrypt = require('bcrypt')
 
 const getUsers = async () => {
   const users = await User.find({})
   return users.map((user) => user.toJSON())
+}
+
+const getPersonajes = async () => {
+  const personajes = await Personaje.find({})
+  return personajes.map( (personaje) => personaje.toJSON())
 }
 
 const upLoadUsers = async () => {
@@ -54,5 +60,6 @@ const upLoadUsers = async () => {
 
 module.exports = {
   getUsers,
-  upLoadUsers
+  upLoadUsers,
+  getPersonajes
 }

@@ -6,7 +6,7 @@ const fs = require('fs')
 const uploadDir = path.join(__dirname, '../../public/uploads')
 const Personaje = require('../../models/personaje')
 const User = require('../../models/user')
-const { upLoadUsers, getUsers } = require('../test_helper')
+const { upLoadUsers, getUsers, getPersonajes } = require('../test_helper')
 const api = supertest(app)
 
 let token = null
@@ -21,12 +21,39 @@ beforeEach(async () => {
     const users = await getUsers()
     //me logeo para obtener token para poder hacer POST
     const res = await api.post('/').send({ user: users[0].userName, password: 'sekret' })
+    const res2 = await api.post('/').send({ user: users[1].userName, password: 'sekret' })
     token = res.body.token
+    token2 = res2.body.token
+
+    // Crear personaje para usar en tests de eliminación
+    await api
+        .post('/personaje/alta')
+        .set('Authorization', `Bearer ${token}`)
+        .field('nombre', 'Jill Valentine')
+        .field('fechaNacimiento', '1974-02-03')
+        .field('edad', '29')
+        .field('colorOjos', 'verde')
+        .field('colorPelo', 'rubio')
+        .field('altura', 170)
+        .field('peso', 56)
+        .field('categoria', 'héroe')
+        .field('oficio', 'miembro de S.T.A.R.S.')
+        .field('condicion', 'vivo')
+        .field('primeraAparicion', 'Resident Evil')
+        .field('ultimaAparicion', 'Resident Evil 3 Remake')
+        .field('biografia', 'Miembro clave en la lucha contra Umbrella.')
+        .attach('picture', path.join(__dirname, 'fixtures', 'test-imagen.png'))
+
+    const personajes = await getPersonajes()
+    const id = personajes[0].id
+    console.log("ID", id)
 })
 
 describe('POST /personaje/alta', () => {
 
     test('crear personaje exitosamente', async () => {
+        const personajesInicio = await getPersonajes()
+
         const res = await api
             .post('/personaje/alta')
             .set('Authorization', `Bearer ${token}`)
@@ -47,7 +74,10 @@ describe('POST /personaje/alta', () => {
             .expect('Content-Type', /application\/json/)
             .expect(201)
 
+        const personajesFinal = await getPersonajes()
         expect(res.body.msj).toBe('Éxito, personaje creado!')
+        expect(personajesFinal).toHaveLength(personajesInicio.length + 1)
+
     })
 
     test('Falta de campos obligatorios', async () => {
@@ -79,12 +109,12 @@ describe('POST /personaje/alta', () => {
     test('Validacion de longitud', async () => {
         const personaje = {
             nombre: 'xx',
-            edad:'aeiou',
-            colorOjos:'color verde aceituna, mas verdes que un lago',
-            colorPelo:'color como la rojo, tan rojo como la sangre',
+            edad: 'aeiou',
+            colorOjos: 'color verde aceituna, mas verdes que un lago',
+            colorPelo: 'color como la rojo, tan rojo como la sangre',
             altura: 'abcde',
-            peso:'efgh',
-            oficio:'Investigador bioquímico especializado en mutaciones virales clandestinas',
+            peso: 'efgh',
+            oficio: 'Investigador bioquímico especializado en mutaciones virales clandestinas',
             biografia: 'Leon S. Kennedy es un agente del gobierno estadounidense con un pasado oscuro y una valentía sin igual. Desde su primer día como policía en Raccoon City, se vio envuelto en el horror provocado por la Corporación Umbrella. Su determinación lo llevó a enfrentarse a múltiples amenazas bioterroristas alrededor del mundo. A lo largo de los años, Leon ha demostrado una y otra vez su compromiso inquebrantable con la justicia, sacrificando su bienestar personal por el bien de la humanidad. Su experiencia, inteligencia táctica, habilidades de combate y empatía lo han convertido en un símbolo de esperanza en un mundo asolado por el caos. A pesar de las pérdidas, sigue adelante.',
             categoria: '',
             condicion: '',
@@ -114,6 +144,72 @@ describe('POST /personaje/alta', () => {
     })
 })
 
+describe('GET /personaje/all', () => {
+    test('Obtener todos los personajes', async () => {
+
+        const res = await api
+            .get('/personaje/all')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toBeTruthy()
+        expect(res.body).toHaveProperty('personajes')
+
+    })
+})
+
+describe('GET /personaje/:id', () => {
+    test('Perfil eliminar o no existente', async () => {
+        // genero un ObjectId válido que se que no está en la base
+        const nonExistingId = new mongoose.Types.ObjectId()
+        const res = await api
+            .get(`/personaje/${nonExistingId}`)
+            .expect(404)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).not.toBeNull()
+        expect(res.body.error).toContain('Personaje inexistente o eliminado!')
+    })
+
+    test('Perfil encontrado', async () => {
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+
+        const res = await api
+            .get(`/personaje/${id}`)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+    })
+})
+
+describe('PATCH /personaje/eliminar/:id', () => {
+    test('Eliminar personaje', async () => {
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+
+        const res = await api
+            .patch(`/personaje/eliminar/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+        expect(res.body).toHaveProperty('msj')
+        expect(res.body.msj).toContain('Personaje eliminado!')
+    })
+
+    test('Intentanto eliminar usuario rol comun ', async () => {
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+
+        const res = await api
+            .patch(`/personaje/eliminar/${id}`)
+            .set('Authorization', `Bearer ${token2}`)//token user comun
+            .expect(403)
+            .expect('Content-Type', /application\/json/)
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('Acceso denegado: permisos insuficientes')
+    })
+})
 
 afterEach(() => {
     // Limpias la carpeta uploads para que no acumule imágenes de tests

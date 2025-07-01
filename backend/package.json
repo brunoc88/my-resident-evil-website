@@ -8,7 +8,7 @@
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "test:user": "npm test test/user/editar.test.js",
     "test:login": "npm test test/login/login.test.js",
-    "test:personaje": "npm test test/personaje/registro.test.js",
+    "test:personaje": "npm test test/personaje/crud.test.js",
     "test:watch": "cross-env NODE_ENV=test jest --watch"
   },
   "keywords": [],
