@@ -66,7 +66,7 @@ const validarRegistroPersonaje = (req, res, next) => {
   }
 
   if (errores.length > 0) {
-    return res.status(400).json({ errores, data })
+    return res.status(400).json({ error: errores, data })
   }
 
   next()

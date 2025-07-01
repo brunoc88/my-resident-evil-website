@@ -7,6 +7,6 @@ const personajeController = require('../controller/personaje')
 //rutas protegidas
 router.use(userExtractor)
 
-router.post('/alta', validarRegistroPersonaje, personajeController.alta)
+router.post('/alta', upload.single('picture'), validarRegistroPersonaje, personajeController.alta)
 
 module.exports = router
