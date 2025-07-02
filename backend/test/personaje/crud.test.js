@@ -45,8 +45,8 @@ beforeEach(async () => {
         .attach('picture', path.join(__dirname, 'fixtures', 'test-imagen.png'))
 
     const personajes = await getPersonajes()
-    const id = personajes[0].id
-    console.log("ID", id)
+    
+    
 })
 
 describe('POST /personaje/alta', () => {
@@ -211,6 +211,116 @@ describe('PATCH /personaje/eliminar/:id', () => {
     })
 })
 
+describe('PUT /personaje/editar/:id', () => {
+    test('No hay cambios!', async () => {
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+
+        const per = {
+
+        }
+
+        const res = await api
+            .put(`/personaje/editar/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(per)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('No hay cambios!')
+
+    })
+
+    test('No hay cambiosV2!', async () => {
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+        const res = await api
+            .put(`/personaje/editar/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .field('nombre', 'Jill Valentine')
+            .field('fechaNacimiento', '1974-02-03')
+            .field('edad', '29')
+            .field('colorOjos', 'verde')
+            .field('colorPelo', 'rubio')
+            .field('altura', 170)
+            .field('peso', 56)
+            .field('categoria', 'héroe')
+            .field('oficio', 'miembro de S.T.A.R.S.')
+            .field('condicion', 'vivo')
+            .field('primeraAparicion', 'Resident Evil')
+            .field('ultimaAparicion', 'Resident Evil 3 Remake')
+            .field('biografia', 'Miembro clave en la lucha contra Umbrella.')
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('No hay cambios!')
+
+    })
+
+    test('Valores obligatorios', async () => {
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+
+        const per = {
+            nombre: '',
+            categoria: '',
+            condicion: ''
+        }
+
+        const res = await api
+            .put(`/personaje/editar/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(per)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('Ingrese un nombre!')
+        expect(res.body.error).toContain('Categoría inválida o no seleccionada!')
+        expect(res.body.error).toContain('Condición inválida o no seleccionada!')
+    })
+
+    test('Cambiar imagen: Personaje actualizado!', async () => {
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+
+
+        const res = await api
+            .put(`/personaje/editar/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .attach('picture', path.join(__dirname, 'fixtures', 'test-change-imagen.png'))
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('msj')
+        expect(res.body.msj).toContain('Personaje actualizado!')
+
+    })
+
+    test('Personaje actualizado!', async () => {
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+
+        const user = {
+            nombre: 'Jill mamasita Valentine'
+        }
+
+        const res = await api
+            .put(`/personaje/editar/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(user)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('msj')
+        expect(res.body.msj).toContain('Personaje actualizado!')
+
+    })
+    
+
+})
 afterEach(() => {
     // Limpias la carpeta uploads para que no acumule imágenes de tests
     fs.readdirSync(uploadDir).forEach(file => {

@@ -1,6 +1,9 @@
 const app = require('../../app')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const path = require('path') // Necesario para ruta a la imagen
+const fs = require('fs')
+const uploadDir = path.join(__dirname, '../../public/uploads')
 const User = require('../../models/user')
 const { getUsers, upLoadUsers } = require('../test_helper')
 
@@ -141,7 +144,7 @@ describe('PUT /user/editar/:id', () => {
         const id = users[0].id //user id
 
         const user = {
-            password:'wesker'
+            password: 'wesker'
         }
 
         const res = await api
@@ -155,7 +158,34 @@ describe('PUT /user/editar/:id', () => {
         expect(res.body.msj).toContain('Usuario Actualizado!')
 
     })
+
+    test('Cambiar imagen: Usuario actualizado!', async () => {
+        const users = await getUsers()
+        const id = users[0].id
+
+
+        const res = await api
+            .put(`/user/editar/${id}`)
+            .set('Authorization', `Bearer ${token}`)
+            .attach('picture', path.join(__dirname, 'fixtures', 'test-imagen.png'))
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('msj')
+        expect(res.body.msj).toContain('Usuario Actualizado!')
+
+    })
 })
+
+afterEach(() => {
+    // Limpias la carpeta uploads para que no acumule imágenes de tests
+    fs.readdirSync(uploadDir).forEach(file => {
+        if (file !== 'default.png') {
+            fs.unlinkSync(path.join(uploadDir, file))
+        }
+    })
+})
+
 
 afterAll(async () => {
     await mongoose.connection.close()

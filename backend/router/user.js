@@ -25,6 +25,6 @@ router.patch('/eliminar/:id', userController.eliminarCuenta)
 
 router.patch('/reActivar/:id', verifyRole('admin'), userController.reactivarCuenta)
 
-router.put('/editar/:id', validarCambios, validarEdicionUser, userController.editarUsuario)
+router.put('/editar/:id', upload.single('picture'), validarCambios, validarEdicionUser, userController.editarUsuario)
 
 module.exports = router
