@@ -10,6 +10,7 @@ const { upLoadUsers, getUsers, getPersonajes } = require('../test_helper')
 const api = supertest(app)
 
 let token = null
+let token2 = null
 
 beforeEach(async () => {
     await Personaje.deleteMany({})

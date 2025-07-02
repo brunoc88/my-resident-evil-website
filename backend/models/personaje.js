@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const comentarioSchema = require('./subdocumentos/comentarioSchema') //subdocumento 
+const comentarioSchema = require('./subDocuments/comentarios') //subdocumento 
 // Esquema principal de Personaje
 const personajeSchema = new mongoose.Schema({
   nombre: {
