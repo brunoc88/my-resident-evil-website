@@ -89,3 +89,47 @@ exports.editar = async (req, res, next) => {
         next(error)
     }
 }
+
+exports.like = async (req, res, next) => {
+    try {
+        const userId = req.user.id
+        const personaje = await Personaje.findById(req.params.id)
+
+        if (!personaje || !personaje.estado) {
+            return res.status(404).json({ error: 'Personaje eliminado o inexistente!' })
+        }
+        if (!personaje.likes.includes(userId)) {
+            personaje.likes.push(userId)
+            await personaje.save()
+        }
+        res.status(200).json({ likes: personaje.likes.length })
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.unlike = async (req, res, next) => {
+    try {
+        const userId = req.user.id
+        const personaje = await Personaje.findById(req.params.id)
+
+        if (!personaje || !personaje.estado) {
+            return res.status(404).json({ error: 'Personaje eliminado o inexistente!' })
+        }
+        personaje.likes = personaje.likes.filter(id => id.toString() !== userId)
+        await personaje.save()
+        res.status(200).json({ likes: personaje.likes.length })
+    } catch (error) {
+        next(error)
+    }
+}
+//para ver los likes del usuario
+exports.allLikes = async (req, res, next) => {
+    try {
+        const userId = req.user.id 
+        const personajes = await Personaje.find({ likes: userId })
+        res.status(200).json(personajes)
+    } catch (error) {
+        next(error)
+    }
+}

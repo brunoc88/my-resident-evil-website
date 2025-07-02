@@ -19,4 +19,10 @@ router.patch('/eliminar/:id', verifyRole('admin'), personajeController.eliminar)
 
 router.put('/editar/:id', upload.single('picture'), validarCambiosPersonaje, validarEdicionPersonaje, personajeController.editar)
 
+router.patch('/:id/like', personajeController.like)
+
+router.patch('/:id/unlike', personajeController.unlike)
+//PENDIENTE
+router.get('/allLikes', personajeController.allLikes)
+
 module.exports = router

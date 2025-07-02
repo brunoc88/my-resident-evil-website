@@ -43,9 +43,6 @@ beforeEach(async () => {
         .field('ultimaAparicion', 'Resident Evil 3 Remake')
         .field('biografia', 'Miembro clave en la lucha contra Umbrella.')
         .attach('picture', path.join(__dirname, 'fixtures', 'test-imagen.png'))
-
-    const personajes = await getPersonajes()
-    
     
 })
 
@@ -321,6 +318,7 @@ describe('PUT /personaje/editar/:id', () => {
     
 
 })
+
 afterEach(() => {
     // Limpias la carpeta uploads para que no acumule imágenes de tests
     fs.readdirSync(uploadDir).forEach(file => {
