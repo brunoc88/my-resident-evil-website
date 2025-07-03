@@ -143,20 +143,20 @@ exports.postearComentario = async (req, res, next) => {
             return res.status(404).json({ error: 'Personaje eliminado o inexistente!' })
         }
 
-        const { comentario } = req.body
+        const { mensaje } = req.body
 
-        if (!comentario || comentario.trim().length === 0) {
+        if (!mensaje || mensaje.trim().length === 0) {
             return res.status(400).json({ error: '¡Escriba un comentario!' })
         }
 
-        if (comentario && comentario.length > 280) {
+        if (mensaje && mensaje.length > 280) {
             return res.status(400).json({ error: 'El comentario pasó el límite de caracteres permitido!' })
         }
 
 
         const nuevoComentario = {
             usuario: req.user.id, // El id del usuario logueado
-            mensaje: comentario,
+            mensaje: mensaje,
             fecha: new Date(),
             estado: true
         }
@@ -196,7 +196,8 @@ exports.editarComentario = async (req, res, next) => {
       return res.status(404).json({ error: 'Comentario eliminado o inexistente' })
     }
 
-    const nuevoTexto = req.body.comentario
+   
+    const nuevoTexto = req.body.mensaje
 
     if (!nuevoTexto || nuevoTexto.trim().length === 0) {
       return res.status(400).json({ error: '¡Escriba un comentario!' })
