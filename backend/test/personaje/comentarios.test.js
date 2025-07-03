@@ -13,6 +13,7 @@ const api = supertest(app)
 let token = null
 let token2 = null
 
+
 beforeEach(async () => {
     await Personaje.deleteMany({})
     await User.deleteMany({})
@@ -21,8 +22,10 @@ beforeEach(async () => {
 
     const res = await api.post('/').send({ user: users[0].userName, password: 'sekret' })
     const res2 = await api.post('/').send({ user: users[1].userName, password: 'sekret' })
+
     token = res.body.token
     token2 = res2.body.token
+
 
     //creo un personaje
     await api
@@ -113,112 +116,177 @@ describe('POST /personaje/:id/comentario', () => {
 })
 
 describe('PUT /personaje/:id/editarComentario/:idComentario', () => {
-  test('Comentario actualizado', async () => {
-    // Busco el id del personaje
-    const personajes = await getPersonajes()
-    const id = personajes[0].id
+    test('Comentario actualizado', async () => {
+        // Busco el id del personaje
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
 
-    // Hago un comentario
-    const comentario = {
-      mensaje: 'Gracias por subir la biografia!'
-    }
-    const res = await api
-      .post(`/personaje/${id}/comentario`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(comentario)
-      .expect(201)
+        // Hago un comentario
+        const comentario = {
+            mensaje: 'Gracias por subir la biografia!'
+        }
+        const res = await api
+            .post(`/personaje/${id}/comentario`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(comentario)
+            .expect(201)
 
-    // Busco el id del comentario
-    const idNuevoComentario = res.body.comentario._id.toString()
+        // Busco el id del comentario
+        const idNuevoComentario = res.body.comentario._id.toString()
 
-    // Ahora lo voy a editar
-    const nuevoComentario = {
-      mensaje: 'Muy bueno!'
-    }
-    const res2 = await api
-      .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(nuevoComentario)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
+        // Ahora lo voy a editar
+        const nuevoComentario = {
+            mensaje: 'Muy bueno!'
+        }
+        const res2 = await api
+            .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(nuevoComentario)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
 
-    expect(res2.body).toBeTruthy()
-    expect(res2.body).toHaveProperty('msj')
-    expect(res2.body.msj).toContain('Comentario actualizado')
-    expect(res2.body).toHaveProperty('comentario')
-    expect(res2.body.comentario).toHaveProperty('mensaje', nuevoComentario.mensaje)
-  })
+        expect(res2.body).toBeTruthy()
+        expect(res2.body).toHaveProperty('msj')
+        expect(res2.body.msj).toContain('Comentario actualizado')
+        expect(res2.body).toHaveProperty('comentario')
+        expect(res2.body.comentario).toHaveProperty('mensaje', nuevoComentario.mensaje)
+    })
 
-  test('No hay cambios', async () => {
-    // Busco el id del personaje
-    const personajes = await getPersonajes()
-    const id = personajes[0].id
+    test('No hay cambios', async () => {
+        // Busco el id del personaje
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
 
-    // Hago un comentario
-    const comentario = {
-      mensaje: 'Gracias por subir la biografia!'
-    }
-    const res = await api
-      .post(`/personaje/${id}/comentario`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(comentario)
-      .expect(201)
+        // Hago un comentario
+        const comentario = {
+            mensaje: 'Gracias por subir la biografia!'
+        }
+        const res = await api
+            .post(`/personaje/${id}/comentario`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(comentario)
+            .expect(201)
 
-    // Busco el id del comentario
-    const idNuevoComentario = res.body.comentario._id.toString()
+        // Busco el id del comentario
+        const idNuevoComentario = res.body.comentario._id.toString()
 
-    // Ahora lo voy a editar
-    const nuevoComentario = {
-      mensaje: 'Gracias por subir la biografia!'
-    }
-    const res2 = await api
-      .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(nuevoComentario)
-      .expect(400)
-      .expect('Content-Type', /application\/json/)
+        // Ahora lo voy a editar
+        const nuevoComentario = {
+            mensaje: 'Gracias por subir la biografia!'
+        }
+        const res2 = await api
+            .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(nuevoComentario)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
 
-    expect(res2.body).toBeTruthy()
-    expect(res2.body).toHaveProperty('error')
-    expect(res2.body.error).toContain('No hay cambios')
+        expect(res2.body).toBeTruthy()
+        expect(res2.body).toHaveProperty('error')
+        expect(res2.body.error).toContain('No hay cambios')
 
-  })
+    })
 
-  test('Acceso prohibido!', async () => {
-    // Busco el id del personaje
-    const personajes = await getPersonajes()
-    const id = personajes[0].id
+    test('Acceso prohibido!', async () => {
+        // Busco el id del personaje
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
 
-    // Hago un comentario
-    const comentario = {
-      mensaje: 'Gracias por subir la biografia!'
-    }
-    const res = await api
-      .post(`/personaje/${id}/comentario`)
-      .set('Authorization', `Bearer ${token2}`)
-      .send(comentario)
-      .expect(201)
+        // Hago un comentario
+        const comentario = {
+            mensaje: 'Gracias por subir la biografia!'
+        }
+        const res = await api
+            .post(`/personaje/${id}/comentario`)
+            .set('Authorization', `Bearer ${token2}`)
+            .send(comentario)
+            .expect(201)
 
-    // Busco el id del comentario
-    const idNuevoComentario = res.body.comentario._id.toString()
+        // Busco el id del comentario
+        const idNuevoComentario = res.body.comentario._id.toString()
 
-    // Ahora lo voy a editar
-    const nuevoComentario = {
-      mensaje: 'Gracias'
-    }
-    const res2 = await api
-      .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send(nuevoComentario)
-      .expect(404)
-      .expect('Content-Type', /application\/json/)
+        // Ahora lo voy a editar
+        const nuevoComentario = {
+            mensaje: 'Gracias'
+        }
+        const res2 = await api
+            .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(nuevoComentario)
+            .expect(404)
+            .expect('Content-Type', /application\/json/)
 
-    expect(res2.body).toBeTruthy()
-    expect(res2.body).toHaveProperty('error')
+        expect(res2.body).toBeTruthy()
+        expect(res2.body).toHaveProperty('error')
 
-  })
+    })
 })
 
+describe('PATCH /personaje/:id/eliminarComentario/:idComentario', () => {
+    test('Comentario eliminado correctamente', async () => {
+        // Busco el id del personaje
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+        // Hago un comentario
+        const comentario = {
+            mensaje: 'Gracias por subir la biografia!'
+        }
+        const res = await api
+            .post(`/personaje/${id}/comentario`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(comentario)
+            .expect(201)
+
+        // Elimino el comentario
+        // Busco el id del comentario
+        const idEliminar = res.body.comentario._id.toString()
+        const res2 = await api
+            .patch(`/personaje/${id}/eliminarComentario/${idEliminar}`)
+            .expect(200)
+            .set('Authorization', `Bearer ${token}`)
+        expect(res2.body).toHaveProperty('msj')
+        expect(res2.body.msj).toContain('Comentario eliminado correctamente')
+    })
+
+    test('No tiene permisos para eliminar este comentario', async () => {
+        // Busco el id del personaje
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+        // Hago un comentario
+        const comentario = {
+            mensaje: 'Gracias por subir la biografia!'
+        }
+        const res = await api
+            .post(`/personaje/${id}/comentario`)
+            .set('Authorization', `Bearer ${token}`) //usuario admin
+            .send(comentario)
+            .expect(201)
+
+        // Elimino el comentario
+        // Busco el id del comentario
+        const idEliminar = res.body.comentario._id.toString()
+        const res2 = await api
+            .patch(`/personaje/${id}/eliminarComentario/${idEliminar}`)
+            .expect(403)
+            .set('Authorization', `Bearer ${token2}`) //usuario comun
+        expect(res2.body).toHaveProperty('error')
+        expect(res2.body.error).toContain('No tiene permisos para eliminar este comentario')
+    })
+})
+
+describe('GET /personaje/:id/allComentarios', () => {
+    test.only('Todos los comentarios del personaje', async () => {
+        // Busco el id del personaje
+        const personajes = await getPersonajes()
+        const id = personajes[0].id
+
+        await api
+            .get(`/personaje/${id}/allComentarios`)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200)
+
+    })
+})
 
 
 afterEach(() => {
