@@ -27,4 +27,6 @@ router.patch('/reActivar/:id', verifyRole('admin'), userController.reactivarCuen
 
 router.put('/editar/:id', upload.single('picture'), validarCambios, validarEdicionUser, userController.editarUsuario)
 
+router.get('/allLikes', userController.allLikes)
+
 module.exports = router

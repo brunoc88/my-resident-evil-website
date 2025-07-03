@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Personaje = require('../models/personaje')
 const bcrypt = require('bcrypt')
 const crypto = require('crypto') // para generar clave mas segura
 const { CLAVE_SECRETA_ADMIN } = require('../utils/config')
@@ -167,11 +168,11 @@ exports.recuperarPassword = async (req, res, next) => {
       return res.status(400).json({ error: 'Usuario eliminado o inactivo' })
     }
 
-    
+
     if (pregunta !== checkUser.pregunta || respuesta !== checkUser.respuesta) {
       return res.status(400).json({ error: 'Pregunta o respuesta incorrecta' })
     }
-    
+
     const nuevaPassword = generarPasswordAleatoria()
     const passwordHasheada = await bcrypt.hash(nuevaPassword, 10)
 
@@ -187,7 +188,7 @@ exports.recuperarPassword = async (req, res, next) => {
   }
 }
 
-exports.editarUsuario = async(req, res, next) => {
+exports.editarUsuario = async (req, res, next) => {
   try {
     const id = req.params.id
     const cambios = req.cambios
@@ -199,6 +200,18 @@ exports.editarUsuario = async(req, res, next) => {
     next(error)
   }
 }
+
+//para ver los likes del usuario
+exports.allLikes = async (req, res, next) => {
+  try {
+    const userId = req.user.id
+    const personajes = await Personaje.find({ likes: userId })
+    res.status(200).json(personajes)
+  } catch (error) {
+    next(error)
+  }
+}
+
 
 
 const generarPasswordAleatoria = (longitud = 12) => {

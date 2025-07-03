@@ -22,8 +22,6 @@ router.put('/editar/:id', upload.single('picture'), validarCambiosPersonaje, val
 router.patch('/:id/like', personajeController.like)
 
 router.patch('/:id/unlike', personajeController.unlike)
-//PENDIENTE
-router.get('/allLikes', personajeController.allLikes)
 
 router.post('/:id/comentario', personajeController.postearComentario)
 

@@ -123,16 +123,6 @@ exports.unlike = async (req, res, next) => {
         next(error)
     }
 }
-//para ver los likes del usuario
-exports.allLikes = async (req, res, next) => {
-    try {
-        const userId = req.user.id
-        const personajes = await Personaje.find({ likes: userId })
-        res.status(200).json(personajes)
-    } catch (error) {
-        next(error)
-    }
-}
 
 exports.postearComentario = async (req, res, next) => {
     try {
