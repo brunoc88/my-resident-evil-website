@@ -212,7 +212,37 @@ exports.allLikes = async (req, res, next) => {
   }
 }
 
+//un usuario comun no puede bloquear a un admin
+exports.mandarMensaje = async (req, res, next) => {
+  try {
+    const { mensaje } = req.body
+    const id = req.params.id
+    const user = await User.findById(id)
 
+    if (!mensaje || mensaje.trim().length === 0) {
+      return res.status(400).json({ error: '¡Mensaje vacio!' })
+    }
+
+    if (mensaje && mensaje.length > 280) {
+      return res.status(400).json({ error: 'El mensaje pasó el límite de caracteres permitido!' })
+    }
+
+
+    const nuevoMensaje = {
+      usuario: req.user.id, // El id del usuario logueado
+      mensaje: mensaje,
+      fecha: new Date(),
+      estado: true
+    }
+
+    user.mensajes.push(nuevoMensaje)
+    await user.save()
+
+    res.status(201).json({msj: 'Mensaje Enviado!'})
+  } catch (error) {
+    next(error)
+  }
+}
 
 const generarPasswordAleatoria = (longitud = 12) => {
   return crypto.randomBytes(longitud).toString('hex').slice(0, longitud)  // ej: "a9d0e3f1b2c4"

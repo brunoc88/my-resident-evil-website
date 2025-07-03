@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const validator = require('validator')//para que el email sea valido 
+const mensajeSchema = require('./subDocuments/mensajes')
 
 const userSchema = mongoose.Schema({
     userName: {
@@ -48,7 +49,13 @@ const userSchema = mongoose.Schema({
     fechaCreacion: {
         type: Date,
         default: Date.now
-    }
+    },
+    bloqueos:[{ //para control puse bloqueo para evitar recibir o enviar mensajes
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        default: [] 
+    }],
+    mensajes:[mensajeSchema]
 })
 
 

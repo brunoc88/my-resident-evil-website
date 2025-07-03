@@ -5,6 +5,7 @@ const validarRecuperarPassword = require('../middlewares/user/validarRecuperarPa
 const validarCambios = require('../middlewares/user/validarCambios')
 const validarEdicionUser = require('../middlewares/user/validarEdicionUser')
 const { userExtractor, verifyRole } = require('../middlewares/authMiddleware')
+const verifyBlock = require('../middlewares/user/verifyBlock')
 const userController = require('../controller/user')
 
 router.post('/registro', upload.single('picture'), validarRegistro, userController.altaUser)
@@ -28,5 +29,7 @@ router.patch('/reActivar/:id', verifyRole('admin'), userController.reactivarCuen
 router.put('/editar/:id', upload.single('picture'), validarCambios, validarEdicionUser, userController.editarUsuario)
 
 router.get('/allLikes', userController.allLikes)
+
+router.post('/mensaje/:id', verifyBlock, userController.mandarMensaje)
 
 module.exports = router
