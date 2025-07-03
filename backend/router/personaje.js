@@ -25,4 +25,12 @@ router.patch('/:id/unlike', personajeController.unlike)
 //PENDIENTE
 router.get('/allLikes', personajeController.allLikes)
 
+router.post('/:id/comentario', personajeController.postearComentario)
+
+router.put('/:id/editarComentario/:idComentario', personajeController.editarComentario)
+
+router.patch('/:id/eliminarComentario/:idComentario', personajeController.eliminarComentario)
+
+router.get('/:id/allComentarios', personajeController.getComentarios)
+
 module.exports = router

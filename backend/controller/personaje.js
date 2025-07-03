@@ -126,10 +126,152 @@ exports.unlike = async (req, res, next) => {
 //para ver los likes del usuario
 exports.allLikes = async (req, res, next) => {
     try {
-        const userId = req.user.id 
+        const userId = req.user.id
         const personajes = await Personaje.find({ likes: userId })
         res.status(200).json(personajes)
     } catch (error) {
         next(error)
     }
+}
+
+exports.postearComentario = async (req, res, next) => {
+    try {
+        const id = req.params.id
+        const personaje = await Personaje.findById(id)
+
+        if (!personaje || !personaje.estado) {
+            return res.status(404).json({ error: 'Personaje eliminado o inexistente!' })
+        }
+
+        const { comentario } = req.body
+
+        if (!comentario || comentario.trim().length === 0) {
+            return res.status(400).json({ error: '¡Escriba un comentario!' })
+        }
+
+        if (comentario && comentario.length > 280) {
+            return res.status(400).json({ error: 'El comentario pasó el límite de caracteres permitido!' })
+        }
+
+
+        const nuevoComentario = {
+            usuario: req.user.id, // El id del usuario logueado
+            mensaje: comentario,
+            fecha: new Date(),
+            estado: true
+        }
+
+        personaje.comentarios.push(nuevoComentario)
+        await personaje.save()
+
+        //devuelve el personaje con los comentarios populados
+        await personaje.populate('comentarios.usuario', 'userName picture')
+
+        res.status(201).json({
+            msj: 'Comentario agregado',
+            //esto devuelve el ultimo mensaje, osea el que acabamos de hacer
+            comentario: personaje.comentarios[personaje.comentarios.length - 1]
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+exports.editarComentario = async (req, res, next) => {
+  try {
+    const personajeId = req.params.id
+    const comentarioId = req.params.idComentario
+    const personaje = await Personaje.findById(personajeId)
+
+    if (!personaje || !personaje.estado) {
+      return res.status(404).json({ error: 'Personaje eliminado o inexistente!' })
+    }
+
+    //busco que exista coincidencia de id tanto del comentario como el usuario que lo hizo
+    const comentario = personaje.comentarios.find(
+      c => c._id.toString() === comentarioId && c.usuario.toString() === req.user.id
+    )
+
+    if (!comentario || !comentario.estado) {
+      return res.status(404).json({ error: 'Comentario eliminado o inexistente' })
+    }
+
+    const nuevoTexto = req.body.comentario
+
+    if (!nuevoTexto || nuevoTexto.trim().length === 0) {
+      return res.status(400).json({ error: '¡Escriba un comentario!' })
+    }
+
+    if (nuevoTexto.length > 280) {
+      return res.status(400).json({ error: 'El comentario pasó el límite de caracteres permitido!' })
+    }
+
+    if (nuevoTexto === comentario.mensaje) {
+      return res.status(400).json({ error: 'No hay cambios' })
+    }
+
+    // Editar el comentario
+    comentario.mensaje = nuevoTexto
+    // Opcional: marcar que fue editado
+    comentario.fecha = new Date() // o agregar un campo comentario.editado = true
+    await personaje.save()
+
+    res.status(200).json({
+      msj: 'Comentario actualizado',
+      comentario
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.eliminarComentario = async (req, res, next) => {
+  try {
+    const personajeId = req.params.id
+    const comentarioId = req.params.idComentario
+    const personaje = await Personaje.findById(personajeId)
+
+    if (!personaje || !personaje.estado) {
+      return res.status(404).json({ error: 'Personaje eliminado o inexistente!' })
+    }
+
+    const comentario = personaje.comentarios.find(
+      c => c._id.toString() === comentarioId
+    )
+
+    if (!comentario || !comentario.estado) {
+      return res.status(404).json({ error: 'Comentario inexistente o ya eliminado' })
+    }
+
+    const esAutor = comentario.usuario.toString() === req.user.id
+    const esAdmin = req.user.rol === 'admin'
+
+    if (!esAutor && !esAdmin) {
+      return res.status(403).json({ error: 'No tiene permisos para eliminar este comentario' })
+    }
+
+    comentario.estado = false
+    await personaje.save()
+
+    res.status(200).json({ msj: 'Comentario eliminado correctamente' })
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.getComentarios = async (req, res, next) => {
+  try {
+    const personajeId = req.params.id
+    const personaje = await Personaje.findById(personajeId).populate('comentarios.usuario', 'userName picture')
+
+    if (!personaje || !personaje.estado) {
+      return res.status(404).json({ error: 'Personaje eliminado o inexistente!' })
+    }
+
+    const comentariosActivos = personaje.comentarios.filter(c => c.estado)
+
+    res.status(200).json(comentariosActivos)
+  } catch (error) {
+    next(error)
+  }
 }
