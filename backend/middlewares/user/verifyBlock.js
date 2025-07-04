@@ -23,6 +23,10 @@ const verifyBlock = async (req, res, next) => {
       return res.status(400).json({ error: `Tienes bloqueado a ${user.userName}!` })
     }
 
+    if(yo.rol === 'comun' && user.rol === 'admin'){
+      return res.status(403).json({ error: `No puedes bloquear a un administrador!` })
+    }
+
     next()
   } catch (error) {
     next(error)

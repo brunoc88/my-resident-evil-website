@@ -261,7 +261,7 @@ exports.getComentarios = async (req, res, next) => {
 
     const comentariosActivos = personaje.comentarios.filter(c => c.estado)
 
-    res.status(200).json(comentariosActivos)
+    res.status(200).json({comentario: comentariosActivos})
   } catch (error) {
     next(error)
   }

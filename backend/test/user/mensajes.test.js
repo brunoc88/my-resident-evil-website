@@ -96,7 +96,7 @@ describe('POST /user/mensaje/:id', () => {
 })
 
 describe('PATCH /user/mensaje/:id', () => {
-    test.only('Eliminar un mensaje', async () => {
+    test('Eliminar un mensaje', async () => {
         const users = await getUsers()
         const idReceptor = users[1].id
 
@@ -106,15 +106,9 @@ describe('PATCH /user/mensaje/:id', () => {
             .post(`/user/mensaje/${idReceptor}`)
             .send(msj)
             .set('Authorization', `Bearer ${token}`)
-        console.log('POST:', res.status, res.body)
+        
         const mensajeId = res.body.mensajeId
 
-        const usuarioReceptor = await User.findById(idReceptor)
-        console.log('Mensajes receptor:', usuarioReceptor.mensajes.map(m => m._id.toString()))
-
-        // LOG antes del PATCH
-        console.log('PATCH URL:', `/user/mensaje/${mensajeId}`)
-        console.log('Authorization:', token2)
 
         const res2 = await api
             .patch(`/user/mensaje/${mensajeId}`)

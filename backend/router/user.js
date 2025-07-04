@@ -34,4 +34,10 @@ router.post('/mensaje/:id', verifyBlock, userController.mandarMensaje)
 
 router.patch('/mensaje/:id', userController.eliminarMensaje)
 
+router.get('/mensajes', userController.allMsj)
+
+router.post('/bloquear/:id', verifyBlock, userController.bloquear)
+
+router.delete('/desbloquear/:id', userController.desbloquear)
+
 module.exports = router

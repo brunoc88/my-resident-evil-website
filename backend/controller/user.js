@@ -320,9 +320,66 @@ exports.eliminarMensaje = async (req, res, next) => {
   }
 }
 
+exports.allMsj = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id)
+
+    if (!user) return res.status(404).json({ error: "Usuario no encontrado" })
+
+    //Si los mensajes pueden crecer mucho, se puede solicitar ese campo a la base:
+    //const user = await User.findById(req.user.id).select('mensajes')
+
+    let allMsj = user.mensajes.filter( m => m.estado)
+
+    return res.status(200).json({mensaje: allMsj})
+  } catch (error) {
+    next(error)
+  }
+}
 
 //funciones de bloqueo
 //un usuario comun no puede bloquear a un admin
+exports.bloquear = async (req, res, next) => {
+  try {
+    const id = req.params.id // usuario a bloquear
+    const myId = req.user.id
+
+    // Evitar que te bloquees a vos mismo
+    if (id === myId) {
+      return res.status(400).json({ error: "No puedes bloquearte a ti mismo." })
+    }
+
+    // En este punto, verifyBlock ya garantizó:
+    // - El usuario a bloquear existe y está activo
+    // - No está bloqueado previamente
+    // - No me tiene bloqueado
+
+    // Buscamos el usuario autenticado
+    const user = await User.findById(myId)
+
+    user.bloqueos.push(id)
+    await user.save()
+
+    return res.status(200).json({ msj: `Usuario bloqueado!` })
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.desbloquear = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const user = await User.findById(req.user.id)
+
+    // Filtra el array y reasigna
+    user.bloqueos = user.bloqueos.filter(u => u.toString() !== id.toString())
+
+    await user.save()
+    return res.status(200).json({ msj: `Usuario desbloqueado!` })
+  } catch (error) {
+    next(error)
+  }
+}
 const generarPasswordAleatoria = (longitud = 12) => {
   return crypto.randomBytes(longitud).toString('hex').slice(0, longitud)  // ej: "a9d0e3f1b2c4"
 }
