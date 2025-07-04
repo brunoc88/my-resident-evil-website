@@ -18,6 +18,10 @@ const mensajeSchema = mongoose.Schema({
     estado: {
         type: Boolean,
         default: true
+    },
+    replyTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
     }
 })
 

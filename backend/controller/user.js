@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const User = require('../models/user')
 const Personaje = require('../models/personaje')
 const bcrypt = require('bcrypt')
@@ -33,10 +34,10 @@ exports.altaUserAdmin = async (req, res, next) => {
   try {
     const data = req.body
 
-    if (!data.secreto || data.secreto.trim().length === 0) return res.status(400).json({ error: 'Debe ingresa clave secreta!' , data})
+    if (!data.secreto || data.secreto.trim().length === 0) return res.status(400).json({ error: 'Debe ingresa clave secreta!', data })
     if (data.secreto !== CLAVE_SECRETA_ADMIN) return res.status(400).json({ error: 'Clave secreta incorrecta!', data })
     if (data.secreto && /\s/.test(data.secreto)) {
-      return res.status(400).json({ error: 'El password no debe contener espacios' , data})
+      return res.status(400).json({ error: 'El password no debe contener espacios', data })
     }
     const passwordHash = await bcrypt.hash(data.password, 10)
 
@@ -170,7 +171,7 @@ exports.recuperarPassword = async (req, res, next) => {
 
 
     if (pregunta !== checkUser.pregunta || respuesta !== checkUser.respuesta) {
-      return res.status(400).json({ error: 'Pregunta o respuesta incorrecta', data:{email, pregunta} })
+      return res.status(400).json({ error: 'Pregunta o respuesta incorrecta', data: { email, pregunta } })
     }
 
     const nuevaPassword = generarPasswordAleatoria()
@@ -212,14 +213,15 @@ exports.allLikes = async (req, res, next) => {
   }
 }
 
-//un usuario comun no puede bloquear a un admin
+//un usuario no puede mandar mensajes a un usuario bloqueado
 exports.mandarMensaje = async (req, res, next) => {
   try {
-    const { mensaje } = req.body
+    let mensaje = req.body.mensaje?.trim()
+    const replyTo = req.body.replyTo
     const id = req.params.id
     const user = await User.findById(id)
 
-    if (!mensaje || mensaje.trim().length === 0) {
+    if (!mensaje) {
       return res.status(400).json({ error: '¡Mensaje vacio!' })
     }
 
@@ -227,23 +229,100 @@ exports.mandarMensaje = async (req, res, next) => {
       return res.status(400).json({ error: 'El mensaje pasó el límite de caracteres permitido!' })
     }
 
+    //responder mensaje
+    if (replyTo) {
+      // 1. Validar que sea un ObjectId
+      if (!mongoose.Types.ObjectId.isValid(replyTo)) {
+        return res.status(400).json({ error: 'El ID del mensaje al que respondes no es válido' })
+      }
+
+      // 2. Buscar si ese mensaje existe dentro del array mensajes del receptor
+      const mensajeOriginal = user.mensajes.find(m => m._id.toString() === replyTo)
+
+      if (!mensajeOriginal) {
+        return res.status(400).json({ error: 'El mensaje al que estás respondiendo no existe' })
+      }
+
+      // Validaciones necesarias porque:
+      // Eviatamos hacer reply a un mensaje que no existe o que no le pertenece al receptor.
+      // Nos sirve por si querevemos ver todo el hilo de la conversacion
+    }
+
 
     const nuevoMensaje = {
       usuario: req.user.id, // El id del usuario logueado
       mensaje: mensaje,
       fecha: new Date(),
-      estado: true
+      estado: true,
+      replyTo: replyTo || null // Para responder el mismo mensaje
     }
 
     user.mensajes.push(nuevoMensaje)
     await user.save()
 
-    res.status(201).json({msj: 'Mensaje Enviado!'})
+    const ultimoMensaje = user.mensajes[user.mensajes.length - 1]
+    //mensajeId para obtener el id del mensaje
+    res.status(201).json({ msj: 'Mensaje Enviado!', mensajeId: ultimoMensaje._id })
   } catch (error) {
     next(error)
   }
 }
 
+// Solo el receptor puede eliminar el mensaje
+// Controlador para eliminar un mensaje de la casilla del usuario autenticado
+exports.eliminarMensaje = async (req, res, next) => {
+  try {
+    const mensajeId = req.params.id
+
+    if (!mongoose.Types.ObjectId.isValid(mensajeId)) {
+      return res.status(400).json({ error: 'ID de mensaje inválido' })
+    }
+
+    // Buscar por id del usuario autenticado
+    const user = await User.findById(req.user.id)
+    if (!user || !user.estado) return res.status(404).json({ error: 'Usuario no encontrado' })
+
+    // Buscar el mensaje dentro del array de mensajes del usuario autenticado
+    // formas de busacar en un array de subdocumentos en este caso mensajes
+
+    // #1
+    const mensaje = user.mensajes.id(mensajeId)
+
+    /* #2
+   const mensaje = user.mensajes.find(m => m._id.toString() === mensajeId.toString())
+   
+    #3
+    const user = await User.findOne({
+      _id: userId,
+      'mensajes._id': mensajeId
+      })
+   */
+    if (!mensaje || !mensaje.estado) {
+      return res.status(404).json({ error: 'Mensaje inexistente o ya fue eliminado' })
+    }
+
+
+    /*
+    // ACTUALIZACION DIRECTA! 
+      await User.updateOne(
+        { _id: userId, 'mensajes._id': mensajeId },
+        { $set: { 'mensajes.$.estado': false } }
+      ) 
+          
+    */
+    mensaje.estado = false
+    await user.save()
+
+    res.status(200).json({ msj: 'Mensaje eliminado!' })
+  } catch (error) {
+    console.error('ERROR EN ELIMINAR MENSAJE:', error)
+    next(error)
+  }
+}
+
+
+//funciones de bloqueo
+//un usuario comun no puede bloquear a un admin
 const generarPasswordAleatoria = (longitud = 12) => {
   return crypto.randomBytes(longitud).toString('hex').slice(0, longitud)  // ej: "a9d0e3f1b2c4"
 }

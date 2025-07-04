@@ -6,7 +6,7 @@
     "start": "cross-env NODE_ENV=start node index.js",
     "dev": "cross-env NODE_ENV=dev nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
-    "test:u": "npm test test/user",
+    "test:u": "npm test test/user/mensajes.test.js",
     "test:l": "npm test test/login/login.test.js",
     "test:p": "npm test test/personaje",
     "test:watch": "cross-env NODE_ENV=test jest --watch"

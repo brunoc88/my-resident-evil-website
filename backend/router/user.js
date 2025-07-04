@@ -32,4 +32,6 @@ router.get('/allLikes', userController.allLikes)
 
 router.post('/mensaje/:id', verifyBlock, userController.mandarMensaje)
 
+router.patch('/mensaje/:id', userController.eliminarMensaje)
+
 module.exports = router

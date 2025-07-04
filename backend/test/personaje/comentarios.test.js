@@ -115,7 +115,7 @@ describe('POST /personaje/:id/comentario', () => {
     })
 })
 
-describe('PUT /personaje/:id/editarComentario/:idComentario', () => {
+describe('PUT /personaje/comentario/:idComentario', () => {
     test('Comentario actualizado', async () => {
         // Busco el id del personaje
         const personajes = await getPersonajes()
@@ -139,7 +139,7 @@ describe('PUT /personaje/:id/editarComentario/:idComentario', () => {
             mensaje: 'Muy bueno!'
         }
         const res2 = await api
-            .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
+            .put(`/personaje/${id}/comentario/${idNuevoComentario}`)
             .set('Authorization', `Bearer ${token}`)
             .send(nuevoComentario)
             .expect(200)
@@ -175,7 +175,7 @@ describe('PUT /personaje/:id/editarComentario/:idComentario', () => {
             mensaje: 'Gracias por subir la biografia!'
         }
         const res2 = await api
-            .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
+            .put(`/personaje/${id}/comentario/${idNuevoComentario}`)
             .set('Authorization', `Bearer ${token}`)
             .send(nuevoComentario)
             .expect(400)
@@ -210,7 +210,7 @@ describe('PUT /personaje/:id/editarComentario/:idComentario', () => {
             mensaje: 'Gracias'
         }
         const res2 = await api
-            .put(`/personaje/${id}/editarComentario/${idNuevoComentario}`)
+            .put(`/personaje/${id}/comentario/${idNuevoComentario}`)
             .set('Authorization', `Bearer ${token}`)
             .send(nuevoComentario)
             .expect(404)
@@ -222,7 +222,7 @@ describe('PUT /personaje/:id/editarComentario/:idComentario', () => {
     })
 })
 
-describe('PATCH /personaje/:id/eliminarComentario/:idComentario', () => {
+describe('PATCH /personaje/:id/comentario/:idComentario', () => {
     test('Comentario eliminado correctamente', async () => {
         // Busco el id del personaje
         const personajes = await getPersonajes()
@@ -241,7 +241,7 @@ describe('PATCH /personaje/:id/eliminarComentario/:idComentario', () => {
         // Busco el id del comentario
         const idEliminar = res.body.comentario._id.toString()
         const res2 = await api
-            .patch(`/personaje/${id}/eliminarComentario/${idEliminar}`)
+            .patch(`/personaje/${id}/comentario/${idEliminar}`)
             .expect(200)
             .set('Authorization', `Bearer ${token}`)
         expect(res2.body).toHaveProperty('msj')
@@ -266,7 +266,7 @@ describe('PATCH /personaje/:id/eliminarComentario/:idComentario', () => {
         // Busco el id del comentario
         const idEliminar = res.body.comentario._id.toString()
         const res2 = await api
-            .patch(`/personaje/${id}/eliminarComentario/${idEliminar}`)
+            .patch(`/personaje/${id}/comentario/${idEliminar}`)
             .expect(403)
             .set('Authorization', `Bearer ${token2}`) //usuario comun
         expect(res2.body).toHaveProperty('error')
@@ -274,14 +274,14 @@ describe('PATCH /personaje/:id/eliminarComentario/:idComentario', () => {
     })
 })
 
-describe('GET /personaje/:id/allComentarios', () => {
-    test.only('Todos los comentarios del personaje', async () => {
+describe('GET /personaje/:id/comentarios', () => {
+    test('Todos los comentarios del personaje', async () => {
         // Busco el id del personaje
         const personajes = await getPersonajes()
         const id = personajes[0].id
 
         await api
-            .get(`/personaje/${id}/allComentarios`)
+            .get(`/personaje/${id}/comentarios`)
             .set('Authorization', `Bearer ${token}`)
             .expect(200)
 

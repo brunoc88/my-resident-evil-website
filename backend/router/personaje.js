@@ -25,10 +25,10 @@ router.patch('/:id/unlike', personajeController.unlike)
 
 router.post('/:id/comentario', personajeController.postearComentario)
 
-router.put('/:id/editarComentario/:idComentario', personajeController.editarComentario)
+router.put('/:id/comentario/:idComentario', personajeController.editarComentario)
 
-router.patch('/:id/eliminarComentario/:idComentario', personajeController.eliminarComentario)
+router.patch('/:id/comentario/:idComentario', personajeController.eliminarComentario)
 
-router.get('/:id/allComentarios', personajeController.getComentarios)
+router.get('/:id/comentarios', personajeController.getComentarios)
 
 module.exports = router
