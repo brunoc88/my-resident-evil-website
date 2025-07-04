@@ -84,6 +84,23 @@ describe('POST /user/recuperar-password', () => {
         expect(res.body).toHaveProperty('nuevaPassword')
         console.log(res.body.error)
     })
+
+    test('Falta email!', async () => {
+        const user = {
+            email: '',
+            pregunta: 'resident evil favorito?',
+            respuesta: 'resident evil 4'
+        }
+
+        const res = await api
+            .post('/user/recuperar-password')
+            .send(user)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toContain('Falta email!')
+    })
 })
 afterAll(async () => {
     await mongoose.connection.close()

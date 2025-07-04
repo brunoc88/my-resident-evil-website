@@ -33,10 +33,10 @@ exports.altaUserAdmin = async (req, res, next) => {
   try {
     const data = req.body
 
-    if (!data.secreto || data.secreto.trim().length === 0) return res.status(400).json({ error: 'Debe ingresa clave secreta!' })
-    if (data.secreto !== CLAVE_SECRETA_ADMIN) return res.status(400).json({ error: 'Clave secreta incorrecta!' })
+    if (!data.secreto || data.secreto.trim().length === 0) return res.status(400).json({ error: 'Debe ingresa clave secreta!' , data})
+    if (data.secreto !== CLAVE_SECRETA_ADMIN) return res.status(400).json({ error: 'Clave secreta incorrecta!', data })
     if (data.secreto && /\s/.test(data.secreto)) {
-      return res.status(400).json({ error: 'El password no debe contener espacios' })
+      return res.status(400).json({ error: 'El password no debe contener espacios' , data})
     }
     const passwordHash = await bcrypt.hash(data.password, 10)
 
@@ -170,7 +170,7 @@ exports.recuperarPassword = async (req, res, next) => {
 
 
     if (pregunta !== checkUser.pregunta || respuesta !== checkUser.respuesta) {
-      return res.status(400).json({ error: 'Pregunta o respuesta incorrecta' })
+      return res.status(400).json({ error: 'Pregunta o respuesta incorrecta', data:{email, pregunta} })
     }
 
     const nuevaPassword = generarPasswordAleatoria()

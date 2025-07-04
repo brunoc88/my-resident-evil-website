@@ -1,7 +1,10 @@
+const User = require('../../models/user')
+
 const validarEdicionUsuario = async (req, res, next) => {
   if (!req.cambios) {
     return res.status(400).json({ error: 'No se detectaron cambios para validar' })
   }
+  const userDB = await User.findById(req.user.id)//recupero datos por si falla
 
   const data = req.cambios
   const errores = []
@@ -56,7 +59,18 @@ const validarEdicionUsuario = async (req, res, next) => {
   }
 
   if (errores.length > 0) {
-    return res.status(400).json({ error: errores, data })
+    return res.status(400).json({
+      error: errores,
+      data: {
+        id: req.user.id,
+        userName: data.userName || userDB.userName,
+        email: data.email || userDB.email,
+        picture: data.picture || userDB.picture,
+        sobreMi: data.sobreMi || userDB.sobreMi,
+        pregunta: data.pregunta || userDB.pregunta,
+        respuesta: data.respuesta || userDB.respuesta
+      }
+    })
   }
 
   next()
