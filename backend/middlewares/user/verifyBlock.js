@@ -2,30 +2,26 @@ const User = require('../../models/user')
 
 const verifyBlock = async (req, res, next) => {
   try {
-    const myId = req.user.id
-    const id = req.params.id
+    const emisorId = req.user.id          // quien envía el mensaje
+    const receptorId = req.params.id      // a quién se lo envía
 
-    const user = await User.findById(id)
-    const yo = await User.findById(myId)
+    const emisor = await User.findById(emisorId)
+    const receptor = await User.findById(receptorId)
 
-    // Verifico que el usuario exista y esté activo
-    if (!user || !user.estado) {
-      return res.status(404).json({ error: 'Usuario no encontrado o eliminado!' })
+    if (!receptor || !receptor.estado) {
+      return res.status(404).json({ error: 'Usuario no encontrado o eliminado' })
     }
 
-    // Verifico si el usuario me bloqueó
-    if (user.bloqueos.includes(myId)) {
-      return res.status(403).json({ error: `El usuario ${user.userName} no está disponible` })
+    // ¿El receptor bloqueó al emisor?
+    if (receptor.bloqueos.includes(emisorId)) {
+      return res.status(403).json({ error: `El usuario ${receptor.userName} no está disponible` })
     }
 
-    // Verifico si yo lo tengo bloqueado
-    if (yo.bloqueos.includes(id)) {
-      return res.status(400).json({ error: `Tienes bloqueado a ${user.userName}!` })
+    // ¿El emisor bloqueó al receptor?
+    if (emisor.bloqueos.includes(receptorId)) {
+      return res.status(400).json({ error: `Tienes bloqueado a ${receptor.userName}` })
     }
 
-    if(yo.rol === 'comun' && user.rol === 'admin'){
-      return res.status(403).json({ error: `No puedes bloquear a un administrador!` })
-    }
 
     next()
   } catch (error) {

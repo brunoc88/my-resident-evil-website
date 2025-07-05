@@ -231,22 +231,23 @@ exports.mandarMensaje = async (req, res, next) => {
 
     //responder mensaje
     if (replyTo) {
-      // 1. Validar que sea un ObjectId
       if (!mongoose.Types.ObjectId.isValid(replyTo)) {
         return res.status(400).json({ error: 'El ID del mensaje al que respondes no es válido' })
       }
 
-      // 2. Buscar si ese mensaje existe dentro del array mensajes del receptor
-      const mensajeOriginal = user.mensajes.find(m => m._id.toString() === replyTo)
+      // Buscamos el mensaje original en el receptor actual
+      // Si no se encuentra, intentar buscar en el emisor actual
+      const mensajeOriginalReceptor = user.mensajes.find(m => m._id.toString() === replyTo)
 
-      if (!mensajeOriginal) {
+      // Intentar buscar en el usuario actual (el que envía el mensaje)
+      const emisor = await User.findById(req.user.id)
+      const mensajeOriginalEmisor = emisor?.mensajes.find(m => m._id.toString() === replyTo)
+
+      if (!mensajeOriginalReceptor && !mensajeOriginalEmisor) {
         return res.status(400).json({ error: 'El mensaje al que estás respondiendo no existe' })
       }
-
-      // Validaciones necesarias porque:
-      // Eviatamos hacer reply a un mensaje que no existe o que no le pertenece al receptor.
-      // Nos sirve por si querevemos ver todo el hilo de la conversacion
     }
+
 
 
     const nuevoMensaje = {
@@ -320,6 +321,7 @@ exports.eliminarMensaje = async (req, res, next) => {
   }
 }
 
+//obtener todos los mensajes activos
 exports.allMsj = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id)
@@ -329,9 +331,9 @@ exports.allMsj = async (req, res, next) => {
     //Si los mensajes pueden crecer mucho, se puede solicitar ese campo a la base:
     //const user = await User.findById(req.user.id).select('mensajes')
 
-    let allMsj = user.mensajes.filter( m => m.estado)
+    let allMsj = user.mensajes.filter(m => m.estado)
 
-    return res.status(200).json({mensaje: allMsj})
+    return res.status(200).json({ mensaje: allMsj })
   } catch (error) {
     next(error)
   }
@@ -344,11 +346,17 @@ exports.bloquear = async (req, res, next) => {
     const id = req.params.id // usuario a bloquear
     const myId = req.user.id
 
+    const emisor = await User.findById(myId)
+    const receptor = await User.findById(id)
+
     // Evitar que te bloquees a vos mismo
     if (id === myId) {
       return res.status(400).json({ error: "No puedes bloquearte a ti mismo." })
     }
 
+    if (emisor.rol === 'comun' && receptor.rol === 'admin') {
+      return res.status(403).json({ error: 'No puedes bloquear a un administrador!' })
+    }
     // En este punto, verifyBlock ya garantizó:
     // - El usuario a bloquear existe y está activo
     // - No está bloqueado previamente
@@ -380,6 +388,23 @@ exports.desbloquear = async (req, res, next) => {
     next(error)
   }
 }
+
+exports.listaBloqueados = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id)
+      .select('bloqueos')
+      .populate('bloqueos', 'userName email')
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' })
+    }
+
+    return res.status(200).json({ bloqueados: user.bloqueos })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const generarPasswordAleatoria = (longitud = 12) => {
   return crypto.randomBytes(longitud).toString('hex').slice(0, longitud)  // ej: "a9d0e3f1b2c4"
 }

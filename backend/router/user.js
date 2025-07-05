@@ -40,4 +40,6 @@ router.post('/bloquear/:id', verifyBlock, userController.bloquear)
 
 router.delete('/desbloquear/:id', userController.desbloquear)
 
+router.get('/bloqueados', userController.listaBloqueados)
+
 module.exports = router

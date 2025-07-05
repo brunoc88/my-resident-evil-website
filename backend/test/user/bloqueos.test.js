@@ -80,7 +80,7 @@ describe('POST /user/bloquear/:id', () => {
             .expect('Content-Type', /application\/json/)
 
         expect(res.body).toHaveProperty('error')
-        expect(res.body.error).toContain(`Tienes bloqueado a ${users[1].userName}!`)
+        expect(res.body.error).toContain(`Tienes bloqueado a ${users[1].userName}`)
 
     })
 
@@ -110,7 +110,7 @@ describe('POST /user/bloquear/:id', () => {
 })
 
 describe('DELETE /user/desbloquear/:id', () => {
-    test.only('Desbloquear usuario', async () => {
+    test('Desbloquear usuario', async () => {
         //bloqueo a un usuario
         const users = await getUsers()
         const id = users[1].id
@@ -133,6 +133,21 @@ describe('DELETE /user/desbloquear/:id', () => {
     })
 })
 
+describe('GET /user/bloqueados', () => {
+    test('Lista de bloqueados', async() => {
+        const users = await getUsers()
+        const id = users[0].id
+
+        
+        const res = await api
+        .get(`/user/bloqueados`)
+        .expect(200)
+        .set('Authorization', `Bearer ${token}`)
+        .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('bloqueados')
+    })
+})
 afterAll(async () => {
     await mongoose.connection.close()
 })
