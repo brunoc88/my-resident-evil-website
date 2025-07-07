@@ -9,6 +9,7 @@
     "test:u": "npm test test/user/mensajes.test.js",
     "test:l": "npm test test/login/login.test.js",
     "test:p": "npm test test/personaje",
+    "test:d": "npm test test/denuncias",
     "test:watch": "cross-env NODE_ENV=test jest --watch"
   },
   "keywords": [],

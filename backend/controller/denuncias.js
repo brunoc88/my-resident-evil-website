@@ -6,7 +6,7 @@ exports.crearDenuncia = async (req, res, next) => {
   try {
     const { tipo, id, motivo, mensaje } = req.body
 
-    if (!tipo || !id || !motivo, !mensaje) {
+    if (!tipo || !id || !motivo || !mensaje) {
       return res.status(400).json({ error: 'Faltan campos requeridos' })
     }
 
