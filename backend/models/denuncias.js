@@ -22,6 +22,14 @@ const denunciaSchema = mongoose.Schema({
     required: true,
     maxlength: 100
   },
+  mensaje: {
+    type: String,
+    maxlength: 500 
+  },
+  estado: {
+    type: Boolean,
+    default: true // true = pendiente, false = resuelta
+  },
   fecha: {
     type: Date,
     default: Date.now

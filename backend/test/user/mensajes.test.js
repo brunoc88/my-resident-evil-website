@@ -269,7 +269,7 @@ describe('GET /user/mensajes/chat/:id', () => {
 })
 
 describe('GET /user/mensajes/resumen', () => {
-    test.only('Resumen de mensajes: muestra el último mensaje de cada emisor', async () => {
+    test('Resumen de mensajes: muestra el último mensaje de cada emisor', async () => {
         const users = await getUsers()
         const idReceptor = users[1].id // Usuario que recibe los mensajes
 
@@ -305,6 +305,7 @@ describe('GET /user/mensajes/resumen', () => {
     })
 
 })
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
