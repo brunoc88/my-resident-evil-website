@@ -339,6 +339,78 @@ exports.allMsj = async (req, res, next) => {
   }
 }
 
+// chat de toda la conversacion con el usuario
+exports.getHiloConversacion = async (req, res, next) => {
+  try {
+    const usuarioId = req.user.id
+    const otroUsuarioId = req.params.id
+
+    // Traigo ambos usuarios
+    const user = await User.findById(usuarioId)
+    const otroUser = await User.findById(otroUsuarioId)
+
+    if (!user || !otroUser) return res.status(404).json({ error: 'Usuario no encontrado' })
+
+    // Filtrar mensajes del usuario que sean enviados o recibidos por el otro usuario
+    const mensajesUsuario = user.mensajes.filter(m => m.usuario.toString() === otroUsuarioId || otroUsuarioId === usuarioId)
+
+    // Filtrar mensajes del otro usuario que involucren al usuario actual
+    const mensajesOtroUser = otroUser.mensajes.filter(m => m.usuario.toString() === usuarioId || usuarioId === otroUsuarioId)
+
+    // Combinar
+    const hiloCompleto = [...mensajesUsuario, ...mensajesOtroUser]
+
+    // Ordenar por fecha ascendente
+    hiloCompleto.sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+
+    return res.status(200).json({ mensajes: hiloCompleto })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// tipo "bandeja de entrada"
+// Muestre un solo mensaje por cada usuario emisor
+// Devuelve un resumen de últimas conversaciones, agrupando por usuario
+// Devuelva info del emisor (userName, email, etc.)
+// Permita después hacer clic y ver el hilo (si decidís implementarlo luego).
+exports.resumenMensajes = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).populate('mensajes.usuario', 'userName email')
+
+    if (!user) return res.status(404).json({ error: "Usuario no encontrado" })
+
+    const mensajesActivos = user.mensajes
+      .filter(m => m.estado)
+      .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+
+    const vistos = new Set()
+    const resumen = []
+
+    for (const m of mensajesActivos) {
+      const idEmisor = m.usuario._id.toString()
+      if (!vistos.has(idEmisor)) {
+        resumen.push({
+          _id: m._id,
+          de: {
+            id: m.usuario._id,
+            userName: m.usuario.userName,
+            email: m.usuario.email
+          },
+          mensaje: m.mensaje,
+          fecha: m.fecha
+        })
+        vistos.add(idEmisor)
+      }
+    }
+
+    res.status(200).json({ mensajes: resumen })
+  } catch (error) {
+    next(error)
+  }
+}
+
+
 //funciones de bloqueo
 //un usuario comun no puede bloquear a un admin
 exports.bloquear = async (req, res, next) => {

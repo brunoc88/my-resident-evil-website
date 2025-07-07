@@ -36,6 +36,10 @@ router.patch('/mensaje/:id', userController.eliminarMensaje)
 
 router.get('/mensajes', userController.allMsj)
 
+router.get('/mensajes/chat/:id', userController.getHiloConversacion)
+
+router.get('/mensajes/resumen', userController.resumenMensajes)
+
 router.post('/bloquear/:id', verifyBlock, userController.bloquear)
 
 router.delete('/desbloquear/:id', userController.desbloquear)

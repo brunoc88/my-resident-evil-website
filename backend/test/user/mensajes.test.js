@@ -8,7 +8,7 @@ const api = supertest(app)
 
 let token = null
 let token2 = null
-
+let token3 = null
 
 beforeEach(async () => {
     await User.deleteMany({})
@@ -21,12 +21,17 @@ beforeEach(async () => {
     const res = await api.post('/').send({ user: users[0].userName, password: 'sekret' })
     //logeo al user Comun
     const res2 = await api.post('/').send({ user: users[1].userName, password: 'sekret' })
-    
+    //logeo un tercer user
+    const res3 = await api.post('/').send({ user: users[3].userName, password: 'sekret' })
+
     //token user admin
     token = res.body.token
     //token user comun
     token2 = res2.body.token
-   
+    //token user 3
+    token3 = res3.body.token
+
+
 })
 
 describe('POST /user/mensaje/:id', () => {
@@ -228,7 +233,78 @@ describe('PATCH /user/mensaje/:id', () => {
     })
 })
 
+describe('GET /user/mensajes/chat/:id', () => {
+    test('Obtener hilo de conversación entre dos usuarios', async () => {
+        const users = await getUsers()
+        const user1 = users[0] // admin
+        const user2 = users[1] // comun
 
+        // Usuario 1 (admin) envía un mensaje a usuario 2
+        const res1 = await api.post(`/user/mensaje/${user2.id}`)
+            .send({ mensaje: 'Hola, cómo estás?' })
+            .set('Authorization', `Bearer ${token}`) // token del admin
+
+        expect(res1.status).toBe(201)
+
+        // Usuario 2 (comun) responde al mensaje recibido
+        const res2 = await api.post(`/user/mensaje/${user1.id}`)
+            .send({ mensaje: 'Todo bien! ¿y vos?', replyTo: res1.body.mensajeId })
+            .set('Authorization', `Bearer ${token2}`) // token del user comun
+
+        expect(res2.status).toBe(201)
+
+        // Usuario 1 pide el hilo de conversación con usuario 2
+        const hilo = await api.get(`/user/mensajes/chat/${user2.id}`)
+            .set('Authorization', `Bearer ${token}`) // token del admin
+
+        expect(hilo.status).toBe(200)
+        expect(hilo.body).toHaveProperty('mensajes')
+        expect(hilo.body.mensajes.length).toBeGreaterThanOrEqual(2)
+
+        const mensajes = hilo.body.mensajes.map(m => m.mensaje)
+        expect(mensajes).toContain('Hola, cómo estás?')
+        expect(mensajes).toContain('Todo bien! ¿y vos?')
+    })
+
+})
+
+describe('GET /user/mensajes/resumen', () => {
+    test.only('Resumen de mensajes: muestra el último mensaje de cada emisor', async () => {
+        const users = await getUsers()
+        const idReceptor = users[1].id // Usuario que recibe los mensajes
+
+        // Usuario 0 le envía dos mensajes al usuario 1
+        await api.post(`/user/mensaje/${idReceptor}`)
+            .send({ mensaje: 'Hola!', replyTo: null })
+            .set('Authorization', `Bearer ${token}`)
+
+        await api.post(`/user/mensaje/${idReceptor}`)
+            .send({ mensaje: '¿Estás?', replyTo: null })
+            .set('Authorization', `Bearer ${token}`)
+
+        // Usuario 3 le envía un mensaje también
+        await api.post(`/user/mensaje/${idReceptor}`)
+            .send({ mensaje: 'Qué tal!', replyTo: null })
+            .set('Authorization', `Bearer ${token3}`)
+
+        // El usuario receptor (user[1]) pide el resumen
+        const res = await api.get('/user/mensajes/resumen')
+            .set('Authorization', `Bearer ${token2}`)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('mensajes')
+        expect(Array.isArray(res.body.mensajes)).toBe(true)
+
+        // Debería haber dos mensajes: uno del user 0 y otro del user 3
+        expect(res.body.mensajes.length).toBe(2)
+
+        const textos = res.body.mensajes.map(m => m.mensaje)
+        expect(textos).toContain('¿Estás?') // último del user 0
+        expect(textos).toContain('Qué tal!') // único del user 3
+    })
+
+})
 afterAll(async () => {
     await mongoose.connection.close()
 })
