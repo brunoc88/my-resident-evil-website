@@ -1,3 +1,1 @@
 # my-resident-evil-website
-
-REVISAR EL CONTROLADOR Y RUTA DE LOS LIKES DEL PERSONAJE
