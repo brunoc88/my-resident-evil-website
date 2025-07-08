@@ -154,6 +154,15 @@ exports.reactivarCuenta = async (req, res, next) => {
   }
 }
 
+// Lista de baneados, solo vista por admins
+exports.listaDeBaneados = async (req, res, next) => {
+  try {
+    const lista = await User.find({estado:false})
+    return res.status(200).json(lista)
+  } catch (error) {
+    next(error)
+  }
+}
 //cualquier usuario puede recuperarla
 exports.recuperarPassword = async (req, res, next) => {
   try {

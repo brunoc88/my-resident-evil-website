@@ -26,6 +26,8 @@ router.patch('/eliminar/:id', userController.eliminarCuenta)
 
 router.patch('/reActivar/:id', verifyRole('admin'), userController.reactivarCuenta)
 
+router.get('/baneados', verifyRole('admin'), userController.listaDeBaneados)
+
 router.put('/editar/:id', upload.single('picture'), validarCambios, validarEdicionUser, userController.editarUsuario)
 
 router.get('/allLikes', userController.allLikes)

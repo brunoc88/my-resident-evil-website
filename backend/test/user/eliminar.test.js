@@ -105,6 +105,16 @@ describe('PATCH /user/eliminar/:id', () => {
     })
 })
 
+describe('GET /user/baenados', () => {
+    test('Lista de cuentas baneadas', async () => {
+        await api
+            .get('/user/baneados')
+            .set('Authorization', `Bearer ${token}`)
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+    })
+})
+
 afterAll(async () => {
     await mongoose.connection.close()
 })
