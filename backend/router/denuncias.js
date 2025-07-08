@@ -6,14 +6,16 @@ router.use(userExtractor)
 
 router.post('/', denunciasController.crearDenuncia)
 
-// Ver todas
-router.get('/', verifyRole('admin'), denunciasController.obtenerDenuncias)
+router.use(verifyRole('admin'))
+
+// Ver todas activas
+router.get('/', denunciasController.obtenerDenuncias)
 
 // Ver una denuncia por id
-router.get('/:id', verifyRole('admin'), denunciasController.detalleDenuncia)
+router.get('/:id', denunciasController.detalleDenuncia)
 
 // Marcar como resuelta
-router.patch('/:id/resolver', verifyRole('admin'), denunciasController.marcarResuelta)
+router.patch('/:id/resolver', denunciasController.marcarResuelta)
 
 
 module.exports = router

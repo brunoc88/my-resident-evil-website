@@ -35,7 +35,7 @@ exports.alta = async (req, res, next) => {
 
 exports.all = async (req, res, next) => {
     try {
-        const data = await Personaje.find({})
+        const data = await Personaje.find({estado:true})
         return res.status(200).json({ personajes: data })
     } catch (error) {
         next(error)

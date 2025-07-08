@@ -58,7 +58,7 @@ exports.crearDenuncia = async (req, res, next) => {
 // Obtener todas las denuncias (admin)
 exports.obtenerDenuncias = async (req, res, next) => {
   try {
-    const denuncias = await Denuncia.find()
+    const denuncias = await Denuncia.find({estado:true})
       .populate('denunciante', 'userName email')
       .sort({ fecha: -1 })
 
