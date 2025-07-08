@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const { MONGODB_URI } = require('./utils/config')
 const logger = require('./utils/loggers')
 const path = require('path')
@@ -28,6 +29,7 @@ mongoose.connect(MONGODB_URI)
 
 // middlewares
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
+app.use(cors())
 app.use(express.json())
 app.use(tokenExtractor)
 

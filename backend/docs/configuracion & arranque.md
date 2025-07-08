@@ -53,6 +53,8 @@ Estas son las dependencias principales usadas en producción y desarrollo para l
 - **validator**  
   Funciones para validar y sanitizar datos como emails, URLs, etc.
 
+- **cors**
+  middleware para poder permitir que el frontend de react consuma la el backend que esta en un servidor diferente
 ---
 
 ## 📦 Dependencias de Desarrollo (devDependencies)
