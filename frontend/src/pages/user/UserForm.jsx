@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useNavigate, useOutletContext } from 'react-router-dom'
+import './UserForm.css'
 
 const UserForm = () => {
     const [user, setUser] = useState('')
@@ -12,7 +13,7 @@ const UserForm = () => {
     return (
         <div>
             <div>
-                <h2>Registrate!</h2>
+                <h1>Inscripcion para ser un miembro de la R.P.D o Umbrella!</h1>
             </div>
             <div>
                 <form onSubmit={handleSubmit} encType="multipart/form-data">
@@ -63,6 +64,25 @@ const UserForm = () => {
                         <div>
                             <label htmlFor="picture">Foto: (opcional)</label>
                             <input type="file" name="picture" id="picture" />
+                        </div>
+                        <div>
+                            <label htmlFor="password">Password:</label>
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="Ingrese una password"
+                            />
+                        </div>
+                        <div>
+                            <input
+                                type="password2"
+                                id="password2"
+                                placeholder="Repite el password"
+                            />
+                        </div>
+                        <div className="botones-container">
+                            <button id="registrarse" type="submit">Registrarse</button>
+                            <button id="volver">Volver</button>
                         </div>
                     </div>
                 </form>
