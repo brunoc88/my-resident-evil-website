@@ -17,11 +17,12 @@ const Login = () => {
         try {
             const res = await login({ user, password })
 
-            if (res && !res.error) {
+            if(res && res.error){
+                setError(res.error)
+            }else{
                 navigate('/home')
-            } else {
-                setError(res.error || 'Credenciales inválidas')
             }
+
         } catch (err) {
             setError(err.message || 'Error en el servidor')
         }
