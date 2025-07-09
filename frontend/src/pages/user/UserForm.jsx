@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate, useOutletContext } from 'react-router-dom'
 
-const RegistroUser = () => {
+const UserForm = () => {
     const [user, setUser] = useState('')
     const { setError } = useOutletContext()
     const navigate = useNavigate()
@@ -71,4 +71,4 @@ const RegistroUser = () => {
     )
 }
 
-export default RegistroUser
+export default UserForm
