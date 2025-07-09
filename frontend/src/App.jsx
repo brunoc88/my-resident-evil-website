@@ -1,13 +1,16 @@
 import { Routes, Route } from "react-router-dom"
-import Login from "./pages/login"
+import LayOut from "./pages/LayOut"
+import Login from "./pages/Login"
 import RegistroUser from "./pages/user/registro"
 
 const App = () => {
-  return(
+  return (
     <>
       <Routes>
-        <Route path ='/login' element = {<Login/>}/>
-        <Route path = '/registro' element = {<RegistroUser/>}/>
+        <Route path="/" element={<LayOut />}>
+          <Route path='login' element={<Login />} />
+          <Route path='registro' element={<RegistroUser />} />
+        </Route>
       </Routes>
     </>
   )
