@@ -43,12 +43,16 @@ const Login = () => {
                                 name="user" onChange={(e) => setUser(e.target.value)}
                                 value={user}
                             />
+                        </div>
+                        <div>
                             Password: <input type="password"
                                 placeholder="Ingrese password"
                                 name="password" onChange={(e) => setPassword(e.target.value)}
                                 value={password}
                             />
                         </div>
+                    </div>
+                    <div>
                         <button type="submit">Login</button>
                     </div>
                 </form>
