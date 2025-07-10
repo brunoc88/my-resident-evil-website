@@ -1,0 +1,12 @@
+POST http://localhost:3000/user/registro
+Content-Type: application/json
+
+{
+    "userName": "",
+    "email": "",
+    "password": "",
+    "sobreMi": "",
+    "pregunta": "",
+    "respuesta": "",
+    "picture": ""
+}
