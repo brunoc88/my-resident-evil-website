@@ -100,13 +100,16 @@ const UserForm = () => {
                 const incomingData = data.data       // campos que el usuario había escrito
 
                 setError(errores)                    // mostrar en <Notificaciones />
+                setTimeout(() => setError(null), 4000)
                 if (incomingData) {
                     setUser(prev => ({ ...prev, ...incomingData })) // rellenar el form con lo anterior
                 }
             }
         } catch (error) {
             const errores = parseError(error)
+            console.log(errores)
             setError(errores)
+            setTimeout(() => setError(null), 4000)
         }
     }
 
@@ -114,7 +117,9 @@ const UserForm = () => {
         <div>
             <h1>Inscripción para ser un miembro de la R.P.D o Umbrella!</h1>
 
+            
             <form onSubmit={handleSubmit} encType="multipart/form-data">
+                
                 <UserInputField
                     label="Nombre de usuario:"
                     name="userName"
@@ -128,7 +133,7 @@ const UserForm = () => {
                 <UserInputField
                     label="Email:"
                     name="email"
-                    type="email"
+                    type="text"
                     value={user.email}
                     onChange={handleChange}
                     isValid={validation.email}

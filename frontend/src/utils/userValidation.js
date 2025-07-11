@@ -33,7 +33,7 @@ export const validateField = (field, value, user) => {
                 errorMsj = 'Password inválido'
             } else if (value !== user.password) {
                 valid = false
-                errorMsj = 'Las contraseñas no coinciden'
+                errorMsj = 'Los Password no coinciden'
             }
             break
         case 'respuesta':

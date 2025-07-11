@@ -20,7 +20,7 @@ const UserInputField = ({// Props
         placeholder={placeholder}
       />
       {isValid === true && <span>✅</span>}
-      {isValid === false && <span>{message} ❌</span>}
+      {isValid === false && <span className="error-text">{message} ❌</span>}
     </div>
   )
 }

@@ -8,8 +8,8 @@ const LayOut = () => {
 
   return (
     <>
-      <Outlet context={{ setError, setMsj }} />
       <Notificaciones error={error} msj={msj} />
+      <Outlet context={{ setError, setMsj }} />
     </>
   )
 }

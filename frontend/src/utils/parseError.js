@@ -1,12 +1,9 @@
 export function parseError(error) {
-  // Intentamos obtener el array de errores del response (backend)
-  const backendErrors = error?.response?.data?.error
+  // fallbackError: en caso de que falle completamente la respuesta del backend
+  const fallbackError = error?.error || error?.message || 'Error desconocido'
 
-  // Si backendErrors es array, lo usamos, sino buscamos message o fallback genérico
-  const fallback = Array.isArray(backendErrors)
-    ? backendErrors
-    : error?.message || 'Error desconocido'
+  // Normalizamos para que siempre sea un array (para que <Notificaciones /> lo maneje igual)
+  const errores = Array.isArray(fallbackError) ? fallbackError : [fallbackError]
 
-  // Normalizamos a array si es string u otro tipo
-  return Array.isArray(fallback) ? fallback : [fallback]
+  return errores
 }
