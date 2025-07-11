@@ -2,7 +2,6 @@ import { useState } from "react"
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import UserInputField from "../../components/userInputField"
 import { validateField } from '../../utils/userValidation'
-import { parseError } from '../../utils/parseError'
 import { userPost } from '../../services/user/userServices'
 import './UserForm.css'
 
@@ -27,7 +26,7 @@ const UserForm = () => {
         sobreMi: null
     })
 
-    const [frontNotification, setFrontNoticiation] = useState({
+    const [notification, setNoticiation] = useState({
         userName: '',
         email: '',
         password: '',
@@ -47,7 +46,7 @@ const UserForm = () => {
             [field]: valid
         }))
 
-        setFrontNoticiation(prev => ({
+        setNoticiation(prev => ({
             ...prev,
             [field]: errorMsj
         }))
@@ -94,22 +93,8 @@ const UserForm = () => {
                 return
             }
 
-            // Si responde con errores
-            if (data.error) {
-                const errores = data.error           // array de errores
-                const incomingData = data.data       // campos que el usuario había escrito
-
-                setError(errores)                    // mostrar en <Notificaciones />
-                setTimeout(() => setError(null), 4000)
-                if (incomingData) {
-                    setUser(prev => ({ ...prev, ...incomingData })) // rellenar el form con lo anterior
-                }
-            }
         } catch (error) {
-            const errores = parseError(error)
-            console.log(errores)
-            setError(errores)
-            setTimeout(() => setError(null), 4000)
+            setError(error)
         }
     }
 
@@ -126,7 +111,7 @@ const UserForm = () => {
                     value={user.userName}
                     onChange={handleChange}
                     isValid={validation.userName}
-                    message={frontNotification.userName}
+                    message={notification.userName}
                     placeholder="Ingresar nombre de usuario"
                 />
 
@@ -137,7 +122,7 @@ const UserForm = () => {
                     value={user.email}
                     onChange={handleChange}
                     isValid={validation.email}
-                    message={frontNotification.email}
+                    message={notification.email}
                     placeholder="Ingrese un Email"
                 />
 
@@ -162,7 +147,7 @@ const UserForm = () => {
                     value={user.respuesta}
                     onChange={handleChange}
                     isValid={validation.respuesta}
-                    message={frontNotification.respuesta}
+                    message={notification.respuesta}
                     placeholder="Ingrese una respuesta"
                 />
                 <div style={{ textAlign: 'right', fontSize: '0.9rem', color: '#ccc' }}>
@@ -181,7 +166,7 @@ const UserForm = () => {
                     <div style={{ textAlign: 'right', fontSize: '0.9rem', color: '#ccc' }}>
                         {user.sobreMi.length}/150 caracteres
                     </div>
-                    {validation.sobreMi === false && <span>{frontNotification.sobreMi} ❌</span>}
+                    {validation.sobreMi === false && <span>{notification.sobreMi} ❌</span>}
                 </div>
 
                 <div>
@@ -196,7 +181,7 @@ const UserForm = () => {
                     value={user.password}
                     onChange={handleChange}
                     isValid={validation.password}
-                    message={frontNotification.password}
+                    message={notification.password}
                     placeholder="Ingrese una password"
                 />
 
@@ -207,7 +192,7 @@ const UserForm = () => {
                     value={user.password2}
                     onChange={handleChange}
                     isValid={validation.password2}
-                    message={frontNotification.password2}
+                    message={notification.password2}
                     placeholder="Repite el password"
                 />
 

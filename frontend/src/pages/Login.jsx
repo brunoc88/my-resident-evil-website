@@ -16,13 +16,15 @@ const Login = () => {
         try {
             const res = await login({ user, password })
 
-            if (res && res.error) {
-                setError(res.error)
-            } else {
+            if (res && !res.error) {
                 navigate('/home')
-            }
+            } 
+            
         } catch (err) {
             setError(err.message || 'Error en el servidor')
+            setTimeout(() => {
+                setError(null)
+            }, 3000);
         }
     }
 

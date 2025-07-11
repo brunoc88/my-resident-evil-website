@@ -7,7 +7,10 @@ const userPost = async (user) => {
         const res = await axios.post(`${baseUrl}/user/registro`, user)
         return res.data
     } catch (error) {
-        return Promise.reject(error.response?.data || { message: 'Error desconocido' })
+        const data = error.response?.data
+        if (data?.error) throw new Error(data.error)
+        if (data?.message) throw new Error(data.message)
+        throw new Error('Error desconocido')
     }
 }
 

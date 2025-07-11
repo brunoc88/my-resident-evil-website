@@ -10,3 +10,13 @@ Content-Type: application/json
     "respuesta": "",
     "picture": ""
 }
+
+###
+
+POST http://localhost:3000/
+Content-Type: application/json
+
+{
+    "user": "",
+    "password": ""
+}
