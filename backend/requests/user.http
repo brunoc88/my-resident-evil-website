@@ -2,12 +2,12 @@ POST http://localhost:3000/user/registro
 Content-Type: application/json
 
 {
-    "userName": "",
-    "email": "",
-    "password": "",
+    "userName": "bruno88",
+    "email": "brunocerutti88@gmail.com",
+    "password": "123456",
     "sobreMi": "",
-    "pregunta": "",
-    "respuesta": "",
+    "pregunta": "Resident Evil Favorito?",
+    "respuesta": "Resident Evil 3",
     "picture": ""
 }
 
@@ -17,6 +17,7 @@ POST http://localhost:3000/
 Content-Type: application/json
 
 {
-    "user": "",
-    "password": ""
+    "user": "bruno88",
+    "password": "123456"
 }
+

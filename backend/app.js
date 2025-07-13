@@ -17,7 +17,7 @@ const denunciasRouter = require('./router/denuncias')
 // conectando a la DB
 mongoose.set('strictQuery', false)
 
-logger.info('Conectando a Base de datos: ', MONGODB_URI)
+logger.info('Conectando a Base de datos')
 
 mongoose.connect(MONGODB_URI)
     .then(() => {
