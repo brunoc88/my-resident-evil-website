@@ -22,13 +22,17 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        setDbErrorMsj(null)
-        const { user, password } = usuario
-        const res = await login({ user, password })
-        if (res && res.error) {
-            setDbErrorMsj(res.error)
+        if (validationError) {
+            setValidationError('Ingresar un password valido!')
         } else {
-            navigate('/home')
+            setDbErrorMsj(null)
+            const { user, password } = usuario
+            const res = await login({ user, password })
+            if (res && res.error) {
+                setDbErrorMsj(res.error)
+            } else {
+                navigate('/home')
+            }
         }
     }
 

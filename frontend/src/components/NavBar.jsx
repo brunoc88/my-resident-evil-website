@@ -37,7 +37,7 @@ const NavBar = () => {
                 </div>
                 <div>
                     <li>
-                        <NavLink to=''>
+                        <NavLink to='login'>
                             Login
                         </NavLink>
                     </li>
