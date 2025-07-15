@@ -1,0 +1,96 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 👉 ahora se alinea arriba */
+  padding: 4rem 2rem;
+  min-height: 80vh;
+  background-color: #000;
+}
+
+.login-box {
+  display: flex;
+  gap: 3rem;
+  width: 100%;
+  max-width: 1200px;
+  align-items: flex-start;
+}
+
+/* 🔴 FORMULARIO */
+.login-form-section {
+  flex: 0 0 35%;
+  background-color: #000;
+  padding: 2rem;
+  border-radius: 6px; /* 👉 más sutil */
+  border: 1px solid #444;
+  margin-top: 3rem; /* 👉 lo empuja hacia abajo */
+}
+
+.login-form-section h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+form label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+form input {
+  width: 90%; /* 👉 más angosto */
+  max-width: 250px;
+  padding: 0.4rem 0.5rem;
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 4px;
+}
+
+form button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background-color: red;
+  margin-right: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+form button:hover {
+  background-color: darkred;
+}
+
+.recovery-link {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+/* 🔴 IMAGEN + TEXTO: sin cambios */
+.login-image-section {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.login-image-section .login-text {
+  flex: 1;
+  color: white;
+  font-style: italic;
+  font-weight: bold;
+  text-align: right;
+  align-self: flex-end;
+  padding-bottom: 1rem;
+}
+
+.login-image-section img {
+  width: 330px;
+  height: auto;
+  border-radius: 8px;
+  align-self: flex-end;
+}

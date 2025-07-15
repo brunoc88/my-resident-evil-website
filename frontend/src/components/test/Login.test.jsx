@@ -1,6 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from "react-router-dom"
-import { expect, vi } from 'vitest'
+import { vi } from 'vitest'
 import Login from "../../pages/Login"
 
 beforeEach(() => {
@@ -9,6 +9,16 @@ beforeEach(() => {
             <Login />
         </MemoryRouter>
     )
+})
+
+
+
+vi.mock('react-router-dom', () => {
+    const actual = await vi.importActual('react-router-dom')
+    return {
+        ...actual,
+    }
+
 })
 
 describe('Login', () => {

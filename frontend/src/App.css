@@ -1,0 +1,31 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #000;
+  color: white;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: black;
+}
+ul > div {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+ul li {
+  margin: 0;
+}
+nav img {
+  width: 25px;
+  height: auto;
+  margin-left: 8px;
+}

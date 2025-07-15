@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom"
+import './NavBar.css'
 
 const NavBar = () => {
     return(
@@ -8,6 +9,7 @@ const NavBar = () => {
                     <li>
                         <NavLink to=''>
                             Umbrella S.A
+                            <img src="/logo.png" alt="logo" />
                         </NavLink>
                     </li>
                 </div>
@@ -25,6 +27,11 @@ const NavBar = () => {
                     <li>
                         <NavLink to=''>
                             Nosotros
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to=''>
+                            Contactanos
                         </NavLink>
                     </li>
                 </div>
