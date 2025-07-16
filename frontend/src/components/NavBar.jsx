@@ -55,7 +55,8 @@ const NavBar = ({ isAuth, user, onLogout }) => {
                     {isAuth &&
                         <li>
                             <button onClick={onLogout} className="logout-link">Logout</button>
-                        </li>}
+                        </li>
+                    }
                 </div>
             </ul>
         </nav>

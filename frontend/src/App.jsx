@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom"
+import { useState, useEffect } from "react"
 import LayOut from "./components/LayOut"
 import Login from "./pages/Login"
-import { useState, useEffect } from "react"
+import UserForm from "./pages/user/userForm"
 
 
 const App = () => {
@@ -29,7 +30,8 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<LayOut isAuth={isAuth} user={user} onLogout={handleLogout}/>}>
-          <Route path='login' element={<Login setToken={setToken} setUser={setUser} user={user} isAuth={isAuth} />} />
+          <Route path="login" element={<Login setToken={setToken} setUser={setUser} user={user} isAuth={isAuth} />} />
+          <Route path="registrarse" element={<UserForm/>}/>
         </Route>
       </Routes>
     </>

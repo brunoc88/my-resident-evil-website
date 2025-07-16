@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { validarPassword } from "../utils/validarLogin"
+import { useNavigate } from "react-router-dom"
 import login from "../services/login"
 import './Login.css'
 
@@ -8,6 +9,7 @@ const Login = ({ setToken, setUser, isAuth, user }) => {
     const [usuario, setUsuario] = useState({ user: '', password: '' })
     const [validationError, setValidationError] = useState('')
     const [dbErrorMsj, setDbErrorMsj] = useState('')
+    const navigate = useNavigate()
 
     const handleChange = (e) => {
         setValidationError(null)
@@ -26,16 +28,20 @@ const Login = ({ setToken, setUser, isAuth, user }) => {
         } else {
             setDbErrorMsj(null)
             const { user, password } = usuario
-            const res = await login({ user, password })
-            if (res && res.error) {
-                setDbErrorMsj(res.error)
-            }
-            if (res && res.token) {
-                window.localStorage.setItem('loggerReAppUser', JSON.stringify(res))
+            try {
+                const res = await login({ user, password })
                 setToken(res.token)
                 setUser(res.user)
+                localStorage.setItem('loggerReAppUser', JSON.stringify({ token: res.token, user: res.user }))
+            } catch (error) {
+                setDbErrorMsj(error.message) // Captura el mensaje del error lanzado
             }
+
         }
+    }
+
+    const handleNavigate = () => {
+        navigate('/registrarse')
     }
 
     if (!isAuth) {
@@ -73,7 +79,7 @@ const Login = ({ setToken, setUser, isAuth, user }) => {
 
                             <div>
                                 <button type="submit">Login</button>
-                                <button type="button">Registrarse</button>
+                                <button onClick={handleNavigate}>Registrarse</button>
                             </div>
                         </form>
 
@@ -95,23 +101,29 @@ const Login = ({ setToken, setUser, isAuth, user }) => {
             </div>
         )
     }
-    else{
-        return(
-            <div>
-                <div>
-                    <h1>Bienvenido de nuevo {user.userName}!</h1>
-                </div>
-                <div>
-                    <p>
-                        Recuerdas que puedes, crear, editar, likear y comentar personajes,
-                        como tambien puedes mensajearte con otros usuarios!
-                    </p>
-                </div>
+    else {
+        return (
+            <div
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '60vh',
+                    textAlign: 'center',
+                    padding: '1rem',
+                }}
+            >
+                <h1 style={{ fontSize: '3rem', marginBottom: '1rem' }}>
+                    Bienvenido de nuevo {user.userName}!
+                </h1>
+                <p style={{ fontSize: '1.2rem', maxWidth: '600px' }}>
+                    Recuerdas que puedes, crear, editar, likear y comentar personajes,
+                    como tambien puedes mensajearte con otros usuarios!
+                </p>
             </div>
         )
     }
-
-
 }
 
 export default Login
