@@ -45,3 +45,17 @@ nav ul div li img {
   height: 100px;
   object-fit: contain; /* para que no se deforme */
 }
+
+.logout-link {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 1rem;
+  padding: 0;
+}
+
+.logout-link:hover {
+  color: #ccc;
+}

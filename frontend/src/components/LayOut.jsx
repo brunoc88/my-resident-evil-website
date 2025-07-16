@@ -2,11 +2,13 @@ import NavBar from "./NavBar"
 import { Outlet } from "react-router-dom"
 
 
-const LayOut = () => {
+const LayOut = ({ isAuth, user, onLogout }) => {
     return (
         <>
-            <NavBar/>
-            <Outlet/>
+            <NavBar isAuth={isAuth} user={user} onLogout={onLogout} />
+            <main>
+                <Outlet />
+            </main>
         </>
     )
 }

@@ -1,14 +1,35 @@
 import { Routes, Route } from "react-router-dom"
 import LayOut from "./components/LayOut"
 import Login from "./pages/Login"
+import { useState, useEffect } from "react"
 
 
 const App = () => {
+  const [token, setToken] = useState(null)
+  const [user, setUser] = useState(null)
+  const isAuth = !!user // <-- isAuth sera verdadera si user no es null||undefined
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggerReAppUser')
+    if (loggedUserJSON) {
+      const userData = JSON.parse(loggedUserJSON)
+      setUser(userData.user)
+      setToken(userData.token)
+    }
+  }, [])
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggerReAppUser')
+    setUser(null)
+    setToken(null)
+  }
+
+
   return (
     <>
       <Routes>
-        <Route path="/" element={<LayOut />}>
-          <Route path='login' element={<Login />} />
+        <Route path="/" element={<LayOut isAuth={isAuth} user={user} onLogout={handleLogout}/>}>
+          <Route path='login' element={<Login setToken={setToken} setUser={setUser} user={user} isAuth={isAuth} />} />
         </Route>
       </Routes>
     </>
