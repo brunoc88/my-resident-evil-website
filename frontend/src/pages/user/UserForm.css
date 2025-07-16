@@ -1,100 +1,125 @@
-/* Fondo general */
 body {
-  background-color: #000;
-  color: white;
-  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #0a0a0a;
+  font-family: 'Arial', sans-serif;
 }
 
-/* Contenedor del formulario */
-.form-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: #2c2c2c;
-  border-radius: 10px;
+.user-form-layout {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 0;
   gap: 2rem;
 }
 
-/* Título */
-.form-container h1 {
-  text-align: center;
+.side-image {
+  width:400px;
+  object-fit: cover;
+  height: auto;
+  align-self: stretch;
+  border-radius: 10px
+}
+
+.formulario {
+  background-color: #1e1e1e;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+  color: #fff;
+  width: 600px;
+}
+
+.formulario h1 {
+  font-size: 24px;
+  color: #ff3c3c;
   margin-bottom: 0.5rem;
 }
 
-.form-container p {
-  text-align: center;
-  font-size: 1rem;
+.formulario p {
+  margin-bottom: 2rem;
   color: #ccc;
+  font-style: italic;
 }
 
-/* Grid de los inputs */
-.form-grid {
+.grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
 }
 
-/* Cada campo */
-.field-group {
+.campo {
   display: flex;
   flex-direction: column;
 }
 
-.field-group label {
-  margin-bottom: 0.3rem;
+.campo label {
+  margin-bottom: 0.5rem;
   font-weight: bold;
 }
 
-.field-group input,
-.field-group select,
-.field-group textarea {
+.campo input,
+.campo select,
+.campo textarea {
   padding: 0.5rem;
-  font-size: 1rem;
   border: none;
   border-radius: 5px;
-  background-color: white;
-  color: black;
+  background-color: #333;
+  color: white;
 }
 
-.field-group textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-/* Errores */
-.field-group span {
+.campo span {
   color: red;
-  font-size: 0.9rem;
-  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
 }
 
-/* Contador sobreMi opcional */
-.char-counter {
-  font-size: 0.9rem;
-  color: #ccc;
-  margin-top: 0.2rem;
+textarea {
+  resize: none;
+  height: 80px;
 }
 
-/* Botones */
-.form-buttons {
+.contador {
+  font-size: 0.8rem;
+  text-align: right;
+  color: #aaa;
+}
+
+.botones {
   display: flex;
   justify-content: center;
+  margin-top: 2rem;
   gap: 1rem;
 }
 
-.form-buttons button {
-  padding: 0.6rem 1.5rem;
-  background-color: red;
+.botones button {
+  padding: 0.7rem 2rem;
+  background-color: #a80000;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.2s ease;
 }
 
-form button:hover {
-  background-color: darkred;
+.botones button:hover {
+  background-color: #d40000;
 }
 
+@media (max-width: 1024px) {
+  .user-form-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .side-image {
+    display: none;
+  }
+
+  .formulario {
+    width: 90%;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
