@@ -13,7 +13,7 @@ import { useNavigate, useOutletContext } from 'react-router-dom'
 import login from '../../services/login'
 import './UserForm.css'
 
-const UserForm = ({setToken, setUser}) => {
+const UserForm = ({ setToken, setUser }) => {
   const {
     register,
     handleSubmit,
@@ -41,11 +41,11 @@ const UserForm = ({setToken, setUser}) => {
     formData.append('respuesta', data.respuesta)
     formData.append('sobreMi', data.sobreMi)
     if (data.picture && data.picture[0]) {
-      formData.append('picture', data.picture)
+      formData.append('picture', data.picture[0])
     }
 
     try {
-      const res = await userPost(data)
+      const res = await userPost(formData)
       if (res && !res.error) {
         setNotification({ error: '', exito: 'Gracias por registrartre!' })
         setTimeout(() => {
@@ -77,7 +77,7 @@ const UserForm = ({setToken, setUser}) => {
         className="side-image left"
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="formulario">
+      <form onSubmit={handleSubmit(onSubmit)} className="formulario" encType="multipart/form-data">
         <h1>Formulario de Usuario</h1>
         <p>¿Te unes a la R.P.D o a Umbrella?</p>
 
@@ -166,8 +166,14 @@ const UserForm = ({setToken, setUser}) => {
 
           <div className="campo">
             <label htmlFor="picture">Imagen:</label>
-            <input type="file" id="picture" />
+            <input
+              type="file"
+              id="picture"
+              accept="image/*"
+              {...register('picture')}
+            />
           </div>
+
         </div>
 
         <div className="botones">
