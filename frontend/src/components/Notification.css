@@ -1,0 +1,13 @@
+.error-msg {
+  color: red;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.succes-msg {
+  color: green;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+}

@@ -31,7 +31,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LayOut isAuth={isAuth} user={user} onLogout={handleLogout}/>}>
           <Route path="login" element={<Login setToken={setToken} setUser={setUser} user={user} isAuth={isAuth} />} />
-          <Route path="registrarse" element={<UserForm/>}/>
+          <Route path="registrarse" element={<UserForm setToken={setToken} setUser={setUser}/>}/>
         </Route>
       </Routes>
     </>

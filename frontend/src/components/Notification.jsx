@@ -4,7 +4,7 @@ const Notification = ({ error, exito }) => {
 
   return (
     <div>
-      {exito ? <p style={{ color: 'green' }}>{exito}</p> : <p style={{ color: 'red' }}>{error}</p>}
+      {exito ? <p className="succes-msg">{exito}</p> : <p className="error-msg">{error}</p>}
     </div>
   )
 }

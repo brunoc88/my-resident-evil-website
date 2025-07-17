@@ -10,9 +10,10 @@ import {
 } from '../../utils/userValidation'
 import { userPost } from '../../services/user'
 import { useNavigate, useOutletContext } from 'react-router-dom'
+import login from '../../services/login'
 import './UserForm.css'
 
-const UserForm = () => {
+const UserForm = ({setToken, setUser}) => {
   const {
     register,
     handleSubmit,
@@ -40,7 +41,7 @@ const UserForm = () => {
     formData.append('respuesta', data.respuesta)
     formData.append('sobreMi', data.sobreMi)
     if (data.picture && data.picture[0]) {
-      formData.append('picture', data.picture[0])
+      formData.append('picture', data.picture)
     }
 
     try {
@@ -50,15 +51,21 @@ const UserForm = () => {
         setTimeout(() => {
           setNotification({ error: '', exito: '' })
         }, 5000)
+        const user = data.userName
+        const password = data.password
+        const res = await login({ user, password })
+        setToken(res.token)
+        setUser(res.user)
+        localStorage.setItem('loggerReAppUser', JSON.stringify({ token: res.token, user: res.user }))
         navigate('/')
       }
     } catch (error) {
-      setNotification({ error: `${error}`, exito: '' })
+      setNotification({ error: error.message, exito: '' })
     }
 
   }
 
-  const onVolver = () =>{
+  const onVolver = () => {
     navigate('/login')
   }
 
