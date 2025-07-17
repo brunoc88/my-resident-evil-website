@@ -1,4 +1,14 @@
 import { useForm } from 'react-hook-form'
+import {
+  userNameValidation,
+  passwordValidation,
+  password2Validation,
+  emailValidation,
+  preguntaValidation,
+  sobreMiValidation,
+  respuestaValidation
+} from '../../utils/userValidation'
+
 import './UserForm.css'
 
 const UserForm = () => {
@@ -10,6 +20,8 @@ const UserForm = () => {
   } = useForm({ mode: 'onChange' })
 
   const sobreMi = watch('sobreMi', '')
+  const respuesta = watch('respuesta', '')
+  const userName = watch('userName', '')
 
   const onSubmit = (data) => {
     console.log(data)
@@ -29,24 +41,24 @@ const UserForm = () => {
 
         <div className="grid">
           <div className="campo">
-            <label htmlFor="userName">Nombre:</label>
+            <label htmlFor="userName">Nombre de Usuario:</label>
             <input
               id="userName"
-              {...register('userName', { required: 'Nombre requerido' })}
-              placeholder="Ej: adaWong"
+              {...register('userName', userNameValidation)}
+              placeholder="Ej: adaWong88"
+              type='text'
             />
+            <div className="contador">{userName.length}/10</div>
             {errors.userName && <span>{errors.userName.message}</span>}
           </div>
 
           <div className="campo">
             <label htmlFor="password">Password:</label>
             <input
-              type="password"
               id="password"
-              {...register('password', {
-                required: 'Contraseña requerida',
-                minLength: { value: 6, message: 'Mínimo 6 caracteres' }
-              })}
+              type="password"
+              {...register('password', passwordValidation)}
+              placeholder="Ingrese un password"
             />
             {errors.password && <span>{errors.password.message}</span>}
           </div>
@@ -55,13 +67,8 @@ const UserForm = () => {
             <label htmlFor="email">Email:</label>
             <input
               id="email"
-              {...register('email', {
-                required: 'Email requerido',
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Email inválido'
-                }
-              })}
+              type="text"
+              {...register('email', emailValidation)}
               placeholder="Ej: capcom@gmail.com"
             />
             {errors.email && <span>{errors.email.message}</span>}
@@ -70,13 +77,10 @@ const UserForm = () => {
           <div className="campo">
             <label htmlFor="password2">Confirmar Password:</label>
             <input
-              type="password"
               id="password2"
-              {...register('password2', {
-                required: 'Debes confirmar la contraseña',
-                validate: value =>
-                  value === watch('password') || 'Las contraseñas no coinciden'
-              })}
+              type="password"
+              {...register('password2', password2Validation(watch))}
+              
             />
             {errors.password2 && <span>{errors.password2.message}</span>}
           </div>
@@ -85,7 +89,7 @@ const UserForm = () => {
             <label htmlFor="pregunta">Selecciona una Pregunta:</label>
             <select
               id="pregunta"
-              {...register('pregunta', { required: 'Selecciona una pregunta' })}
+              {...register('pregunta', preguntaValidation)}
             >
               <option value="">-- Elige una opción --</option>
               <option value="RE Favorito?">RE Favorito?</option>
@@ -99,14 +103,10 @@ const UserForm = () => {
             <label htmlFor="sobreMi">Escribe un poco sobre ti:</label>
             <textarea
               id="sobreMi"
-              {...register('sobreMi', {
-                maxLength: {
-                  value: 60,
-                  message: 'Máximo 60 caracteres'
-                }
-              })}
+              {...register('sobreMi', sobreMiValidation)}
+              placeholder='Ej: Amo jugar Resident Evil, los juego desde que salio la PlayStation'
             />
-            <div className="contador">{sobreMi.length}/60</div>
+            <div className="contador">{sobreMi.length}/150</div>
             {errors.sobreMi && <span>{errors.sobreMi.message}</span>}
           </div>
 
@@ -114,8 +114,11 @@ const UserForm = () => {
             <label htmlFor="respuesta">Respuesta:</label>
             <input
               id="respuesta"
-              {...register('respuesta', { required: 'Respuesta requerida' })}
+              type="text"
+              placeholder='Ej: Resident Evil 3 de 1998'
+              {...register('respuesta', respuestaValidation)}
             />
+            <div className="contador">{respuesta.length}/60</div>
             {errors.respuesta && <span>{errors.respuesta.message}</span>}
           </div>
 
