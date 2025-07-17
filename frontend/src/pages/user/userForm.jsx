@@ -8,7 +8,8 @@ import {
   sobreMiValidation,
   respuestaValidation
 } from '../../utils/userValidation'
-
+import { userPost } from '../../services/user'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import './UserForm.css'
 
 const UserForm = () => {
@@ -23,8 +24,42 @@ const UserForm = () => {
   const respuesta = watch('respuesta', '')
   const userName = watch('userName', '')
 
-  const onSubmit = (data) => {
+  const { setNotification } = useOutletContext()
+  // Navigate
+
+  const navigate = useNavigate()
+
+  const onSubmit = async (data) => {
     console.log(data)
+    const formData = new FormData()
+    formData.append('userName', data.userName)
+    formData.append('password', data.password)
+    formData.append('password2', data.password2)
+    formData.append('email', data.email)
+    formData.append('pregunta', data.pregunta)
+    formData.append('respuesta', data.respuesta)
+    formData.append('sobreMi', data.sobreMi)
+    if (data.picture && data.picture[0]) {
+      formData.append('picture', data.picture[0])
+    }
+
+    try {
+      const res = await userPost(data)
+      if (res && !res.error) {
+        setNotification({ error: '', exito: 'Gracias por registrartre!' })
+        setTimeout(() => {
+          setNotification({ error: '', exito: '' })
+        }, 5000)
+        navigate('/')
+      }
+    } catch (error) {
+      setNotification({ error: `${error}`, exito: '' })
+    }
+
+  }
+
+  const onVolver = () =>{
+    navigate('/login')
   }
 
   return (
@@ -80,7 +115,7 @@ const UserForm = () => {
               id="password2"
               type="password"
               {...register('password2', password2Validation(watch))}
-              
+
             />
             {errors.password2 && <span>{errors.password2.message}</span>}
           </div>
@@ -130,7 +165,7 @@ const UserForm = () => {
 
         <div className="botones">
           <button type="submit">Enviar</button>
-          <button type="button">Volver</button>
+          <button onClick={onVolver}>Volver</button>
         </div>
       </form>
 

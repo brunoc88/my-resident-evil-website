@@ -1,13 +1,18 @@
 import NavBar from "./NavBar"
-import { Outlet } from "react-router-dom"
-
+import Notification from "./Notification"
+import { Outlet} from "react-router-dom"
+import { useState } from "react"
 
 const LayOut = ({ isAuth, user, onLogout }) => {
+    const [notification, setNotification] = useState({ error: '', exito: '' })
     return (
         <>
             <NavBar isAuth={isAuth} user={user} onLogout={onLogout} />
             <main>
-                <Outlet />
+                {/*es un atajo para pasar las props individualmente, es decir: */}
+                {/*<Notification error={notification.error} exito={notification.exito} /> */}
+                <Notification {...notification} /> 
+                <Outlet context={{ setNotification }} />
             </main>
         </>
     )

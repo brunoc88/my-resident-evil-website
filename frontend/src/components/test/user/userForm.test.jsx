@@ -1,6 +1,29 @@
 import { screen, render, fireEvent, waitFor } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { expect, vi } from "vitest"
+import { userPost } from "../../../services/user"
+
+// 👇 MOCK antes que el import del componente
+const setNotification = vi.fn()
+const mockedUsedNavigate = vi.fn()
+
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom')
+    return {
+        ...actual,
+        useOutletContext: () => ({
+            setNotification,
+            notification: { error: '', exito: '' } // <-- creo un objeto vacio para evitar errores
+        }),
+        useNavigate: () => mockedUsedNavigate
+    }
+})
+
+vi.mock('../../../services/user.js', () => ({
+    userPost: vi.fn().mockResolvedValue({ error: null }) // o { success: true }
+}))
+
+// 👇 Import después del mock
 import UserForm from "../../../pages/user/userForm"
 
 beforeEach(() => {
@@ -9,6 +32,7 @@ beforeEach(() => {
             <UserForm />
         </MemoryRouter>
     )
+    setNotification.mockReset()
 })
 
 describe('Formulario de registro de usuario', () => {
@@ -151,5 +175,61 @@ describe('Formulario de registro de usuario', () => {
             })
 
         })
+    })
+})
+
+describe('UserForm con setNotification', () => {
+    test('Renderiza correctamente', () => {
+        expect(screen.getByText(/formulario de usuario/i)).toBeInTheDocument()
+    })
+
+    test('Simula envío con datos válidos y llamado a Notificacion', async () => {
+        fireEvent.change(screen.getByLabelText(/nombre de usuario/i), {
+            target: { value: 'bruno88' }
+        })
+        fireEvent.change(screen.getByPlaceholderText(/password/i), {
+            target: { value: '123456' }
+        })
+        fireEvent.change(screen.getByLabelText(/confirmar password/i), {
+            target: { value: '123456' }
+        })
+        fireEvent.change(screen.getByLabelText(/email/i), {
+            target: { value: 'bruno@gmail.com' }
+        })
+        fireEvent.change(screen.getByLabelText(/pregunta/i), {
+            target: { value: 'RE Favorito?' }
+        })
+        fireEvent.change(screen.getByLabelText(/respuesta/i), {
+            target: { value: 'RESIDENT EVIL 3' }
+        })
+        fireEvent.change(screen.getByLabelText(/sobre ti/i), {
+            target: { value: 'Fan de Resident Evil desde chico' }
+        })
+
+        // Imagen se puede simular así si hace falta
+        const fileInput = screen.getByLabelText(/imagen/i)
+        const file = new File(['(⌐□_□)'], 'avatar.png', { type: 'image/png' })
+        fireEvent.change(fileInput, { target: { files: [file] } })
+
+        const submitBtn = screen.getByRole('button', { name: /enviar/i })
+        fireEvent.click(submitBtn)
+
+        
+        await waitFor(() => {
+            expect(userPost).toHaveBeenCalled()
+            expect(setNotification).toHaveBeenCalledWith({
+                error: '',
+                exito: 'Gracias por registrartre!'
+            })
+        })
+
+    })
+
+    test('Probar boton volver al Login', () => {
+        const btnVolver = screen.getByRole('button', {name:/volver/i})
+
+        fireEvent.click(btnVolver)
+        
+        expect(mockedUsedNavigate).toHaveBeenCalledWith('/login') 
     })
 })
