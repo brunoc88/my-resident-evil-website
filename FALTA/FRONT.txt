@@ -1,0 +1,17 @@
+FRONT:
+
+PERSONAJE
+para peso usar INPUNT NUMBER STEP
+
+Y FORM DATA YA QUE VAMOS A MANDAR IMAGENES
+
+const formData = new FormData()
+formData.append('nombre', nombre)
+formData.append('edad', edad)
+formData.append('picture', imagenSeleccionada) // File
+
+await axios.post('/personaje/alta', formData, {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})

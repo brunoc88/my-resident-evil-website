@@ -1,0 +1,76 @@
+
+# Qué es un Mock en Testing
+
+Un mock es una simulación controlada de una función, módulo o respuesta, que se usa en lugar del original para probar el código de forma aislada.
+
+## ¿Por qué se usan mocks?
+- Para evitar que se hagan llamadas reales (por ejemplo, a una API)
+- Para controlar lo que devuelve una función
+- Para testear distintos escenarios sin depender del entorno real
+- Para evitar efectos colaterales (como redireccionar, conectarse a backend, etc.)
+
+---
+
+# ¿Qué es `vi`?
+
+`vi` es el objeto global que ofrece Vitest (similar a `jest` en Jest). Sirve para crear funciones falsas, reemplazar módulos y espiar comportamientos.
+
+Funciones comunes:
+- `vi.fn()` → Crea una función falsa (mock function)
+- `vi.mock()` → Reemplaza un módulo por una versión simulada
+- `vi.spyOn()` → Observa el comportamiento de una función real
+
+---
+
+# ¿Qué hace `vi.mock(...)`?
+
+Permite decirle a Vitest:
+> “Cuando alguien importe este módulo, usá mi versión simulada en vez del original”.
+
+Ejemplo:
+```js
+vi.mock('react-router-dom', () => ({
+  useOutletContext: () => ({ setError: vi.fn(), setMsj: vi.fn() })
+}))
+```
+
+---
+
+# ¿Qué hace `vi.importActual(...)`?
+
+Te permite obtener el módulo real, sin que le afecten los mocks.
+
+Ejemplo:
+```js
+const actual = await vi.importActual('react-router-dom')
+```
+
+---
+
+# ¿Para qué sirve `...actual`?
+
+Es una forma de:
+- Conservar todas las funcionalidades reales del módulo
+- Sobrescribir solo lo que querés simular
+
+Ejemplo completo:
+```js
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom')
+  return {
+    ...actual,
+    useOutletContext: () => ({ setError, setMsj })
+  }
+})
+```
+
+---
+
+# Conclusión
+
+| Elemento             | Qué hace                                              |
+|----------------------|-------------------------------------------------------|
+| `vi.fn()`            | Crea una función falsa                               |
+| `vi.mock()`          | Reemplaza un módulo por uno simulado                 |
+| `vi.importActual()`  | Trae el módulo original real                         |
+| `...actual`          | Mantiene lo real y permite sobrescribir lo que quieras |
