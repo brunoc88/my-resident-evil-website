@@ -8,12 +8,12 @@ import {
   sobreMiValidation,
   respuestaValidation
 } from '../../utils/userValidation'
-import { userPost } from '../../services/user'
+import { userPost, userAdminPost } from '../../services/user'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import login from '../../services/login'
 import './UserForm.css'
 
-const UserForm = ({ setToken, setUser }) => {
+const UserForm = ({ setToken, setUser, isAdmin }) => {
   const {
     register,
     handleSubmit,
@@ -26,8 +26,8 @@ const UserForm = ({ setToken, setUser }) => {
   const userName = watch('userName', '')
 
   const { setNotification } = useOutletContext()
+  
   // Navigate
-
   const navigate = useNavigate()
 
   const onSubmit = async (data) => {
@@ -43,9 +43,18 @@ const UserForm = ({ setToken, setUser }) => {
     if (data.picture && data.picture[0]) {
       formData.append('picture', data.picture[0])
     }
+    if(isAdmin){
+      formData.append('secreto', data.secreto)
+    }
 
+    let res = ''
     try {
-      const res = await userPost(formData)
+      if (isAdmin) {
+        res = await userAdminPost(formData)
+      }else{
+        res = await userPost(formData)
+      }
+
       if (res && !res.error) {
         setNotification({ error: '', exito: 'Gracias por registrartre!' })
         setTimeout(() => {
@@ -173,6 +182,19 @@ const UserForm = ({ setToken, setUser }) => {
               {...register('picture')}
             />
           </div>
+
+          {isAdmin && (
+            <div className="campo">
+              <label htmlFor="secreto">Palabra Secreta (Solo admins):</label>
+              <input
+                id="secreto"
+                type="password"
+                placeholder="Ingrese palabra secreta para admin"
+                {...register('secreto', {required:'Ingrese palabra secreta!'})}
+              />
+              {errors.secreto && <span>{errors.secreto.message}</span>}
+            </div>
+          )}
 
         </div>
 

@@ -40,7 +40,7 @@ const NavBar = ({ isAuth, user, onLogout }) => {
                     }
                     {isAuth === false &&
                         <li>
-                            <NavLink to=''>
+                            <NavLink to='registro'>
                                 Registrarse
                             </NavLink>
                         </li>

@@ -41,7 +41,7 @@ const Login = ({ setToken, setUser, isAuth, user }) => {
     }
 
     const handleNavigate = () => {
-        navigate('/registrarse')
+        navigate('/registro')
     }
 
     if (!isAuth) {
@@ -84,7 +84,7 @@ const Login = ({ setToken, setUser, isAuth, user }) => {
                         </form>
 
                         <div className="recovery-link">
-                            <p><a href="#">¿Olvidaste tu password?</a></p>
+                            <p><a href="recuperarPassword">¿Olvidaste tu password?</a></p>
                         </div>
                     </div>
 

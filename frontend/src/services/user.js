@@ -12,6 +12,17 @@ const userPost = async (user) => {
   }
 }
 
+const userAdminPost = async (user) => {
+  try {
+    const res = await axios.post(`${baseUrl}/registroAdmin`, user)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+
 export {
-    userPost
+    userPost,
+    userAdminPost
 }

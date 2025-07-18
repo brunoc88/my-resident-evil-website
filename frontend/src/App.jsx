@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom"
 import { useState, useEffect } from "react"
 import LayOut from "./components/LayOut"
 import Login from "./pages/Login"
-import UserForm from "./pages/user/userForm"
+import UserForm from "./pages/user/UserForm"
+import PasswordRecovery from "./pages/user/PasswordRecovery"
 
 
 const App = () => {
@@ -31,7 +32,9 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LayOut isAuth={isAuth} user={user} onLogout={handleLogout}/>}>
           <Route path="login" element={<Login setToken={setToken} setUser={setUser} user={user} isAuth={isAuth} />} />
-          <Route path="registrarse" element={<UserForm setToken={setToken} setUser={setUser}/>}/>
+          <Route path="registro" element={<UserForm setToken={setToken} setUser={setUser}/>}/>
+          <Route path="registroAdmin" element={<UserForm setToken={setToken} setUser={setUser} isAdmin={true}/>}/>
+          <Route path="recuperarPassword" element={<PasswordRecovery/>}/>
         </Route>
       </Routes>
     </>
