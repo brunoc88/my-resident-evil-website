@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
-import { emailValidation, preguntaValidation } from '../../utils/userValidation'
-import { respuestaValidation } from '../../utils/passwordRecoveryValidation.js'
+import { emailValidation, preguntaValidation, respuestaValidation } from '../../utils/userValidation'
+
 
 const PasswordRecovery = () => {
   const {
@@ -28,6 +28,7 @@ const PasswordRecovery = () => {
           <input
             type="text"
             id="email"
+            placeholder="Ej: re@gmail.com"
             {...register('email', emailValidation)}
           />
           
@@ -51,9 +52,10 @@ const PasswordRecovery = () => {
           <input
             type="text"
             id="respuesta"
+            placeholder="Ej: Resident Evil 3 de 1998"
             {...register('respuesta', respuestaValidation)}
           />
-          <div>{respuesta.length}/17</div>
+          <div>{respuesta.length}/60</div>
           {errors.respuesta && <span>{errors.respuesta.message}</span>}
         </div>
 
