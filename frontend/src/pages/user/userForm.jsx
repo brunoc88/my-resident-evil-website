@@ -70,6 +70,9 @@ const UserForm = ({ setToken, setUser, isAdmin }) => {
       }
     } catch (error) {
       setNotification({ error: error.message, exito: '' })
+      setTimeout(() => {
+        setNotification({error:'', exito:''})
+      }, 5000);
     }
 
   }

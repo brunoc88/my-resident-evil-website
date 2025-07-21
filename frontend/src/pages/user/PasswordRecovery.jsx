@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { emailValidation, preguntaValidation, respuestaValidation } from '../../utils/userValidation'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import { passwordRecovery } from '../../services/user'
+import './PasswordRecovery.css'
 
 const PasswordRecovery = () => {
   const {
@@ -17,41 +18,40 @@ const PasswordRecovery = () => {
   const navigate = useNavigate()
 
   const onSubmit = async (data) => {
-    console.log(data)
-    try {
-      const res = await passwordRecovery(data)
-      if (res && res.msj) {
-        setNotification({
-          error: '',
-          exito: (
-            <>
-              Password Provisional: {res.nuevaPassword}
-              <br />
-              Tiene 15 segundos antes que se borre
-            </>
-          )
-        })
+  try {
+    const res = await passwordRecovery(data)
+    if (res && res.msj) {
+      setNotification({
+        error: '',
+        exito: (
+          <>
+            Password Provisional: {res.nuevaPassword}
+            <br />
+            Tiene 15 segundos antes que se borre
+          </>
+        )
+      })
 
-        setTimeout(() => {
-          setNotification({ error: '', exito: '' })
-        }, 15000)
-      }
-      navigate('/login')
-    } catch (error) {
-      setNotification({ error: error })
       setTimeout(() => {
         setNotification({ error: '', exito: '' })
-      }, 5000)
+      }, 15000)
+      navigate('/login')
     }
+  } catch (error) {
+    setNotification({ error: error.message, exito: '' }) 
+    setTimeout(() => {
+      setNotification({ error: '', exito: '' }) 
+    }, 5000)
   }
+}
+
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} method="post">
+    <div className="recovery-form-container">
+      <form onSubmit={handleSubmit(onSubmit)} className="recovery-form-box">
         <div>
           <h1>Recupera tu Password!</h1>
         </div>
-
         <label htmlFor="email">Email:</label>
         <div>
           <input
@@ -62,7 +62,7 @@ const PasswordRecovery = () => {
           />
 
         </div>
-        {errors.email && <span>{errors.email.message}</span>}
+        {errors.email && <span className='error'>{errors.email.message}</span>}
 
         <label htmlFor="pregunta">Seleccione una pregunta:</label>
         <div>
@@ -74,7 +74,7 @@ const PasswordRecovery = () => {
           </select>
 
         </div>
-        {errors.pregunta && <span>{errors.pregunta.message}</span>}
+        {errors.pregunta && <span className='error'>{errors.pregunta.message}</span>}
 
         <label htmlFor="respuesta">Respuesta:</label>
         <div>
@@ -85,7 +85,7 @@ const PasswordRecovery = () => {
             {...register('respuesta', respuestaValidation)}
           />
           <div>{respuesta.length}/60</div>
-          {errors.respuesta && <span>{errors.respuesta.message}</span>}
+          {errors.respuesta && <span className='error'>{errors.respuesta.message}</span>}
         </div>
 
         <div>
@@ -93,6 +93,11 @@ const PasswordRecovery = () => {
           <button type="button" onClick={() => history.back()}>Volver</button>
         </div>
       </form>
+      <img
+        src="/weskerRecovery.jpg"
+        alt="Izquierda"
+        className="side-image left"
+      />
     </div>
   )
 }
