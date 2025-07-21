@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "test:u": "vitest watch src/components/test/user/UserForm.test.jsx",
+    "test:u": "vitest watch src/components/test/user/PasswordRecovery.test.jsx",
     "test:watch": "vitest --watch"
   },
   "dependencies": {

@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { emailValidation, preguntaValidation, respuestaValidation } from '../../utils/userValidation'
-
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { passwordRecovery } from '../../services/user'
 
 const PasswordRecovery = () => {
   const {
@@ -12,8 +13,36 @@ const PasswordRecovery = () => {
 
   const respuesta = watch('respuesta', '')
 
-  const onSubmit = (data) => {
+  const { setNotification } = useOutletContext()
+  const navigate = useNavigate()
+
+  const onSubmit = async (data) => {
     console.log(data)
+    try {
+      const res = await passwordRecovery(data)
+      if (res && res.msj) {
+        setNotification({
+          error: '',
+          exito: (
+            <>
+              Password Provisional: {res.nuevaPassword}
+              <br />
+              Tiene 15 segundos antes que se borre
+            </>
+          )
+        })
+
+        setTimeout(() => {
+          setNotification({ error: '', exito: '' })
+        }, 15000)
+      }
+      navigate('/login')
+    } catch (error) {
+      setNotification({ error: error })
+      setTimeout(() => {
+        setNotification({ error: '', exito: '' })
+      }, 5000)
+    }
   }
 
   return (
@@ -31,7 +60,7 @@ const PasswordRecovery = () => {
             placeholder="Ej: re@gmail.com"
             {...register('email', emailValidation)}
           />
-          
+
         </div>
         {errors.email && <span>{errors.email.message}</span>}
 
@@ -43,7 +72,7 @@ const PasswordRecovery = () => {
             <option value="Personaje Favorito de RE?">Personaje Favorito de RE?</option>
             <option value="Cual fue tu Primer RE?">Cual fue tu Primer RE?</option>
           </select>
-          
+
         </div>
         {errors.pregunta && <span>{errors.pregunta.message}</span>}
 

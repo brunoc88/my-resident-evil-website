@@ -21,8 +21,17 @@ const userAdminPost = async (user) => {
   }
 }
 
+const passwordRecovery = async (data) => {
+  try {
+    const res = await axios.post(`${baseUrl}/recuperar-password`, data)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
 
 export {
     userPost,
-    userAdminPost
+    userAdminPost,
+    passwordRecovery
 }
