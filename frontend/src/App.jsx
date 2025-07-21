@@ -6,6 +6,7 @@ import UserForm from "./pages/user/UserForm"
 import PasswordRecovery from "./pages/user/PasswordRecovery"
 import Nosotros from "./pages/Nosotros"
 import Contactanos from "./pages/Contactanos"
+import NotFound from "./pages/NotFound"
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -31,13 +32,15 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LayOut isAuth={isAuth} user={user} onLogout={handleLogout}/>}>
+        <Route path="/" element={<LayOut isAuth={isAuth} user={user} onLogout={handleLogout} />}>
           <Route path="login" element={<Login setToken={setToken} setUser={setUser} user={user} isAuth={isAuth} />} />
-          <Route path="registro" element={<UserForm setToken={setToken} setUser={setUser}/>}/>
-          <Route path="registroAdmin" element={<UserForm setToken={setToken} setUser={setUser} isAdmin={true}/>}/>
-          <Route path="recuperarPassword" element={<PasswordRecovery/>}/>
-          <Route path="nosotros" element={<Nosotros/>}/>
-          <Route path="contactos" element={<Contactanos/>}/>
+          <Route path="registro" element={<UserForm setToken={setToken} setUser={setUser} />} />
+          <Route path="registroAdmin" element={<UserForm setToken={setToken} setUser={setUser} isAdmin={true} />} />
+          <Route path="recuperarPassword" element={<PasswordRecovery />} />
+          <Route path="nosotros" element={<Nosotros />} />
+          <Route path="contactos" element={<Contactanos />} />
+          {/* Ruta 404 fuera del layout */}
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </>
