@@ -20,12 +20,12 @@ const NavBar = ({ isAuth, user, onLogout }) => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to=''>
+                        <NavLink to='nosotros'>
                             Nosotros
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to=''>
+                        <NavLink to='contactos'>
                             Contactanos
                         </NavLink>
                     </li>

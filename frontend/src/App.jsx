@@ -4,7 +4,8 @@ import LayOut from "./components/LayOut"
 import Login from "./pages/Login"
 import UserForm from "./pages/user/UserForm"
 import PasswordRecovery from "./pages/user/PasswordRecovery"
-
+import Nosotros from "./pages/Nosotros"
+import Contactanos from "./pages/Contactanos"
 
 const App = () => {
   const [token, setToken] = useState(null)
@@ -35,6 +36,8 @@ const App = () => {
           <Route path="registro" element={<UserForm setToken={setToken} setUser={setUser}/>}/>
           <Route path="registroAdmin" element={<UserForm setToken={setToken} setUser={setUser} isAdmin={true}/>}/>
           <Route path="recuperarPassword" element={<PasswordRecovery/>}/>
+          <Route path="nosotros" element={<Nosotros/>}/>
+          <Route path="contactos" element={<Contactanos/>}/>
         </Route>
       </Routes>
     </>
