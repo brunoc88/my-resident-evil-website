@@ -43,8 +43,10 @@ const UserForm = ({ setToken, setUser, isAdmin, isAuth }) => {
             email: res.user.email || '',
             sobreMi: res.user.sobreMi || '',
             respuesta: res.user.respuesta || '',
-            pregunta: res.user.pregunta || ''
+            pregunta: res.user.pregunta || '',
+            picture: res.user.picture || ''
           })
+          console.log('User', res.user)
         }
       } catch (error) {
         console.error('Error al cargar el perfil:', error)
