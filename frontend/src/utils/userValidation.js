@@ -5,14 +5,19 @@ export const userNameValidation = {
   maxLength: { value: 10, message: 'Máximo 10 caracteres' }
 }
 
-export const passwordValidation = {
-  required: 'Contraseña requerida',
+export const passwordValidation = (isAuth) => ({
+  required: !isAuth ?'Contraseña requerida':false,
   minLength: { value: 6, message: 'Mínimo 6 caracteres' }
-}
+})
 
-export const password2Validation = (watch) => ({
-  required: 'Debes confirmar la contraseña',
-  validate: (value) => value === watch('password') || 'Las contraseñas no coinciden'
+export const password2Validation = (watch, isAuth) => ({
+  required: !isAuth ? 'Confirma tu contraseña' : false,
+  validate: value => {
+    const password = watch('password')
+    if (!isAuth && value !== password) return 'Las contraseñas no coinciden'
+    if (isAuth && value && value !== password) return 'Las contraseñas no coinciden'
+    return true
+  }
 })
 
 export const emailValidation = {

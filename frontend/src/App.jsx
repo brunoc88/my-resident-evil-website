@@ -7,11 +7,14 @@ import PasswordRecovery from "./pages/user/PasswordRecovery"
 import Nosotros from "./pages/Nosotros"
 import Contactanos from "./pages/Contactanos"
 import NotFound from "./pages/NotFound"
+import { applyToken } from "./services/token"
+import ProtectedRoutes from "./components/ProtectedRoutes"
 
 const App = () => {
   const [token, setToken] = useState(null)
   const [user, setUser] = useState(null)
   const isAuth = !!user // <-- isAuth sera verdadera si user no es null||undefined
+  const [checkingAuth, setCheckingAuth] = useState(true)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggerReAppUser')
@@ -19,7 +22,9 @@ const App = () => {
       const userData = JSON.parse(loggedUserJSON)
       setUser(userData.user)
       setToken(userData.token)
+      applyToken(userData.token)
     }
+    setCheckingAuth(false) // señalamos que ya cargó la info
   }, [])
 
   const handleLogout = () => {
@@ -33,12 +38,18 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<LayOut isAuth={isAuth} user={user} onLogout={handleLogout} />}>
+          {/* Rutas publicas */}
           <Route path="login" element={<Login setToken={setToken} setUser={setUser} user={user} isAuth={isAuth} />} />
           <Route path="registro" element={<UserForm setToken={setToken} setUser={setUser} />} />
           <Route path="registroAdmin" element={<UserForm setToken={setToken} setUser={setUser} isAdmin={true} />} />
           <Route path="recuperarPassword" element={<PasswordRecovery />} />
           <Route path="nosotros" element={<Nosotros />} />
           <Route path="contactos" element={<Contactanos />} />
+
+          {/* Rutas protegidas */}
+          <Route path="user/" element={<ProtectedRoutes isAuth={isAuth} checkingAuth={checkingAuth} />}>
+            <Route path="editar" element={<UserForm isAuth={isAuth} />} />
+          </Route>
           {/* Ruta 404 fuera del layout */}
           <Route path="*" element={<NotFound />} />
         </Route>
