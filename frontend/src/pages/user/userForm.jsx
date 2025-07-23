@@ -13,9 +13,10 @@ import { useNavigate, useOutletContext } from 'react-router-dom'
 import login from '../../services/login'
 import { useEffect } from 'react'
 import './UserForm.css'
+import { useAuth } from '../../context/AuthContext'
 
-const UserForm = ({ setToken, setUser, isAdmin, isAuth }) => {
-  
+const UserForm = () => {
+  const {setToken, setUser, isAdmin, isAuth} = useAuth()
   const {
     register,
     handleSubmit,
@@ -29,7 +30,7 @@ const UserForm = ({ setToken, setUser, isAdmin, isAuth }) => {
   const userName = watch('userName', '')
 
   const { setNotification } = useOutletContext()
-  const navigate = useNavigate()
+ const navigate = useNavigate()
 
   // Cargar datos del usuario si está autenticado
   useEffect(() => {
@@ -78,8 +79,8 @@ const UserForm = ({ setToken, setUser, isAdmin, isAuth }) => {
         : await userPost(formData)
 
       if (res && !res.error) {
-        setNotification({ error: '', exito: 'Gracias por registrarte!' })
-        setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
+       setNotification({ error: '', exito: 'Gracias por registrarte!' })
+       setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
 
         const loginRes = await login({
           user: data.userName,

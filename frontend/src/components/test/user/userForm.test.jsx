@@ -2,6 +2,7 @@ import { screen, render, fireEvent, waitFor } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { expect, vi } from "vitest"
 import { userPost } from "../../../services/user"
+import { AuthProvider } from "../../../context/AuthContext"
 
 // 👇 MOCK antes que el import del componente
 const setNotification = vi.fn()
@@ -27,13 +28,15 @@ vi.mock('../../../services/user.js', () => ({
 import UserForm from "../../../pages/user/userForm"
 
 beforeEach(() => {
+    // Renderizar componente con contextos necesarios
     render(
-        <MemoryRouter>
+      <MemoryRouter>
+        <AuthProvider>
             <UserForm />
-        </MemoryRouter>
+        </AuthProvider>
+      </MemoryRouter>
     )
-    setNotification.mockReset()
-})
+  })
 
 describe('Formulario de registro de usuario', () => {
 
@@ -219,7 +222,7 @@ describe('UserForm con setNotification', () => {
             expect(userPost).toHaveBeenCalled()
             expect(setNotification).toHaveBeenCalledWith({
                 error: '',
-                exito: 'Gracias por registrartre!'
+                exito: 'Gracias por registrarte!'
             })
         })
 

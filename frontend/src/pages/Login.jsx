@@ -2,10 +2,11 @@ import { useState } from "react"
 import { validarPassword } from "../utils/validarLogin"
 import { useNavigate } from "react-router-dom"
 import login from "../services/login"
+import { useAuth } from "../context/AuthContext"
 import './Login.css'
 
-const Login = ({ setToken, setUser, isAuth, user }) => {
-
+const Login = () => {
+    const {setToken, setUser, isAuth, user} = useAuth()
     const [usuario, setUsuario] = useState({ user: '', password: '' })
     const [validationError, setValidationError] = useState('')
     const [dbErrorMsj, setDbErrorMsj] = useState('')

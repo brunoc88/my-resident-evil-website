@@ -1,7 +1,9 @@
 import { NavLink } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
 import './NavBar.css'
 
-const NavBar = ({ isAuth, user, onLogout }) => {
+const NavBar = () => {
+    const { isAuth, user, handleLogout } = useAuth()
     return (
         <nav>
             <ul>
@@ -54,7 +56,7 @@ const NavBar = ({ isAuth, user, onLogout }) => {
                     }
                     {isAuth &&
                         <li>
-                            <button onClick={onLogout} className="logout-link">Logout</button>
+                            <button onClick={handleLogout} className="logout-link">Logout</button>
                         </li>
                     }
                 </div>

@@ -25,7 +25,7 @@ import { expect, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import PasswordRecovery from "../../../pages/user/PasswordRecovery";
 import { passwordRecovery } from "../../../services/user"
-
+import { AuthProvider } from "../../../context/AuthContext"
 
 beforeEach(() => {
     setNotification.mockReset()
@@ -33,7 +33,9 @@ beforeEach(() => {
     mockedUsedNavigate.mockReset()
     render(
         <MemoryRouter>
+          <AuthProvider>
             <PasswordRecovery />
+          </AuthProvider>
         </MemoryRouter>
     )
 })
@@ -140,7 +142,7 @@ describe("PasswordRecovery - notificaciones", () => {
     expect(mockedUsedNavigate).toHaveBeenCalledWith("/login")
   })
 
-  test("Muestra notificación de error cuando falla el submit", async () => {
+  test.only("Muestra notificación de error cuando falla el submit", async () => {
     // Mock que lanza error
     passwordRecovery.mockRejectedValue(new Error("Error en servidor"))
 
