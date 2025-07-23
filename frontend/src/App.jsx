@@ -6,6 +6,7 @@ import PasswordRecovery from "./pages/user/PasswordRecovery"
 import Nosotros from "./pages/Nosotros"
 import Contactanos from "./pages/Contactanos"
 import NotFound from "./pages/NotFound"
+import CharacterForm from "./pages/character/CharacterForm"
 import ProtectedRoutes from "./components/ProtectedRoutes"
 
 
@@ -26,6 +27,9 @@ const App = () => {
           {/* Rutas protegidas */}
           <Route path="user/" element={<ProtectedRoutes />}>
             <Route path="editar" element={<UserForm />} />
+          </Route>
+          <Route path="personaje/" element={<ProtectedRoutes />}>
+            <Route path="registro" element={<CharacterForm/>} />
           </Route>
           {/* Ruta 404 fuera del layout */}
           <Route path="*" element={<NotFound />} />
