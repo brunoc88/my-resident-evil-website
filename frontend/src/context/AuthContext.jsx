@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }) => {
       isAuth,
       handleLogout,
       checkingAuth,
+      navigate
     }}>
       {children}
     </AuthContext.Provider>

@@ -9,14 +9,14 @@ import {
   respuestaValidation
 } from '../../utils/userValidation'
 import { userPost, userAdminPost, myProfile, userEdit } from '../../services/user'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import login from '../../services/login'
 import { useEffect } from 'react'
 import './UserForm.css'
 import { useAuth } from '../../context/AuthContext'
 
 const UserForm = () => {
-  const {setToken, setUser, isAdmin, isAuth} = useAuth()
+  const {setToken, setUser, isAdmin, isAuth, navigate} = useAuth()
   const {
     register,
     handleSubmit,
@@ -30,7 +30,7 @@ const UserForm = () => {
   const userName = watch('userName', '')
 
   const { setNotification } = useOutletContext()
- const navigate = useNavigate()
+ 
 
   // Cargar datos del usuario si está autenticado
   useEffect(() => {
