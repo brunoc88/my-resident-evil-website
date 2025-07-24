@@ -11,7 +11,7 @@ import {
 const CharacterSelects = ({ register, errors }) => {
     return (
         <div>
-            <div>
+            <div className="campo">
                 <label htmlFor="categoria">Categoria:</label>
                 <select id="categoria" {...register('categoria', validarCategoria)}>
                     <option value="">--Seleccione categoría--</option>
@@ -24,7 +24,7 @@ const CharacterSelects = ({ register, errors }) => {
                 </select>
                 {errors.categoria && <span>{errors.categoria.message}</span>}
             </div>
-            <div>
+            <div className="campo">
                 <label htmlFor="condicion">Condicion:</label>
                 <select id="condicion" {...register('condicion', validarCondicion)}>
                     <option value="">--elige condicion--</option>
@@ -38,7 +38,7 @@ const CharacterSelects = ({ register, errors }) => {
                 </select>
                 {errors.condicion && <span>{errors.condicion.message}</span>}
             </div>
-            <div>
+            <div className="campo">
                 <label htmlFor="aparicion">Primera Aparición:</label>
                 <select id="aparicion" {...register('primeraAparicion', validarPrimeraAparicion)}>
                     <option value="">--elige videojuego--</option>
@@ -56,7 +56,7 @@ const CharacterSelects = ({ register, errors }) => {
                 {errors.primeraAparicion && <span>{errors.primeraAparicion.message}</span>}
             </div>
 
-            <div>
+            <div className="campo">
                 <label htmlFor="ultima">Última Aparición:</label>
                 <select id="ultima" {...register('ultimaAparicion', validarUltimaAparicion)}>
                     <option value="">--elige videojuego--</option>
