@@ -1,28 +1,46 @@
-const CharacterSelects = ({ register, watch, reset, errors }) => {
+import {
+    CATEGORIAS_VALIDAS,
+    CONDICIONES_VALIDAS,
+    validarCategoria,
+    validarCondicion,
+    validarPrimeraAparicion,
+    validarUltimaAparicion
+} from '../../utils/characterValidations'
+
+
+const CharacterSelects = ({ register, errors }) => {
     return (
         <div>
             <div>
                 <label htmlFor="categorias">Categoria:</label>
-                <select name="categoria" id="categoria">
-                    <option value="">--elige una categoria--</option>
+                <select id="categoria" {...register('categoria', validarCategoria)}>
+                    <option value="">--Seleccione categoría--</option>
                     <option value="héroe">Héroe</option>
                     <option value="villano">Villano</option>
                     <option value="neutral">Neutral</option>
+                    {CATEGORIAS_VALIDAS.map(c => (
+                        <option key={c} value={c}>{c}</option>
+                    ))}
                 </select>
+                {errors.categoria && <span>{errors.categoria.message}</span>}
             </div>
             <div>
                 <label htmlFor="condiciones">Condicion:</label>
-                <select name="condicion" id="condicion">
+                <select id="condicion" {...register('condicion', validarCondicion)}>
                     <option value="">--elige condicion--</option>
                     <option value="vivo">Vivo</option>
                     <option value="muerto">Muerto</option>
                     <option value="desaparecido">Desaparecido</option>
                     <option value="desconocido">Desconocido</option>
+                    {CONDICIONES_VALIDAS.map(c => (
+                        <option key={c} value={c}>{c}</option>
+                    ))}
                 </select>
+                {errors.condicion && <span>{errors.condicion.message}</span>}
             </div>
             <div>
                 <label htmlFor="aparicion">Primera Aparición:</label>
-                <select name="primeraAparicion" id="aparicion">
+                <select id="aparicion" {...register('primeraAparicion', validarPrimeraAparicion)}>
                     <option value="">--elige videojuego--</option>
                     <option value="Resident Evil (1996)">Resident Evil (1996)</option>
                     <option value="Resident Evil 2 (1998)">Resident Evil 2 (1998)</option>
@@ -35,11 +53,12 @@ const CharacterSelects = ({ register, watch, reset, errors }) => {
                     <option value="Resident Evil 7: Biohazard (2017)">Resident Evil 7: Biohazard (2017)</option>
                     <option value="Resident Evil Village (2021)">Resident Evil Village (2021)</option>
                 </select>
+                {errors.primeraAparicion && <span>{errors.primeraAparicion.message}</span>}
             </div>
 
             <div>
                 <label htmlFor="ultimaAparicion">Última Aparición:</label>
-                <select name="ultimaAparicion" id="ultimaAparicion">
+                <select id="ultimaAparicion" {...register('ultimaAparicion', validarUltimaAparicion)}>
                     <option value="">--elige videojuego--</option>
                     <option value="Resident Evil (1996)">Resident Evil (1996)</option>
                     <option value="Resident Evil 2 (1998)">Resident Evil 2 (1998)</option>
@@ -52,6 +71,7 @@ const CharacterSelects = ({ register, watch, reset, errors }) => {
                     <option value="Resident Evil 7: Biohazard (2017)">Resident Evil 7: Biohazard (2017)</option>
                     <option value="Resident Evil Village (2021)">Resident Evil Village (2021)</option>
                 </select>
+                {errors.ultimaAparicion && <span>{errors.ultimaAparicion.message}</span>}
             </div>
         </div>
     )
