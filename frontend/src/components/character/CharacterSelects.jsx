@@ -12,7 +12,7 @@ const CharacterSelects = ({ register, errors }) => {
     return (
         <div>
             <div>
-                <label htmlFor="categorias">Categoria:</label>
+                <label htmlFor="categoria">Categoria:</label>
                 <select id="categoria" {...register('categoria', validarCategoria)}>
                     <option value="">--Seleccione categoría--</option>
                     <option value="héroe">Héroe</option>
@@ -25,7 +25,7 @@ const CharacterSelects = ({ register, errors }) => {
                 {errors.categoria && <span>{errors.categoria.message}</span>}
             </div>
             <div>
-                <label htmlFor="condiciones">Condicion:</label>
+                <label htmlFor="condicion">Condicion:</label>
                 <select id="condicion" {...register('condicion', validarCondicion)}>
                     <option value="">--elige condicion--</option>
                     <option value="vivo">Vivo</option>
@@ -57,8 +57,8 @@ const CharacterSelects = ({ register, errors }) => {
             </div>
 
             <div>
-                <label htmlFor="ultimaAparicion">Última Aparición:</label>
-                <select id="ultimaAparicion" {...register('ultimaAparicion', validarUltimaAparicion)}>
+                <label htmlFor="ultima">Última Aparición:</label>
+                <select id="ultima" {...register('ultimaAparicion', validarUltimaAparicion)}>
                     <option value="">--elige videojuego--</option>
                     <option value="Resident Evil (1996)">Resident Evil (1996)</option>
                     <option value="Resident Evil 2 (1998)">Resident Evil 2 (1998)</option>

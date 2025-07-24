@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
-import CharacterInputs from "../../components/user/CharacterInputs"
-import CharacterSelects from "../../components/user/CharacterSelects"
+import CharacterInputs from "../../components/character/CharacterInputs"
+import CharacterSelects from "../../components/character/CharacterSelects"
 
 
 const CharacterForm = () => {
@@ -26,8 +26,8 @@ const CharacterForm = () => {
                     <CharacterSelects register={register} watch={watch} reset={reset} errors={errors}/>
                 </div>
                 <div>
-                    <button>Enviar</button>
-                    <button>Volver</button>
+                    <button type="submit">Enviar</button>
+                    <button type="button" onClick={() => history.back()}>Volver</button>
                 </div>
             </form>
         </div>
