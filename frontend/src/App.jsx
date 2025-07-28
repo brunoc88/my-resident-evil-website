@@ -8,32 +8,34 @@ import Contactanos from "./pages/Contactanos"
 import NotFound from "./pages/NotFound"
 import CharacterForm from "./pages/character/CharacterForm"
 import ProtectedRoutes from "./components/ProtectedRoutes"
-
+import CharacterIndex from "./pages/character/CharacterIndex"
 
 const App = () => {
-  
+
   return (
     <>
       <Routes>
         <Route path="/" element={<LayOut />}>
           {/* Rutas publicas */}
           <Route path="login" element={<Login />} />
-          <Route path="registro" element={<UserForm  />} />
+          <Route path="registro" element={<UserForm />} />
           <Route path="registroAdmin" element={<UserForm isAdmin={true} />} />
           <Route path="recuperarPassword" element={<PasswordRecovery />} />
           <Route path="nosotros" element={<Nosotros />} />
           <Route path="contactos" element={<Contactanos />} />
-
-          {/* Rutas protegidas */}
-          <Route path="user/" element={<ProtectedRoutes />}>
-            <Route path="editar" element={<UserForm />} />
+          <Route path="personajes/">
+            <Route path="index" element= {<CharacterIndex/>}/>
           </Route>
-          <Route path="personaje/" element={<ProtectedRoutes />}>
-            <Route path="registro" element={<CharacterForm/>} />
+            {/* Rutas protegidas */}
+            <Route path="user/" element={<ProtectedRoutes />}>
+              <Route path="editar" element={<UserForm />} />
+            </Route>
+            <Route path="personajes/" element={<ProtectedRoutes />}>
+              <Route path="registro" element={<CharacterForm />} />
+            </Route>
+            {/* Ruta 404 fuera del layout */}
+            <Route path="*" element={<NotFound />} />
           </Route>
-          {/* Ruta 404 fuera del layout */}
-          <Route path="*" element={<NotFound />} />
-        </Route>
       </Routes>
     </>
   )

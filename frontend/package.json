@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:u": "vitest watch src/components/test/user/PasswordRecovery.test.jsx",
-    "test:c": "vitest watch src/components/test/character/CharacterForm.test.jsx",
+    "test:c": "vitest watch src/components/test/character/CharacterIndex.test.jsx",
     "test:watch": "vitest --watch"
   },
   "dependencies": {

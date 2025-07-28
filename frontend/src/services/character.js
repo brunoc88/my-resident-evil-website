@@ -5,7 +5,6 @@ import handleAxiosError from '../utils/handleAxiosError'
 const baseUrl = 'http://localhost:3000/personaje'
 
 
-
 const characterPost = async (data) => {
     try {
         let token = getToken()
@@ -22,6 +21,17 @@ const characterPost = async (data) => {
     }
 }
 
+// ruta publica
+const characterList = async () => {
+    try {
+        const res = await axios.get(`${baseUrl}/all`)
+        return res.data
+    } catch (error) {
+        handleAxiosError(error)
+    }
+}
+
 export {
-    characterPost
+    characterPost,
+    characterList
 }
