@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound"
 import CharacterForm from "./pages/character/CharacterForm"
 import ProtectedRoutes from "./components/ProtectedRoutes"
 import CharacterIndex from "./pages/character/CharacterIndex"
+import CharacterProfile from "./pages/character/CharacterProfile"
 
 const App = () => {
 
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="contactos" element={<Contactanos />} />
           <Route path="personajes/">
             <Route path="index" element= {<CharacterIndex/>}/>
+            <Route path=":id" element= {<CharacterProfile/>}/>
           </Route>
             {/* Rutas protegidas */}
             <Route path="user/" element={<ProtectedRoutes />}>

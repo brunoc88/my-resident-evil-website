@@ -7,7 +7,9 @@ import './CharacterIndex.css'
 const CharacterIndex = () => {
     const [characters, setCharacters] = useState(null)
     const [filter, setFilter] = useState('')
+    const [loading, setLoading] = useState(true)
     const { setNotification } = useOutletContext()
+
     useEffect(() => {
         const loadCharacters = async () => {
             try {
@@ -21,41 +23,39 @@ const CharacterIndex = () => {
                 setTimeout(() => {
                     setNotification({ error: '', exito: '' })
                 }, 5000)
+            } finally {
+                setLoading(false)
             }
         }
         loadCharacters()
-    }, [setNotification])
+    }, [setNotification, loading])
 
 
-  const handleFilter = (e) => {
-    const value = e.target.value.trim();
-    if (!value) {
-        setFilter(null) // Resetear si el input está vacío
-        return
+    const handleFilter = (e) => {
+        const value = e.target.value.trim()
+        if (!value) {
+            setFilter(null) // Resetear si el input está vacío
+            return
+        }
+        const filtered = characters.filter(c => c.nombre.toLowerCase().includes(value.toLowerCase()))
+        setFilter(filtered)
     }
-    const filtered = characters.filter(c => c.nombre.toLowerCase().includes(value.toLowerCase()));
-    setFilter(filtered)
-};
 
+    if(loading) return <p>Cargando...</p>
     return (
         <div>
             <div>
                 <h1>Lista de Personajes</h1>
             </div>
             <div className="filter">
-                {characters && <input type="text" 
-                placeholder="Ingrese un nombre..." 
-                onChange={handleFilter}
-                id="filter"
+                {characters && <input type="text"
+                    placeholder="Ingrese un nombre..."
+                    onChange={handleFilter}
+                    id="filter"
                 />}
             </div>
             <div>
-                {characters === null ?
-                    <p>
-                        Cargando...
-                    </p> : <ListCharacters characters={filter?filter:characters} />
-                }
-
+                <ListCharacters characters={filter ? filter : characters} />
             </div>
         </div>
     )

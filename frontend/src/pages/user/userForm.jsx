@@ -15,8 +15,8 @@ import { useEffect } from 'react'
 import './UserForm.css'
 import { useAuth } from '../../context/AuthContext'
 
-const UserForm = () => {
-  const {setToken, setUser, isAdmin, isAuth, navigate} = useAuth()
+const UserForm = ({isAdmin}) => {
+  const {setToken, setUser, isAuth, navigate} = useAuth()
   const {
     register,
     handleSubmit,
@@ -95,7 +95,7 @@ const UserForm = () => {
         navigate('/')
       }
     } catch (error) {
-      setNotification({ error: error.message, exito: '' })
+      setNotification({ error: error.message || 'Palabra secreta incorrecta!', exito: '' })
       setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
     }
   }

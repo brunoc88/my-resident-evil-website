@@ -21,7 +21,7 @@ const characterPost = async (data) => {
     }
 }
 
-// ruta publica
+// rutas publica
 const characterList = async () => {
     try {
         const res = await axios.get(`${baseUrl}/all`)
@@ -31,7 +31,17 @@ const characterList = async () => {
     }
 }
 
+const getCharacterById = async (id) => {
+    try {
+        const res = await axios.get(`${baseUrl}/${id}`)
+        return res.data
+    } catch (error) {
+        handleAxiosError(error)
+    }
+}
+
 export {
     characterPost,
-    characterList
+    characterList,
+    getCharacterById
 }

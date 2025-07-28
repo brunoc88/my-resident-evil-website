@@ -1,0 +1,25 @@
+.card {
+  background-color: #111;
+  border-radius: 10px;
+  width: 220px;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(255, 0, 0, 0.2);
+  transition: transform 0.2s;
+  padding-bottom: 1rem;
+}
+
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-bottom: 1px solid #333;
+}
+
+.card h3 {
+  margin: 0.8rem 0;
+}
