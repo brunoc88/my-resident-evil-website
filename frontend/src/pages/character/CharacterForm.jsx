@@ -47,7 +47,7 @@ const CharacterForm = () => {
                 setNotification({error:'', exito:''})
             }, 5000)
 
-            navigate('/')
+            navigate('/personajes/index')
         } catch (error) {
             setNotification({error: error.message, exito:''})
             setTimeout(() => {

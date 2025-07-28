@@ -17,7 +17,7 @@ const NavBar = () => {
                 </div>
                 <div>
                     <li>
-                        <NavLink to=''>
+                        <NavLink to='personajes/index'>
                             Personajes
                         </NavLink>
                     </li>
