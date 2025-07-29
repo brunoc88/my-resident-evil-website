@@ -129,7 +129,7 @@ const CharacterProfile = () => {
                         <span onClick={handleLike} className={`like-icon ${liked ? 'liked' : 'not-liked'}`}>
                             <FaThumbsUp /> {likes}
                         </span>
-                        <span><FaRegComment /> {comments}</span>
+                        <span><FaRegComment onClick={handleVerComentarios}/> {comments}</span>
                     </div>
 
                 </div>
