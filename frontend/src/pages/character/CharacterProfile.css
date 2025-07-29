@@ -1,25 +1,142 @@
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.character-container {
+  padding: 2rem;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.character-content {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Imagen + likes/comentarios */
 .card {
   background-color: #111;
-  border-radius: 10px;
-  width: 220px;
-  overflow: hidden;
-  text-align: center;
-  box-shadow: 0 0 8px rgba(255, 0, 0, 0.2);
-  transition: transform 0.2s;
-  padding-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.card:hover {
-  transform: scale(1.03);
+.character-img {
+  width: 200px;
+  height: auto;
+  border-radius: 5px;
 }
 
-.card img {
+.icon-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.icon-stats span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Datos del personaje */
+.character-details {
+  max-width: 500px;
+  flex: 1;
+}
+
+table {
   width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-bottom: 1px solid #333;
+  background-color: #111;
+  padding: 1rem;
+  border-radius: 8px;
 }
 
-.card h3 {
-  margin: 0.8rem 0;
+td {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+}
+
+/* Botón "+" */
+.plus-button {
+  background-color: #8b0000;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.plus-button:hover {
+  background-color: #a30000;
+}
+
+/* Botones de acción */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.action-buttons button {
+  background-color: #8b0000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.action-buttons button:hover {
+  background-color: #a30000;
+}
+
+.note {
+  color: #ff4d4d;
+  margin-top: 1rem;
+}
+
+.comments-button {
+  background-color: #444;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.comments-button:hover {
+  background-color: #666;
+}
+
+@media (max-width: 768px) {
+  .character-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .character-details {
+    width: 100%;
+  }
 }
