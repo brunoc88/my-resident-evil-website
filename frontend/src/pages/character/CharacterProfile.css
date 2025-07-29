@@ -40,20 +40,48 @@ h1 {
   border-radius: 5px;
 }
 
-.icon-stats {
-  display: flex;
-  justify-content: space-around;
+.like-icon {
+  cursor: pointer;
+  display: inline-flex;
   align-items: center;
-  gap: 1.5rem;
-  font-size: 1rem;
-  margin-top: 1rem;
+  gap: 5px;
+  font-size: 1.2rem;
+  transition: color 0.3s, opacity 0.3s;
 }
 
 .icon-stats span {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 6px;
+  font-size: 1.1rem;
+  color: #ccc;
+  cursor: pointer;
 }
+
+.icon-stats svg {
+  font-size: 1.2rem; /* mismo tamaño para ambos íconos */
+}
+
+
+.like-icon.liked {
+  color: #4caf50; /* verde */
+}
+
+.like-icon.not-liked {
+  color: #999;
+  opacity: 0.5;
+}
+
+.like-icon:hover svg {
+  transform: scale(1.1);
+}
+
+.icon-stats {
+  display: flex;
+  gap: 1.5rem; /* separación entre íconos */
+  margin-top: 0.8rem;
+}
+
 
 /* Datos del personaje */
 .character-details {
@@ -114,7 +142,10 @@ td {
 .note {
   color: #ff4d4d;
   margin-top: 1rem;
+  text-align: center; /* <--- centraliza todo */
+  padding-bottom: 10px;
 }
+
 
 .comments-button {
   background-color: #444;

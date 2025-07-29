@@ -21,6 +21,41 @@ const characterPost = async (data) => {
     }
 }
 
+const sendLike = async (id) => {
+    try {
+        const token = getToken()
+        if (!token) throw new Error('Acceso invalido!')
+        
+        const config = {
+            headers: { Authorization: token }
+        }
+
+        const res = await axios.patch(`${baseUrl}/${id}/like`, {}, config)
+        return res.data
+
+    } catch (error) {
+        handleAxiosError(error)
+    }
+}
+
+
+const sendUnlike = async (id) => {
+        try {
+        let token = getToken()
+        if (!token) throw new Error('Acceso invalido!')
+
+        let config = {
+            headers: { Authorization: token }
+        }
+
+        const res = await axios.patch(`${baseUrl}/${id}/unlike`, {}, config)
+        return res.data
+
+    } catch (error) {
+        handleAxiosError(error)
+    }
+}
+
 // rutas publica
 const characterList = async () => {
     try {
@@ -43,5 +78,7 @@ const getCharacterById = async (id) => {
 export {
     characterPost,
     characterList,
-    getCharacterById
+    getCharacterById, 
+    sendLike,
+    sendUnlike
 }
