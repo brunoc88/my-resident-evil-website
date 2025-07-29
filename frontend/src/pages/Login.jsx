@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import login from "../services/login"
 import { useAuth } from "../context/AuthContext"
 import './Login.css'
+import { applyToken } from "../services/token"
 
 const Login = () => {
     const {setToken, setUser, isAuth, user} = useAuth()
@@ -33,6 +34,7 @@ const Login = () => {
                 const res = await login({ user, password })
                 setToken(res.token)
                 setUser(res.user)
+                applyToken(res.token)
                 localStorage.setItem('loggerReAppUser', JSON.stringify({ token: res.token, user: res.user }))
             } catch (error) {
                 setDbErrorMsj(error.message) // Captura el mensaje del error lanzado

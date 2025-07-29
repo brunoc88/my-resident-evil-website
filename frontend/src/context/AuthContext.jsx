@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { applyToken } from '../services/token'
+import { clearToken } from '../services/token'
 
 const AuthContext = createContext()
 
@@ -24,6 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggerReAppUser')
+    clearToken() 
     setUser(null)
     setToken(null)
     navigate('/login')

@@ -56,19 +56,32 @@ const sendUnlike = async (id) => {
 }
 
 const getComments = async (id) => {
-    console.log("id",id)
-    console.log("DENTRO DE LA FUNCION")
     try {
         let token = getToken()
         if (!token) throw new Error('Acceso invalido!')
 
-        console.log("token", token)
         let config = {
             headers: { Authorization: token }
         }
-        console.log("LLAMANDO A:", `${baseUrl}/${id}/comentarios`)
 
         const res = await axios.get(`${baseUrl}/${id}/comentarios`, config)
+        return res.data
+
+    } catch (error) {
+        handleAxiosError(error)
+    }
+}
+
+const postComment = async (id, data) => {
+    try {
+        let token = getToken()
+        if (!token) throw new Error('Acceso invalido!')
+        
+        let config = {
+            headers: { Authorization: token }
+        }
+
+        const res = await axios.post(`${baseUrl}/${id}/comentario`, data, config)
         return res.data
 
     } catch (error) {
@@ -100,5 +113,6 @@ export {
     getCharacterById,
     sendLike,
     sendUnlike,
-    getComments
+    getComments,
+    postComment
 }

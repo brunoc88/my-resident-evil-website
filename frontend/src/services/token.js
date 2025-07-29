@@ -6,7 +6,12 @@ const applyToken = (newToken) => {
 
 const getToken = () => token
 
+const clearToken = () => {
+    token = null
+}
+
 export {
     applyToken,
-    getToken
+    getToken,
+    clearToken 
 }
