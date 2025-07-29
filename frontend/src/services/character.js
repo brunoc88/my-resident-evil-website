@@ -25,7 +25,7 @@ const sendLike = async (id) => {
     try {
         const token = getToken()
         if (!token) throw new Error('Acceso invalido!')
-        
+
         const config = {
             headers: { Authorization: token }
         }
@@ -38,9 +38,8 @@ const sendLike = async (id) => {
     }
 }
 
-
 const sendUnlike = async (id) => {
-        try {
+    try {
         let token = getToken()
         if (!token) throw new Error('Acceso invalido!')
 
@@ -56,6 +55,26 @@ const sendUnlike = async (id) => {
     }
 }
 
+const getComments = async (id) => {
+    console.log("id",id)
+    console.log("DENTRO DE LA FUNCION")
+    try {
+        let token = getToken()
+        if (!token) throw new Error('Acceso invalido!')
+
+        console.log("token", token)
+        let config = {
+            headers: { Authorization: token }
+        }
+        console.log("LLAMANDO A:", `${baseUrl}/${id}/comentarios`)
+
+        const res = await axios.get(`${baseUrl}/${id}/comentarios`, config)
+        return res.data
+
+    } catch (error) {
+        handleAxiosError(error)
+    }
+}
 // rutas publica
 const characterList = async () => {
     try {
@@ -78,7 +97,8 @@ const getCharacterById = async (id) => {
 export {
     characterPost,
     characterList,
-    getCharacterById, 
+    getCharacterById,
     sendLike,
-    sendUnlike
+    sendUnlike,
+    getComments
 }

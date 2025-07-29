@@ -1,5 +1,6 @@
 import { useParams, useOutletContext } from "react-router-dom"
 import { useEffect, useState } from "react"
+import CharacterComments from "../../components/character/Charactercomments"
 import { getCharacterById, sendLike, sendUnlike } from "../../services/character"
 import { useAuth } from "../../context/AuthContext"
 import { FaThumbsUp, FaRegComment } from "react-icons/fa"
@@ -14,7 +15,8 @@ const CharacterProfile = () => {
     const [plus, setPlus] = useState(false)
     const [likes, setLikes] = useState(null) //<-- contador de likes
     const [liked, setLiked] = useState(false) //<-- si le di like o no
-    const [comentarios, setComentarios] = useState(null)
+    const [comments, setComments] = useState(null)//<-- contador de likes
+    const [verComments, setVerComments] = useState(false)
     const { isAuth, user } = useAuth()
     const { setNotification } = useOutletContext()
 
@@ -24,9 +26,12 @@ const CharacterProfile = () => {
                 const res = await getCharacterById(id)
                 setCharacter(res)
                 setLikes(res.likes.length)
-                setComentarios(res.comentarios.length)
+                setComments(res.comentarios.length)
             } catch (error) {
-                console.error("Error al cargar personaje:", error)
+                setNotification({ error: error.message })
+                setTimeout(() => {
+                    setNotification({ error: '', exito: '' })
+                }, 5000)
             } finally {
                 setLoading(false)
             }
@@ -34,6 +39,19 @@ const CharacterProfile = () => {
 
         loadCharacter()
     }, [id])
+
+    useEffect(() => {
+        if (!character || !character.likes || !user?.id) return
+
+        const myLike = character.likes.some(l => {
+            const likeId = l?._id?.toString?.() || l?.toString?.()
+            return likeId === user.id.toString()
+        })
+
+        if (myLike) {
+            setLiked(true)
+        }
+    }, [character, user])
 
     if (loading) return <p>Cargando...</p>
 
@@ -43,6 +61,7 @@ const CharacterProfile = () => {
         try {
             setLittleNote({ comentarios: '', likes: '' })
             if (isAuth) {
+
                 if (!liked) {
                     setLiked(true)
                     setLikes(prev => prev + 1)
@@ -84,6 +103,12 @@ const CharacterProfile = () => {
                 setLittleNote('')
             }, 5000)
         }
+        if (isAuth && verComments) {
+            setVerComments(false)
+        } else {
+            setVerComments(true)
+        }
+
     }
 
     return (
@@ -104,7 +129,7 @@ const CharacterProfile = () => {
                         <span onClick={handleLike} className={`like-icon ${liked ? 'liked' : 'not-liked'}`}>
                             <FaThumbsUp /> {likes}
                         </span>
-                        <span><FaRegComment /> {comentarios}</span>
+                        <span><FaRegComment /> {comments}</span>
                     </div>
 
                 </div>
@@ -149,9 +174,14 @@ const CharacterProfile = () => {
 
                     {litteNote.comentarios && <div className="note">{litteNote.comentarios}</div>}
 
-                    <button className="comments-button" onClick={handleVerComentarios}>Ver comentarios</button>
+                    <button className="comments-button" onClick={handleVerComentarios}>{verComments?'Ocultar':'Ver Comentarios'}</button>
                 </div>
             </div>
+            {isAuth && verComments &&
+                <div>
+                    <CharacterComments comments={comments} />
+                </div>
+            }
         </div>
     )
 
