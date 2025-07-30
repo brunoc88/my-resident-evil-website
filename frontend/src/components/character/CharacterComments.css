@@ -78,3 +78,13 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.action-link {
+  text-decoration: none;
+  color: inherit; /* o el color que quieras */
+  transition: text-decoration 0.2s;
+}
+
+.action-link:hover {
+  text-decoration: underline;
+}

@@ -88,6 +88,24 @@ const postComment = async (id, data) => {
         handleAxiosError(error)
     }
 }
+
+const deleteCommentById = async (id, idComentario) => {
+    try {
+        let token = getToken()
+        if(!token) throw new Error('Falta token!')
+
+        let config = {
+            headers: { Authorization: token }
+        }
+        
+        const res = await axios.patch(`${baseUrl}/${id}/comentario/${idComentario}`, {}, config)
+        return res.data 
+
+    } catch (error) {
+        handleAxiosError(error)
+    }
+}
+
 // rutas publica
 const characterList = async () => {
     try {
@@ -114,5 +132,6 @@ export {
     sendLike,
     sendUnlike,
     getComments,
-    postComment
+    postComment,
+    deleteCommentById
 }

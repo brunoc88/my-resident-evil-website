@@ -15,7 +15,7 @@ const CharacterProfile = () => {
     const [plus, setPlus] = useState(false)
     const [likes, setLikes] = useState(null) //<-- contador de likes
     const [liked, setLiked] = useState(false) //<-- si le di like o no
-    const [comments, setComments] = useState(null)//<-- contador de likes
+    const [comments, setComments] = useState(null)//<-- contador de comentarios
     const [verComments, setVerComments] = useState(false)
     const { isAuth, user } = useAuth()
     const { setNotification } = useOutletContext()
@@ -26,7 +26,8 @@ const CharacterProfile = () => {
                 const res = await getCharacterById(id)
                 setCharacter(res)
                 setLikes(res.likes.length)
-                setComments(res.comentarios.length)
+                const comentarios = res.comentarios.filter(c => c.estado)
+                setComments(comentarios.length)
             } catch (error) {
                 setNotification({ error: error.message })
                 setTimeout(() => {
@@ -174,12 +175,12 @@ const CharacterProfile = () => {
 
                     {litteNote.comentarios && <div className="note">{litteNote.comentarios}</div>}
 
-                    <button className="comments-button" onClick={handleVerComentarios}>{verComments?'Ocultar':'Ver Comentarios'}</button>
+                    <button className="comments-button" onClick={handleVerComentarios}>{verComments && isAuth?'Ocultar':'Ver Comentarios'}</button>
                 </div>
             </div>
             {isAuth && verComments &&
                 <div>
-                    <CharacterComments id={id} />
+                    <CharacterComments id={id} setComments={setComments}/>
                 </div>
             }
         </div>
