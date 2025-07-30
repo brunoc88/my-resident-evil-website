@@ -1,13 +1,14 @@
 import { useForm } from 'react-hook-form'
 import { useOutletContext, Link } from 'react-router-dom'
 import { comentValidation } from '../../utils/commentValidations.js'
-import { postComment, getComments, deleteCommentById } from '../../services/character.js'
+import { postComment, getComments, deleteCommentById, editCommentById } from '../../services/character.js'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../context/AuthContext.jsx'
 import './CharacterComments.css'
 
 const CharacterComments = ({ id, setComments }) => {
     const [allComments, setAllComments] = useState(null)
+    const [editComment, setEditComment] = useState(false)
     const { setNotification } = useOutletContext()
     const { user } = useAuth()
 
@@ -80,10 +81,41 @@ const CharacterComments = ({ id, setComments }) => {
             }, 5000)
         }
     }
+
+    const getMyComment = (comment) => {
+        reset({
+            id: comment._id,
+            mensaje: comment.mensaje
+        })
+        setEditComment(true)
+    }
+
+    const handleEditComment = async (data) => {
+        try {
+            const res = await editCommentById(id, data.id, data)
+            if (res) {
+                setNotification({ error: '', exito: 'Comentario Editado' })
+                reset({mensaje:''})
+                const updated = await getComments(id)
+                setAllComments(updated.comentario.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)))
+                setTimeout(() => {
+                    setNotification({ error: '', exito: '' })
+                }, 5000)
+                setEditComment(false)
+            }
+        } catch (error) {
+            setNotification({ error: error.message || `Hubo un problema:${error}` })
+            setTimeout(() => {
+                setNotification({ error: '', exito: '' })
+            }, 5000)
+        }
+    }
+
+
     return (
         <div className="comment-section">
             <hr />
-            <form onSubmit={handleSubmit(onSubmit)} className="comment-form">
+            <form onSubmit={handleSubmit(editComment ? handleEditComment : onSubmit)} className="comment-form">
                 <label htmlFor="mensaje">Comentario:</label>
                 <textarea
                     {...register('mensaje', comentValidation)}
@@ -114,7 +146,7 @@ const CharacterComments = ({ id, setComments }) => {
                                 </div>
                                 <p className="comment-message">{c.mensaje}</p>
                                 <div className="comment-options">
-                                    {user.id === c.usuario.id && <span className='action-link'>Editar</span>}
+                                    {user.id === c.usuario.id && <span onClick={() => getMyComment(c)} className='action-link'>Editar</span>}
                                     {user.id === c.usuario.id && <span onClick={() => handleDeleteComment(c._id)} className='action-link'>Eliminar</span>}
                                     {user.id !== c.usuario.id && <span className='action-link'>Denunciar</span>}
                                 </div>
