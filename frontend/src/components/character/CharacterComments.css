@@ -88,3 +88,18 @@
 .action-link:hover {
   text-decoration: underline;
 }
+
+.ver-mas-btn {
+  background-color: transparent;
+  border: 1px solid red;
+  padding: 6px 12px;
+  margin: 10px auto;
+  display: block;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.ver-mas-btn:hover {
+  background-color: #a30000;
+}

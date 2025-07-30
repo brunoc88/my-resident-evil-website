@@ -9,6 +9,8 @@ import './CharacterComments.css'
 const CharacterComments = ({ id, setComments }) => {
     const [allComments, setAllComments] = useState(null)
     const [editComment, setEditComment] = useState(false)
+    const [visibleComments, setVisibleComments] = useState(2)
+
     const { setNotification } = useOutletContext()
     const { user } = useAuth()
 
@@ -39,7 +41,6 @@ const CharacterComments = ({ id, setComments }) => {
 
     const onSubmit = async (data) => {
         try {
-            console.log(data)
             const res = await postComment(id, data)
             if (res) {
                 setNotification({ error: '', exito: 'Gracias por comentar!' })
@@ -50,6 +51,7 @@ const CharacterComments = ({ id, setComments }) => {
                 reset()
                 const updated = await getComments(id)
                 setAllComments(updated.comentario.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)))
+                setVisibleComments(2)
             }
         } catch (error) {
             setNotification({ error: error.message, exito: '' })
@@ -69,6 +71,7 @@ const CharacterComments = ({ id, setComments }) => {
                     const updated = await getComments(id)
                     setComments(prev => prev - 1)
                     setAllComments(updated.comentario.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)))
+                    setVisibleComments(2)
                     setTimeout(() => {
                         setNotification({ error: '', exito: '' })
                     }, 5000)
@@ -95,13 +98,14 @@ const CharacterComments = ({ id, setComments }) => {
             const res = await editCommentById(id, data.id, data)
             if (res) {
                 setNotification({ error: '', exito: 'Comentario Editado' })
-                reset({mensaje:''})
+                reset({ mensaje: '' })
                 const updated = await getComments(id)
                 setAllComments(updated.comentario.sort((a, b) => new Date(b.fecha) - new Date(a.fecha)))
+                setEditComment(false)
+                setVisibleComments(2)
                 setTimeout(() => {
                     setNotification({ error: '', exito: '' })
                 }, 5000)
-                setEditComment(false)
             }
         } catch (error) {
             setNotification({ error: error.message || `Hubo un problema:${error}` })
@@ -110,7 +114,6 @@ const CharacterComments = ({ id, setComments }) => {
             }, 5000)
         }
     }
-
 
     return (
         <div className="comment-section">
@@ -130,12 +133,13 @@ const CharacterComments = ({ id, setComments }) => {
 
                 {errors.mensaje && <span>{errors.mensaje.message}</span>}
             </form>
+
             <div>
                 {!allComments || allComments.length === 0 ? (
                     <h1>¡Sé el primer comentario!</h1>
                 ) : (
                     <div className="comments-container">
-                        {allComments?.map((c) => (
+                        {allComments.slice(0, visibleComments).map((c) => (
                             <div key={c._id} className="comment-card">
                                 <div className="comment-header">
                                     <img src={`http://localhost:3000/uploads/${c.usuario.picture}`} alt="profile" className="profile-pic" />
@@ -152,11 +156,16 @@ const CharacterComments = ({ id, setComments }) => {
                                 </div>
                             </div>
                         ))}
+
+                        {visibleComments < allComments.length && (
+                            <button className="ver-mas-btn" onClick={() => setVisibleComments(prev => prev + 2)}>
+                                Ver más
+                            </button>
+                        )}
                     </div>
                 )}
             </div>
-
-        </div >
+        </div>
     )
 }
 
