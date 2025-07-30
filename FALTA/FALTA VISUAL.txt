@@ -4,3 +4,5 @@ formulario de usuario
 
 cuando se detencta que hay una validacion que da error se expanden tanto las imagenens del costado
 como el mismo form
+
+NOTICACIONES DE EXITO

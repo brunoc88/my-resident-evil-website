@@ -112,6 +112,20 @@ const CharacterProfile = () => {
 
     }
 
+    const handleDeleteCharacter = () => {
+        try {
+            console.log("deleteCharacter(id)")
+            let msj = 'Seguro que quiere eliminar este personaje?'
+            if(confirm(msj)){
+                console.log('Personaje eliminado!')
+            }
+        } catch (error) {
+            setNotification({error:error.message, exito:''})
+            setTimeout(() => {
+                setNotification({error:'', exito:''})
+            }, 5000)
+        }
+    }
     return (
         <div className="character-container">
             <h1>{character.nombre}</h1>
@@ -170,7 +184,7 @@ const CharacterProfile = () => {
                                 <button>Denunciar</button>
                             </>
                         )}
-                        {user?.rol === 'admin' && <button>Eliminar</button>}
+                        {user?.rol === 'admin' && <button onClick={handleDeleteCharacter}>Eliminar</button>}
                     </div>
 
                     {litteNote.comentarios && <div className="note">{litteNote.comentarios}</div>}
