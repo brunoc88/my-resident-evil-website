@@ -171,7 +171,7 @@ const CharacterProfile = () => {
                         <tbody>
                             <tr><td>Nombre: {character.nombre}</td></tr>
                             <tr><td>Fecha de Nacimiento: {new Date(character.fechaNacimiento).toLocaleDateString('es-AR')}</td></tr>
-                            <tr><td>Edad: {character.edad ? `${character.edad} años` : 'sin datos'}</td></tr>
+                            <tr><td>Edad: {character.edad || 'sin datos'}</td></tr>
                             <tr><td>Color de pelo: {character.colorPelo || 'sin datos'}</td></tr>
                             <tr><td>Color de ojos: {character.colorOjos || 'sin datos'}</td></tr>
                             <tr><td>Altura: {character.altura ? `${character.altura} cm` : 'sin datos'}</td></tr>
