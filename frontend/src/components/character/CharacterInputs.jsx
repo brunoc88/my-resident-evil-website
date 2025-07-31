@@ -30,7 +30,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 {errors.nombre && <span>{errors.nombre.message}</span>}
             </div>
             <div className="campo">
-                <label htmlFor="fechaNacimiento">Nacimiento:</label>
+                <label htmlFor="fechaNacimiento">Nacimiento (opcional):</label>
                 <input
                     type="date"
                     id="fechaNacimiento"
@@ -38,7 +38,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 />
             </div>
             <div className="campo">
-                <label htmlFor="edad">Edad:</label>
+                <label htmlFor="edad">Edad (opcional):</label>
                 <input
                     type="text"
                     id="edad"
@@ -47,7 +47,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 {errors.edad && <span>{errors.edad.message}</span>}
             </div>
             <div className="campo">
-                <label htmlFor="peso">Peso:</label>
+                <label htmlFor="peso">Peso (opcional):</label>
                 <input
                     type="number"
                     id="peso"
@@ -56,7 +56,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 {errors.peso && <span>{errors.peso.message}</span>}
             </div>
             <div className="campo">
-                <label htmlFor="altura">Altura:</label>
+                <label htmlFor="altura">Altura (opcional):</label>
                 <input
                     type="number"
                     id="altura"
@@ -65,7 +65,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 {errors.altura && <span>{errors.altura.message}</span>}
             </div>
             <div className="campo">
-                <label htmlFor="colorOjos">Color de Ojos:</label>
+                <label htmlFor="colorOjos">Color de Ojos (opcional):</label>
                 <input
                     type="text"
                     id="colorOjos"
@@ -75,7 +75,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 {errors.colorOjos && <span>{errors.colorOjos.message}</span>}
             </div>
             <div className="campo">
-                <label htmlFor="colorPelo">Color de Pelo:</label>
+                <label htmlFor="colorPelo">Color de Pelo (opcional):</label>
                 <input
                     type="text"
                     id="colorPelo"
@@ -85,7 +85,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 {errors.colorPelo && <span>{errors.colorPelo.message}</span>}
             </div>
             <div className="campo">
-                <label htmlFor="oficio">Oficio:</label>
+                <label htmlFor="oficio">Oficio (opcional):</label>
                 <input
                     type="text"
                     id="oficio"
@@ -95,7 +95,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 {errors.oficio && <span>{errors.oficio.message}</span>}
             </div>
             <div className="campo">
-                <label htmlFor="picture">Imagen:</label>
+                <label htmlFor="picture">{!editMode?'Imagen:' : 'Imagen(opcional):'}</label>
                 {!editMode?(
                     <input
                         type="file"
@@ -114,7 +114,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                 {errors.picture && <span>{errors.picture.message}</span>}
             </div>
             <div className="campo textarea-full">
-                <label htmlFor="biografia">Biografia:</label>
+                <label htmlFor="biografia">Biografia (opcional):</label>
                 <textarea
                     type="text"
                     id="biografia"

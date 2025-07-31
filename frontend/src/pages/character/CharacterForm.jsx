@@ -2,12 +2,12 @@ import { useForm } from "react-hook-form"
 import { useOutletContext, useParams } from "react-router-dom"
 import CharacterInputs from "../../components/character/CharacterInputs"
 import CharacterSelects from "../../components/character/CharacterSelects"
-import { characterPost, getCharacterById } from "../../services/character"
+import { characterPost, editCharacterById, getCharacterById } from "../../services/character"
 import { useAuth } from "../../context/AuthContext"
 import { useEffect, useState } from "react"
 
 
-const CharacterForm = ({editMode}) => {
+const CharacterForm = ({ editMode }) => {
     const { id } = useParams()
     const { navigate } = useAuth()
     const { setNotification } = useOutletContext()
@@ -93,14 +93,58 @@ const CharacterForm = ({editMode}) => {
         }
     }
 
-    if(loading) return <p> Cargando...</p>
+    const handleEditCharacter = async (data) => {
+        
+        const formData = new FormData()
+        
+        try {
+            
+            if (data.nombre) formData.append('nombre', data.nombre)
+            if (data.fechaNacimiento) formData.append('fechaNacimiento', data.fechaNacimiento)
+            if (data.edad) formData.append('edad', data.edad)
+            if (data.altura) formData.append('altura', data.altura)
+            if (data.peso) formData.append('peso', data.peso)
+            if (data.colorOjos) formData.append('colorOjos', data.colorOjos)
+            if (data.colorPelo) formData.append('colorPelo', data.colorPelo)
+            if (data.oficio) formData.append('oficio', data.oficio)
+            if (data.biografia) formData.append('biografia', data.biografia)
+            if (data.categoria) formData.append('categoria', data.categoria)
+            if (data.condicion) formData.append('condicion', data.condicion)
+            if (data.primeraAparicion) formData.append('primeraAparicion', data.primeraAparicion)
+            if (data.ultimaAparicion) formData.append('ultimaAparicion', data.ultimaAparicion)
+            if (data.picture && data.picture[0]) {
+                formData.append('picture', data.picture[0])
+            }
+
+            const update = await editCharacterById(id, formData)
+            if(update){
+                setNotification({error:'', exito:'Personaje Actualizado!'})
+                setTimeout(() => {
+                    setNotification({error:'', exito:''})
+                }, 5000)
+                navigate(`/personajes/${id}`)
+            }
+        } catch (error) {
+            setNotification({ error: error.message || `Hubo un problema: ${error}` })
+            setTimeout(() => {
+                setNotification({ error: '', exito: '' })
+            }, 5000)
+        }
+    }
+
+    const handleBackProfileCharacter = () => {
+        navigate(`/personajes/${id}`)
+    }
+
+    if (loading) return <p> Cargando...</p>
 
     return (
 
         <div className="user-form-layout">
-            <img src="/cForm.jpg" alt="Derecha" className="side-image right" />
-            <form className="formulario" onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
-                <h1>Formulario de Personaje</h1>
+            {!editMode? 
+            (<img src="/cForm.jpg" alt="registro" className="side-image" />) : (<img src="/editForm.jpg" alt="registro" className="side-image" />)}
+            <form className="formulario" onSubmit={handleSubmit(!editMode ? onSubmit : handleEditCharacter)} encType="multipart/form-data">
+                <h1>{!editMode?'Formulario de registro de personaje': 'Formulario de edicion de personaje'}</h1>
                 <div>
                     <CharacterInputs register={register} watch={watch} reset={reset} errors={errors} editMode={editMode} />
                 </div>
@@ -109,7 +153,7 @@ const CharacterForm = ({editMode}) => {
                 </div>
                 <div className="botones">
                     <button type="submit">Enviar</button>
-                    <button type="button" onClick={() => history.back()}>Volver</button>
+                    <button type="button" onClick={handleBackProfileCharacter}>Volver</button>
                 </div>
             </form>
         </div>
