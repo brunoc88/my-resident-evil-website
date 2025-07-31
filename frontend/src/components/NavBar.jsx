@@ -16,10 +16,15 @@ const NavBar = () => {
                     </li>
                 </div>
                 <div>
-                    <li>
-                        <NavLink to='personajes/index'>
+                    <li className="dropdown">
+                        <NavLink to="personajes/index" className="dropbtn">
                             Personajes
                         </NavLink>
+                        <div className="dropdown-content">
+                            {isAuth &&
+                                <NavLink to="personajes/registro">Registrar personaje</NavLink>
+                            }
+                        </div>
                     </li>
                     <li>
                         <NavLink to='nosotros'>

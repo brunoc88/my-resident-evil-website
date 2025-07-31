@@ -108,6 +108,7 @@ const CharacterInputs = ({ register, watch, errors, editMode }) => {
                         type="file"
                         id="picture"
                         accept="image/*"
+                        {...register('picture')}
                     />
                 )
                 }

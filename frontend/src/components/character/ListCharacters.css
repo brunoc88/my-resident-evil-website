@@ -12,6 +12,8 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
+  max-width: 1200px; /* 220px * 5 + gaps ≈ 1200px */
+  margin: 0 auto; /* centrar el contenedor */
 }
 
 /* Tarjeta */

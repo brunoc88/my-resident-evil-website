@@ -45,6 +45,9 @@ const PasswordRecovery = () => {
   }
 }
 
+  const backToLogin = async () => {
+    navigate('/login')
+  }
 
   return (
     <div className="recovery-form-container">
@@ -90,7 +93,7 @@ const PasswordRecovery = () => {
 
         <div>
           <button type="submit">Enviar</button>
-          <button type="button" onClick={() => history.back()}>Volver</button>
+          <button type="button" onClick={backToLogin}>Volver</button>
         </div>
       </form>
       <img

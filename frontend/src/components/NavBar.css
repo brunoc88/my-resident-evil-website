@@ -59,3 +59,39 @@ nav ul div li img {
 .logout-link:hover {
   color: #ccc;
 }
+
+/* Contenedor del dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Contenido oculto del dropdown */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #333;
+  min-width: 160px;
+  z-index: 1;
+}
+
+/* Estilo para los links dentro del dropdown */
+.dropdown-content a {
+  color: white;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Hover para mostrar el dropdown */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Estilo del botón del dropdown */
+.dropbtn {
+  color: white;
+  text-decoration: none;
+  padding: 10px 16px;
+  display: block;
+}
