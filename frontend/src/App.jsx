@@ -25,19 +25,20 @@ const App = () => {
           <Route path="nosotros" element={<Nosotros />} />
           <Route path="contactos" element={<Contactanos />} />
           <Route path="personajes/">
-            <Route path="index" element= {<CharacterIndex/>}/>
-            <Route path=":id" element= {<CharacterProfile/>}/>
+            <Route path="index" element={<CharacterIndex />} />
+            <Route path=":id" element={<CharacterProfile />} />
           </Route>
-            {/* Rutas protegidas */}
-            <Route path="user/" element={<ProtectedRoutes />}>
-              <Route path="editar" element={<UserForm />} />
-            </Route>
-            <Route path="personajes/" element={<ProtectedRoutes />}>
-              <Route path="registro" element={<CharacterForm />} />
-            </Route>
-            {/* Ruta 404 fuera del layout */}
-            <Route path="*" element={<NotFound />} />
+          {/* Rutas protegidas */}
+          <Route path="user/" element={<ProtectedRoutes />}>
+            <Route path="editar" element={<UserForm />} />
           </Route>
+          <Route path="personajes/" element={<ProtectedRoutes />}>
+            <Route path="registro" element={<CharacterForm />} />
+            <Route path="editar/:id" element={<CharacterForm editMode = {true} />} />
+          </Route>
+          {/* Ruta 404 fuera del layout */}
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Routes>
     </>
   )

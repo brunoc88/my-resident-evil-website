@@ -1,7 +1,7 @@
 import { useParams, useOutletContext } from "react-router-dom"
 import { useEffect, useState } from "react"
 import CharacterComments from "../../components/character/Charactercomments"
-import { getCharacterById, sendLike, sendUnlike } from "../../services/character"
+import { getCharacterById, sendLike, sendUnlike, deleteCharacterById } from "../../services/character"
 import { useAuth } from "../../context/AuthContext"
 import { FaThumbsUp, FaRegComment } from "react-icons/fa"
 import './CharacterProfile.css'
@@ -17,7 +17,7 @@ const CharacterProfile = () => {
     const [liked, setLiked] = useState(false) //<-- si le di like o no
     const [comments, setComments] = useState(null)//<-- contador de comentarios
     const [verComments, setVerComments] = useState(false)
-    const { isAuth, user } = useAuth()
+    const { isAuth, user, navigate } = useAuth()
     const { setNotification } = useOutletContext()
 
     useEffect(() => {
@@ -112,12 +112,19 @@ const CharacterProfile = () => {
 
     }
 
-    const handleDeleteCharacter = () => {
+    const handleDeleteCharacter = async () => {
         try {
-            console.log("deleteCharacter(id)")
+            
             let msj = 'Seguro que quiere eliminar este personaje?'
             if(confirm(msj)){
-                console.log('Personaje eliminado!')
+                const res = await deleteCharacterById(id)
+                if(res) {
+                    setNotification({error:'', exito:'Personaje eliminado!'})
+                    setTimeout(() => {
+                        setNotification({error:'', exito:''})
+                    }, 5000)
+                    navigate('/personajes/index')
+                }
             }
         } catch (error) {
             setNotification({error:error.message, exito:''})
@@ -126,6 +133,15 @@ const CharacterProfile = () => {
             }, 5000)
         }
     }
+
+    const handleEditCharacterViewForm = async () => {
+        try {
+            navigate(`/personajes/editar/${id}`)
+        } catch (error) {
+            setNotification({error: error.message || `Hubo un error: ${error}`})
+        }
+    }
+
     return (
         <div className="character-container">
             <h1>{character.nombre}</h1>
@@ -180,7 +196,7 @@ const CharacterProfile = () => {
                     <div className="action-buttons">
                         {isAuth && (
                             <>
-                                <button>Editar</button>
+                                <button onClick={handleEditCharacterViewForm}>Editar</button>
                                 <button>Denunciar</button>
                             </>
                         )}

@@ -10,7 +10,7 @@ import {
     validarPeso
 } from '../../utils/characterValidations'
 
-const CharacterInputs = ({ register, watch, errors }) => {
+const CharacterInputs = ({ register, watch, errors, editMode }) => {
     const nombre = watch('nombre', '')
     const colorOjos = watch('colorOjos', '')
     const colorPelo = watch('colorPelo', '')
@@ -37,7 +37,7 @@ const CharacterInputs = ({ register, watch, errors }) => {
                     {...register('fechaNacimiento')}
                 />
             </div>
-            <div className="campo"> 
+            <div className="campo">
                 <label htmlFor="edad">Edad:</label>
                 <input
                     type="text"
@@ -96,12 +96,21 @@ const CharacterInputs = ({ register, watch, errors }) => {
             </div>
             <div className="campo">
                 <label htmlFor="picture">Imagen:</label>
-                <input
-                    type="file"
-                    id="picture"
-                    accept="image/*"
-                    {...register('picture', validarImagen)}
-                />
+                {!editMode?(
+                    <input
+                        type="file"
+                        id="picture"
+                        accept="image/*"
+                        {...register('picture', validarImagen)}
+                    />
+                ):(
+                    <input
+                        type="file"
+                        id="picture"
+                        accept="image/*"
+                    />
+                )
+                }
                 {errors.picture && <span>{errors.picture.message}</span>}
             </div>
             <div className="campo textarea-full">

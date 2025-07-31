@@ -15,9 +15,6 @@ const CharacterSelects = ({ register, errors }) => {
                 <label htmlFor="categoria">Categoria:</label>
                 <select id="categoria" {...register('categoria', validarCategoria)}>
                     <option value="">--Seleccione categoría--</option>
-                    <option value="héroe">Héroe</option>
-                    <option value="villano">Villano</option>
-                    <option value="neutral">Neutral</option>
                     {CATEGORIAS_VALIDAS.map(c => (
                         <option key={c} value={c}>{c}</option>
                     ))}

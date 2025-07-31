@@ -123,6 +123,21 @@ const editCommentById = async (id, idComentario, data) => {
     }
 }
 
+const deleteCharacterById = async (id) => {
+    try {
+        let token = getToken()
+        if(!token) throw new Error('Falta token!')
+
+        let config = {
+            headers: { Authorization: token }
+        }
+
+        const res = await axios.patch(`${baseUrl}/eliminar/${id}/`, {}, config)
+        return res.data
+    } catch (error) {
+        handleAxiosError(error)
+    }
+}
 // rutas publica
 const characterList = async () => {
     try {
@@ -151,5 +166,6 @@ export {
     getComments,
     postComment,
     deleteCommentById,
-    editCommentById
+    editCommentById,
+    deleteCharacterById
 }
