@@ -53,10 +53,13 @@ const NavBar = () => {
                         </li>
                     }
                     {isAuth &&
-                        <li>
-                            <NavLink to=''>
+                        <li className="dropdown">
+                            <NavLink to='user/miPerfil'>
                                 {user.userName}
                             </NavLink>
+                            <div className="dropdown-content">
+                                <NavLink to=""></NavLink>
+                            </div>
                         </li>
                     }
                     {isAuth &&

@@ -1,0 +1,93 @@
+.user-profile-container {
+  color: white;
+  padding: 2rem;
+  min-height: 100vh;
+  font-family: sans-serif;
+}
+
+.user-header {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 👉 centrado horizontal */
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+
+.follow-button {
+  background-color: #a80000;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.user-profile-content {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.user-info-box p {
+  margin: 0.5rem 0;
+  line-height: 1.6; /* 👉 mayor espacio vertical */
+}
+
+.user-info-box {
+  background-color: #111;
+  padding: 2rem;         /* 👉 más aire interno */
+  border-radius: 10px;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+
+.user-profile-img {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.user-stats-box {
+  margin-top: 1rem;
+  background-color: #a80000;
+  color: white;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.user-info-box {
+  background-color: #111;
+  padding: 1.5rem;
+  border-radius: 10px;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.user-info-box p {
+  margin: 0.5rem 0;
+}
+
+.user-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.user-buttons .action {
+  background-color: #a80000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.user-buttons .delete {
+  background-color: darkred;
+}
