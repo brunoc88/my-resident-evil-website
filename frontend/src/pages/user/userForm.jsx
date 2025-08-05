@@ -15,8 +15,8 @@ import { useEffect } from 'react'
 import './UserForm.css'
 import { useAuth } from '../../context/AuthContext'
 
-const UserForm = ({isAdmin}) => {
-  const {setToken, setUser, isAuth, navigate} = useAuth()
+const UserForm = ({ isAdmin }) => {
+  const { setToken, setUser, isAuth, navigate } = useAuth()
   const {
     register,
     handleSubmit,
@@ -30,7 +30,7 @@ const UserForm = ({isAdmin}) => {
   const userName = watch('userName', '')
 
   const { setNotification } = useOutletContext()
- 
+
 
   // Cargar datos del usuario si está autenticado
   useEffect(() => {
@@ -79,8 +79,8 @@ const UserForm = ({isAdmin}) => {
         : await userPost(formData)
 
       if (res && !res.error) {
-       setNotification({ error: '', exito: 'Gracias por registrarte!' })
-       setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
+        setNotification({ error: '', exito: 'Gracias por registrarte!' })
+        setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
 
         const loginRes = await login({
           user: data.userName,
@@ -101,15 +101,19 @@ const UserForm = ({isAdmin}) => {
   }
 
   const onVolver = (e) => {
-    e.preventDefault()
-    navigate('/login')
+    e.preventDefault() // <-- evita que el form se mande
+    if (isAuth) {
+      navigate(`user/miPerfil`)
+    } else {
+      navigate('/login')
+    }
   }
 
   const handleEditar = async (data) => {
     try {
       const formData = new FormData()
       formData.append('userName', data.userName)
-      if(data.password){
+      if (data.password) {
         formData.append('password', data.password)
       }
       formData.append('email', data.email)
@@ -119,14 +123,14 @@ const UserForm = ({isAdmin}) => {
       if (data.picture && data.picture[0]) {
         formData.append('picture', data.picture[0])
       }
-     
+
       const res = await userEdit(data.id, formData)
-      if (res && res.msj){
-        setNotification({error:'', exito: res.msj})
+      if (res && res.msj) {
+        setNotification({ error: '', exito: res.msj })
       }
       navigate('/')
     } catch (error) {
-      setNotification({error: error.message, exito:''})
+      setNotification({ error: error.message, exito: '' })
       setTimeout(() => {
         setNotification('')
       }, 5000)

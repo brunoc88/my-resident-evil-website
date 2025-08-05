@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { applyToken } from '../services/token'
 import { clearToken } from '../services/token'
+import { myProfile } from '../services/user'
 
 const AuthContext = createContext()
 
@@ -16,16 +17,37 @@ export const AuthProvider = ({ children }) => {
     const loggedUserJSON = window.localStorage.getItem('loggerReAppUser')
     if (loggedUserJSON) {
       const userData = JSON.parse(loggedUserJSON)
-      setUser(userData.user)
+      //setUser(userData.user)
       setToken(userData.token)
       applyToken(userData.token)
+    } else {
+      setCheckingAuth(false)
     }
-    setCheckingAuth(false)
   }, [])
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const res = await myProfile()
+        setUser(res.user)
+      } catch (error) {
+        console.log(error)
+        handleLogout()
+      } finally {
+        setCheckingAuth(false)
+      }
+    }
+
+    if (token) {
+      loadUser()
+    }
+  }, [token])
+
+
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggerReAppUser')
-    clearToken() 
+    clearToken()
     setUser(null)
     setToken(null)
     navigate('/login')

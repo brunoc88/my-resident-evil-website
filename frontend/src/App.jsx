@@ -32,14 +32,12 @@ const App = () => {
           {/* Rutas protegidas */}
           <Route path="user/" element={<ProtectedRoutes />}>
             <Route path="editar" element={<UserForm />} />
+            <Route path="miPerfil" element={<Profile/>}/>
+            <Route path="perfil/:userName" element={<Profile/>}/>
           </Route>
           <Route path="personajes/" element={<ProtectedRoutes />}>
             <Route path="registro" element={<CharacterForm />} />
             <Route path="editar/:id" element={<CharacterForm editMode = {true} />} />
-          </Route>
-          <Route path="user/" element={<ProtectedRoutes />}>
-            <Route path="miPerfil" element={<Profile/>}/>
-            <Route path="perfil/:userName" element={<Profile/>}/>
           </Route>
           {/* Ruta 404 fuera del layout */}
           <Route path="*" element={<NotFound />} />

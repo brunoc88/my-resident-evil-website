@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAuth } from '../../context/AuthContext'
 import { useOutletContext, useParams } from "react-router-dom"
-import { myProfile, myFollowers, myFollowed, userProfile } from '../../services/user.js'
+import { myProfile, userProfile, follow, unFollow } from '../../services/user.js'
 import './Profile.css'
 
 const Profile = () => {
@@ -9,8 +9,9 @@ const Profile = () => {
   const [loading, setLoading] = useState(true)
   const [seguidores, setSeguidores] = useState(null)
   const [seguidos, setSeguidos] = useState(null)
+  const [loSigo, setLoSigo] = useState(null)
   const { setNotification } = useOutletContext()
-  const { user } = useAuth()
+  const { user, navigate } = useAuth()
   const { userName } = useParams()
 
   useEffect(() => {
@@ -21,11 +22,21 @@ const Profile = () => {
           const res = await myProfile()
           if (res && res.user) {
             setProfile(res.user)
+            setSeguidos(res.user.seguidos.length)
+            setSeguidores(res.user.seguidores.length)
           }
         } else {
           const res = await userProfile(userName)
-          if (res && res.user)
+          if (res && res.user){
             setProfile(res.user)
+            setSeguidos(res.user.seguidos.length)
+            setSeguidores(res.user.seguidores.length)
+            if(user.seguidos.includes(res.user.id)){
+              setLoSigo(true)
+            }else {
+              setLoSigo(false)
+            }
+          }  
         }
       } catch (error) {
         setNotification({ error: error.message || `Hubo un problema: ${error}` })
@@ -40,37 +51,44 @@ const Profile = () => {
     loadProfile()
   }, [userName])
 
-  useEffect(() => {
-    const loadFollowers = async () => {
-      try {
-        const res = await myFollowers()
-        setSeguidores(res.seguidores.length)
-      } catch (error) {
-        setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
-        setTimeout(() => {
-          setNotification({ error: '', exito: '' })
-        }, 5000)
+
+  const handleGoToEditProfile = () => {
+    navigate('user/editar')
+  }
+
+  const handleFollow = async (id) => {
+    try {
+      if (!loSigo) {
+        const res = await follow(id)
+        if (res && res.msj) {
+          setNotification({ error: '', exito: res.msj })
+          setTimeout(() => {
+            setNotification({ error: '', exito: '' })
+          }, 5000)
+          setSeguidores(prev => prev + 1)
+          setLoSigo(true)
+        }
+        
+        
+      } else {
+        const res = await unFollow(id)
+        if (res && res.msj) {
+          setNotification({ error: '', exito: res.msj })
+          setTimeout(() => {
+            setNotification({ error: '', exito: '' })
+          }, 5000)
+          setSeguidores(prev => prev - 1)
+          setLoSigo(false)
+        }
       }
+
+    } catch (error) {
+      setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
+      setTimeout(() => {
+        setNotification({ error: '', exito: '' })
+      }, 5000)
     }
-
-    if (!seguidores) loadFollowers()
-
-  }, [seguidores])
-
-  useEffect(() => {
-    const loadFollowed = async () => {
-      try {
-        const res = await myFollowed()
-        setSeguidos(res.seguidos.length)
-      } catch (error) {
-        setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
-        setTimeout(() => {
-          setNotification({ error: '', exito: '' })
-        }, 5000)
-      }
-    }
-    if (!seguidos) loadFollowed()
-  }, [seguidos])
+  }
 
 
   if (loading) return <p>Cargando...</p>
@@ -79,7 +97,11 @@ const Profile = () => {
     <div className="user-profile-container">
       <div className="user-header">
         <h1>Perfil de {profile.userName}</h1>
-        {user.userName !== profile.userName ? <button className="follow-button">Seguir</button> : ''}
+        {user.userName !== profile.userName && (
+          loSigo
+            ? <button className="follow-button" onClick={() => handleFollow(profile.id)}>Dejar de Seguir</button>
+            : <button className="follow-button" onClick={() => handleFollow(profile.id)}>Seguir</button>
+        )}
       </div>
 
       <div className="user-profile-content">
@@ -108,7 +130,7 @@ const Profile = () => {
           <div className="user-buttons">
             {user.userName === profile.userName ?
               <>
-                <button className="action">Editar</button>
+                <button className="action" onClick={handleGoToEditProfile}>Editar</button>
               </> :
               <>
                 <button className="action">Mandar Mensaje</button>

@@ -144,14 +144,16 @@ const CharacterComments = ({ id, setComments }) => {
                                 <div className="comment-header">
                                     <img src={`http://localhost:3000/uploads/${c.usuario.picture}`} alt="profile" className="profile-pic" />
                                     <div className="comment-meta">
-                                        <Link to={`user/perfil/${c.usuario.id}`} className='action-link'>{c.usuario.userName}</Link>
+                                        <Link to={`/user/perfil/${c.usuario.userName}`} className='action-link'>{c.usuario.userName}</Link>
                                         <span className="date">{new Date(c.fecha).toLocaleDateString('es-AR')}</span>
                                     </div>
                                 </div>
                                 <p className="comment-message">{c.mensaje}</p>
                                 <div className="comment-options">
                                     {user.id === c.usuario.id && <span onClick={() => getMyComment(c)} className='action-link'>Editar</span>}
-                                    {user.id === c.usuario.id && <span onClick={() => handleDeleteComment(c._id)} className='action-link'>Eliminar</span>}
+                                    {(user?.id === c.usuario.id || (user?.rol === 'admin' && c.usuario.rol !== 'admin')) && (
+                                        <span onClick={() => handleDeleteComment(c._id)} className='action-link'>Eliminar</span>
+                                    )}
                                     {user.id !== c.usuario.id && <span className='action-link'>Denunciar</span>}
                                 </div>
                             </div>

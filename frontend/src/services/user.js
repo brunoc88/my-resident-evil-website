@@ -114,6 +114,37 @@ const userProfile = async (userName) => {
   }
 }
 
+const follow = async (id) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.patch(`${baseUrl}/seguir/${id}`, {}, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+const unFollow = async (id) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.patch(`${baseUrl}/dejarDeSeguir/${id}`, {}, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+
 export {
   userPost,
   userAdminPost,
@@ -122,5 +153,7 @@ export {
   userEdit,
   myFollowers,
   myFollowed,
-  userProfile
+  userProfile,
+  follow,
+  unFollow
 }
