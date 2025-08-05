@@ -107,5 +107,18 @@ Middleware global:
 
 ---
 
+### 👤 Seguir Usuario
+
+#### `PATCH /seguir/:id`
+- **Middleware:** `verifyBlock`
+- **Controlador:** `seguirUsuario`
+- **Descripción:** Permite seguir a un usuario.
+
+### 👤 Dejar de Seguir Usuario
+
+#### `PATCH /dejarDeSeguir/:id`
+- **Controlador:** `dejarDeSeguirUsuario`
+- **Descripción:** Permite dejar de seguir a un usuario.
+
 Este archivo de rutas gestiona la mayor parte de la interacción entre usuarios, incluyendo mensajería, edición de perfiles, bloqueos y funciones administrativas.
 

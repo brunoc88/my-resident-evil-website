@@ -157,7 +157,7 @@ exports.reactivarCuenta = async (req, res, next) => {
 // Lista de baneados, solo vista por admins
 exports.listaDeBaneados = async (req, res, next) => {
   try {
-    const lista = await User.find({estado:false})
+    const lista = await User.find({ estado: false })
     return res.status(200).json(lista)
   } catch (error) {
     next(error)
@@ -486,6 +486,8 @@ exports.listaBloqueados = async (req, res, next) => {
   }
 }
 
+// funciones de seguimiento de usuarios
+
 exports.seguirUsuario = async (req, res, next) => {
   try {
     const id = req.params.id
@@ -523,6 +525,64 @@ exports.seguirUsuario = async (req, res, next) => {
   }
 }
 
+exports.dejarDeSeguirUsuario = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const yo = await User.findById(req.user.id)
+    const user = await User.findById(id)
+
+    // Validaciones
+    if (!user || !user.estado) {
+      return res.status(404).json({ error: 'Usuario no encontrado o desactivado' })
+    }
+
+    // Verificar si lo sigo
+    if (!yo.seguidos.includes(user._id)) {
+      return res.status(400).json({ error: 'No estás siguiendo a este usuario' })
+    }
+
+    // Eliminarlo de mis seguidos
+    yo.seguidos = yo.seguidos.filter(u => u.toString() !== user._id.toString())
+
+    // Eliminarme de sus seguidores
+    user.seguidores = user.seguidores.filter(u => u.toString() !== yo._id.toString())
+
+    await yo.save()
+    await user.save()
+
+    return res.status(200).json({ msj: `Ya no sigues a ${user.userName}` })
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.misSeguidos = async (req, res, next) => {
+  try {
+    const yo = await User.findById(req.user.id)
+      .select('seguidos')
+      .populate('seguidos', 'userName email picture')
+
+    const seguidosActivos = yo.seguidos.filter(u => u.estado)
+
+    return res.status(200).json({ seguidos: seguidosActivos })
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.misSeguidores = async (req, res, next) => {
+  try {
+    const yo = await User.findById(req.user.id)
+      .select('seguidores')
+      .populate('seguidores', 'userName email picture')
+
+    const seguidoresActivos = yo.seguidores.filter(u => u.estado)
+
+    return res.status(200).json({ seguidores: seguidoresActivos })
+  } catch (error) {
+    next(error)
+  }
+}
 
 
 const generarPasswordAleatoria = (longitud = 12) => {

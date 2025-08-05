@@ -50,4 +50,10 @@ router.get('/bloqueados', userController.listaBloqueados)
 
 router.patch('/seguir/:id', verifyBlock, userController.seguirUsuario)
 
+router.patch('/dejarDeSeguir/:id', userController.dejarDeSeguirUsuario)
+
+router.get('/misSeguidos', userController.misSeguidos)
+
+router.get('/misSeguidores', userController.misSeguidores)
+
 module.exports = router

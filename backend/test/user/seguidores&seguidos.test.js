@@ -26,7 +26,7 @@ beforeEach(async () => {
     token2 = res2.body.token // token userToFollow
 })
 
-describe('PATHC user/seguir/:id', () => {
+describe('PATCH /user/seguir/:id', () => {
     test('Seguir un usuario', async () => {
         let userToFollowId = userToFollow.id
         misSeguidos = await User.findById(myId)
@@ -60,6 +60,24 @@ describe('PATHC user/seguir/:id', () => {
             .expect('Content-Type', /application\/json/)
     })
     
+})
+
+describe('PATCH /user/dejarDeSeguir/:id', () => {
+    test('Dejar de seguir un usuario', async () => {
+
+        // sigo a un usuario
+        await api.patch(`/user/seguir/${userToFollow.id}`).set('Authorization', `Bearer ${token}`)
+
+        // ahora dejo de seguirlo
+        const res = await api
+        .patch(`/user/dejarDeSeguir/${userToFollow.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+        expect(res.body).toHaveProperty('msj')
+        expect(res.body.msj).toContain(`Ya no sigues a ${userToFollow.userName}`)
+    })
 })
 
 afterAll(async () => {
