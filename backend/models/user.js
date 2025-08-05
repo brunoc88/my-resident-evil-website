@@ -50,12 +50,22 @@ const userSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    bloqueos:[{ //para control puse bloqueo para evitar recibir o enviar mensajes
+    bloqueos: [{ //para control puse bloqueo para evitar recibir o enviar mensajes
         type: mongoose.Schema.ObjectId,
         ref: 'User',
-        default: [] 
+        default: []
     }],
-    mensajes:[mensajeSchema]
+    mensajes: [mensajeSchema],
+    seguidos: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        default: []
+    }],
+    seguidores: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        default: []
+    }]
 })
 
 

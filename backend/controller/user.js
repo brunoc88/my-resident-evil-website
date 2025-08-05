@@ -486,6 +486,45 @@ exports.listaBloqueados = async (req, res, next) => {
   }
 }
 
+exports.seguirUsuario = async (req, res, next) => {
+  try {
+    const id = req.params.id
+
+    const yo = await User.findById(req.user.id)
+    const user = await User.findById(id)
+
+    // Validaciones
+    if (!user || !user.estado) {
+      return res.status(404).json({ error: 'Usuario no encontrado o desactivado' })
+    }
+
+    if (yo._id.equals(user._id)) {
+      return res.status(400).json({ error: 'No puedes seguirte a ti mismo' })
+    }
+
+    // Verificar si ya lo sigo
+    const yaLoSigo = yo.seguidos.includes(user._id)
+    if (yaLoSigo) {
+      return res.status(400).json({ error: 'Ya sigues a este usuario' })
+    }
+
+    // Agregar relación
+    yo.seguidos.push(user._id)
+    user.seguidores.push(yo._id)
+
+    // Guardar ambos documentos
+    await yo.save()
+    await user.save()
+
+    return res.status(200).json({ msj: `Ahora sigues a ${user.userName}` })
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+
+
 const generarPasswordAleatoria = (longitud = 12) => {
   return crypto.randomBytes(longitud).toString('hex').slice(0, longitud)  // ej: "a9d0e3f1b2c4"
 }

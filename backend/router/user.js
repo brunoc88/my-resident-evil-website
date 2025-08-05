@@ -48,4 +48,6 @@ router.delete('/desbloquear/:id', userController.desbloquear)
 
 router.get('/bloqueados', userController.listaBloqueados)
 
+router.patch('/seguir/:id', verifyBlock, userController.seguirUsuario)
+
 module.exports = router
