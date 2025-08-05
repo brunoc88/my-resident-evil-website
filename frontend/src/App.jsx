@@ -11,6 +11,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes"
 import CharacterIndex from "./pages/character/CharacterIndex"
 import CharacterProfile from "./pages/character/CharacterProfile"
 import Profile from "./pages/user/Profile"
+import FollowList from "./pages/user/FollowList"
 
 const App = () => {
 
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="editar" element={<UserForm />} />
             <Route path="miPerfil" element={<Profile/>}/>
             <Route path="perfil/:userName" element={<Profile/>}/>
+            <Route path="followList" element={<FollowList/>}/>
           </Route>
           <Route path="personajes/" element={<ProtectedRoutes />}>
             <Route path="registro" element={<CharacterForm />} />

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useAuth } from '../../context/AuthContext'
-import { useOutletContext, useParams } from "react-router-dom"
+import { useOutletContext, useParams, Link } from "react-router-dom"
 import { myProfile, userProfile, follow, unFollow } from '../../services/user.js'
 import './Profile.css'
 
@@ -27,16 +27,16 @@ const Profile = () => {
           }
         } else {
           const res = await userProfile(userName)
-          if (res && res.user){
+          if (res && res.user) {
             setProfile(res.user)
             setSeguidos(res.user.seguidos.length)
             setSeguidores(res.user.seguidores.length)
-            if(user.seguidos.includes(res.user.id)){
+            if (user.seguidos.includes(res.user.id)) {
               setLoSigo(true)
-            }else {
+            } else {
               setLoSigo(false)
             }
-          }  
+          }
         }
       } catch (error) {
         setNotification({ error: error.message || `Hubo un problema: ${error}` })
@@ -68,8 +68,8 @@ const Profile = () => {
           setSeguidores(prev => prev + 1)
           setLoSigo(true)
         }
-        
-        
+
+
       } else {
         const res = await unFollow(id)
         if (res && res.msj) {
@@ -112,9 +112,13 @@ const Profile = () => {
             alt={`profile${profile.nombre}`}
             className="user-profile-img"
           />
-          <div className="user-stats-box">
+          {userName?<div className="user-stats-box">
             Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}
+          </div>:
+          <div className="user-stats-box">
+            <Link to='/user/followList'> Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}</Link> 
           </div>
+          }
         </div>
 
         {/* DATOS */}
