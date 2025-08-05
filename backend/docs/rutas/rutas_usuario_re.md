@@ -107,6 +107,8 @@ Middleware global:
 
 ---
 
+## 👤 Seguimientos 
+
 ### 👤 Seguir Usuario
 
 #### `PATCH /seguir/:id`
@@ -119,6 +121,18 @@ Middleware global:
 #### `PATCH /dejarDeSeguir/:id`
 - **Controlador:** `dejarDeSeguirUsuario`
 - **Descripción:** Permite dejar de seguir a un usuario.
+
+### 👤 Todos mis seguidos
+
+#### `GET /misSeguidos`
+- **Controlador:** `misSeguidos`
+- **Descripción:** Permite obtener el listado de usuario que sigo.
+
+### 👤 Todos mis seguidores
+
+#### `GET /misSeguidores`
+- **Controlador:** `misSeguidores`
+- **Descripción:** Permite obtener el listado de usuario que me siguen.
 
 Este archivo de rutas gestiona la mayor parte de la interacción entre usuarios, incluyendo mensajería, edición de perfiles, bloqueos y funciones administrativas.
 

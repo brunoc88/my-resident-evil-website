@@ -9,7 +9,7 @@ let api = supertest(app)
 let token = null
 let token2 = null
 let users = null
-let myId = null
+let yo = null
 let userToFollow = null
 
 beforeEach(async () => {
@@ -20,7 +20,7 @@ beforeEach(async () => {
     const res = await api.post('/').send({ user: users[0].userName, password: 'sekret' })
     const res2 = await api.post('/').send({ user: users[1].userName, password: 'sekret' })
 
-    myId = await User.findById(res.body.user.id)
+    yo = await User.findById(res.body.user.id)
     userToFollow = await User.findById(res2.body.user.id)
     token = res.body.token
     token2 = res2.body.token // token userToFollow
@@ -28,17 +28,18 @@ beforeEach(async () => {
 
 describe('PATCH /user/seguir/:id', () => {
     test('Seguir un usuario', async () => {
-        let userToFollowId = userToFollow.id
-        misSeguidos = await User.findById(myId)
+        
+        misSeguidos = await User.findById(yo.id)
         let misSeguidosAntes = misSeguidos.seguidos.length
-
+        // id del usuario a seguir
+        let id = userToFollow.id
         const res = await api
-            .patch(`/user/seguir/${userToFollowId}`)
+            .patch(`/user/seguir/${id}`)
             .set('Authorization', `Bearer ${token}`)
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
-        misSeguidos = await User.findById(myId)
+        misSeguidos = await User.findById(yo.id)
         let misSeguidosDespues = misSeguidos.seguidos.length
 
         expect(res.body).toBeTruthy()
@@ -50,13 +51,13 @@ describe('PATCH /user/seguir/:id', () => {
     test('Usuario Bloqueado intenta seguirme', async () => {
 
         // bloqueo al usuario que me quiere seguir
-        await api.post(`/user/bloquear/${userToFollow}`).set('Authorization', `Bearer ${token}`)
+        await api.post(`/user/bloquear/${userToFollow.id}`).set('Authorization', `Bearer ${token}`)
 
         // luego ese usuario me intenta seguir
         await api
-            .patch(`/user/seguir/${myId}`)
+            .patch(`/user/seguir/${yo.id}`)
             .set('Authorization', `Bearer ${token2}`)
-            .expect(400)
+            .expect(403)
             .expect('Content-Type', /application\/json/)
     })
     
