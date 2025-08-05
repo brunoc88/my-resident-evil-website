@@ -1,23 +1,31 @@
 import { useEffect, useState } from "react"
 import { useAuth } from '../../context/AuthContext'
-import { useOutletContext } from "react-router-dom"
-import { myProfile } from '../../services/user.js'
+import { useOutletContext, useParams } from "react-router-dom"
+import { myProfile, myFollowers, myFollowed, userProfile } from '../../services/user.js'
 import './Profile.css'
 
 const Profile = () => {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
-  const [seguidores, setSeguidores] = useState(1000)
-  const [seguidos, setSeguidos] = useState(400)
+  const [seguidores, setSeguidores] = useState(null)
+  const [seguidos, setSeguidos] = useState(null)
   const { setNotification } = useOutletContext()
-  const { isAuth, user } = useAuth()
+  const { user } = useAuth()
+  const { userName } = useParams()
 
   useEffect(() => {
+    setProfile('')
     const loadProfile = async () => {
       try {
-        const res = await myProfile()
-        if (res && res.user) {
-          setProfile(res.user)
+        if (!userName) { // <-- si userName esta vacio es porque estoy viendo mi propio perfil
+          const res = await myProfile()
+          if (res && res.user) {
+            setProfile(res.user)
+          }
+        } else {
+          const res = await userProfile(userName)
+          if (res && res.user)
+            setProfile(res.user)
         }
       } catch (error) {
         setNotification({ error: error.message || `Hubo un problema: ${error}` })
@@ -30,15 +38,48 @@ const Profile = () => {
     }
 
     loadProfile()
-  }, [])
+  }, [userName])
+
+  useEffect(() => {
+    const loadFollowers = async () => {
+      try {
+        const res = await myFollowers()
+        setSeguidores(res.seguidores.length)
+      } catch (error) {
+        setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
+        setTimeout(() => {
+          setNotification({ error: '', exito: '' })
+        }, 5000)
+      }
+    }
+
+    if (!seguidores) loadFollowers()
+
+  }, [seguidores])
+
+  useEffect(() => {
+    const loadFollowed = async () => {
+      try {
+        const res = await myFollowed()
+        setSeguidos(res.seguidos.length)
+      } catch (error) {
+        setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
+        setTimeout(() => {
+          setNotification({ error: '', exito: '' })
+        }, 5000)
+      }
+    }
+    if (!seguidos) loadFollowed()
+  }, [seguidos])
+
 
   if (loading) return <p>Cargando...</p>
 
   return (
     <div className="user-profile-container">
       <div className="user-header">
-        <h1>{profile.userName}</h1>
-        <button className="follow-button">Seguir</button>
+        <h1>Perfil de {profile.userName}</h1>
+        {user.userName !== profile.userName ? <button className="follow-button">Seguir</button> : ''}
       </div>
 
       <div className="user-profile-content">
@@ -65,9 +106,20 @@ const Profile = () => {
           })}</p>
 
           <div className="user-buttons">
-            <button className="action">Mandar Mensaje</button>
-            <button className="action">Denunciar</button>
-            {user?.rol === 'admin' && <button className="action delete">Eliminar</button>}
+            {user.userName === profile.userName ?
+              <>
+                <button className="action">Editar</button>
+              </> :
+              <>
+                <button className="action">Mandar Mensaje</button>
+                <button className="action">Denunciar</button>
+                <button className="action">Bloquear</button>
+              </>
+            }
+            {(user?.userName === profile?.userName) ||
+              (user?.rol === 'admin' && profile?.rol !== 'admin')
+              ? <button className="action">Eliminar</button>
+              : null}
           </div>
         </div>
       </div>

@@ -44,7 +44,7 @@ const myProfile = async () => {
     }
 
     const res = await axios.get(`${baseUrl}/miPerfil`, config)
-    
+
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -69,10 +69,58 @@ const userEdit = async (id, data) => {
   }
 }
 
+const myFollowers = async () => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.get(`${baseUrl}/misSeguidores`, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+const myFollowed = async () => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.get(`${baseUrl}/misSeguidos`, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+const userProfile = async (userName) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.get(`${baseUrl}/perfil/${userName}`, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
 export {
   userPost,
   userAdminPost,
   passwordRecovery,
-  myProfile, 
-  userEdit
+  myProfile,
+  userEdit,
+  myFollowers,
+  myFollowed,
+  userProfile
 }

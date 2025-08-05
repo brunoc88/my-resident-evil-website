@@ -560,7 +560,7 @@ exports.misSeguidos = async (req, res, next) => {
   try {
     const yo = await User.findById(req.user.id)
       .select('seguidos')
-      .populate('seguidos', 'userName email picture')
+      .populate('seguidos', 'userName email picture estado')
 
     const seguidosActivos = yo.seguidos.filter(u => u.estado)
 
@@ -574,7 +574,7 @@ exports.misSeguidores = async (req, res, next) => {
   try {
     const yo = await User.findById(req.user.id)
       .select('seguidores')
-      .populate('seguidores', 'userName email picture')
+      .populate('seguidores', 'userName email picture estado')
 
     const seguidoresActivos = yo.seguidores.filter(u => u.estado)
 

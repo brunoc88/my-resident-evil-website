@@ -39,6 +39,7 @@ const App = () => {
           </Route>
           <Route path="user/" element={<ProtectedRoutes />}>
             <Route path="miPerfil" element={<Profile/>}/>
+            <Route path="perfil/:userName" element={<Profile/>}/>
           </Route>
           {/* Ruta 404 fuera del layout */}
           <Route path="*" element={<NotFound />} />
