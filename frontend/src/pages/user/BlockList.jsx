@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react"
 import { useOutletContext, Link } from "react-router-dom"
 import { blockList, unBlock } from "../../services/user"
-import { useAuth } from "../../context/AuthContext"
 import './List.css'
 
 
-const List = ({ block }) => {
+const BlockList = () => {
     const { setNotification } = useOutletContext()
     const [blockUsers, setBlockUsers] = useState(null)
     const [filter, setFilter] = useState(null)
-    //const { user } = useAuth()
 
     useEffect(() => {
         const loadBlockList = async () => {
             try {
                 const res = await blockList()
                 if (res && res.bloqueados) {
-                    setBlockUsers(res.bloqueados)
+                    const bloqueados = res.bloqueados.filter(user => user.estado === true)
+                    setBlockUsers(bloqueados)
                 }
             } catch (error) {
                 setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
@@ -25,8 +24,8 @@ const List = ({ block }) => {
                 }, 5000)
             }
         }
-        if (block) loadBlockList()
-    }, [block])
+        if (!blockUsers) loadBlockList()
+    }, [])
 
 
     const handleUnblock = async (id) => {
@@ -54,7 +53,7 @@ const List = ({ block }) => {
 
     return (
         <div className="list-container">
-            {block && <h1>Lista de Bloqueados</h1>}
+            <h1>Lista de Bloqueados</h1>
 
             {blockUsers && blockUsers.length === 0 ? (
                 <h2>No tienes bloqueados</h2>
@@ -87,4 +86,4 @@ const List = ({ block }) => {
 }
 
 
-export default List
+export default BlockList

@@ -474,7 +474,7 @@ exports.listaBloqueados = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id)
       .select('bloqueos')
-      .populate('bloqueos', 'userName email picture')
+      .populate('bloqueos', 'userName email picture estado')
 
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' })
