@@ -12,6 +12,7 @@ import CharacterIndex from "./pages/character/CharacterIndex"
 import CharacterProfile from "./pages/character/CharacterProfile"
 import Profile from "./pages/user/Profile"
 import FollowList from "./pages/user/FollowList"
+import List from "./pages/user/List"
 
 const App = () => {
 
@@ -36,6 +37,7 @@ const App = () => {
             <Route path="miPerfil" element={<Profile/>}/>
             <Route path="perfil/:userName" element={<Profile/>}/>
             <Route path="followList" element={<FollowList/>}/>
+            <Route path="bloqueados" element={<List block={true}/>}/>
           </Route>
           <Route path="personajes/" element={<ProtectedRoutes />}>
             <Route path="registro" element={<CharacterForm />} />

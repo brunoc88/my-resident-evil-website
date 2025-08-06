@@ -58,7 +58,7 @@ const NavBar = () => {
                                 {user.userName}
                             </NavLink>
                             <div className="dropdown-content">
-                                <NavLink to=""></NavLink>
+                                <NavLink to="user/bloqueados">Lista de Bloqueados</NavLink>
                             </div>
                         </li>
                     }

@@ -174,7 +174,7 @@ const Profile = () => {
     <div className="user-profile-container">
       <div className="user-header">
         <h1>Perfil de {profile.userName}</h1>
-        {user.userName !== profile.userName && (
+        {(user.userName !== profile.userName) && (!isBlock && !imBlock) && (
           loSigo
             ? <button className="follow-button" onClick={() => handleFollow(profile.id)}>Dejar de Seguir</button>
             : <button className="follow-button" onClick={() => handleFollow(profile.id)}>Seguir</button>
@@ -214,7 +214,8 @@ const Profile = () => {
                 <button className="action" onClick={handleGoToEditProfile}>Editar</button>
               </> :
               <>
-                <button className="action">Mandar Mensaje</button>
+              {!isBlock && !imBlock && <button className="action">Mandar Mensaje</button>}
+                
                 <button className="action">Denunciar</button>
                 {(user.rol !== 'admin' && profile.rol === 'admin') || (imBlock) ?
                   <></> :
