@@ -159,6 +159,36 @@ const deleteAccount = async (id) => {
   }
 }
 
+const block = async (id) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.post(`${baseUrl}/bloquear/${id}`, {}, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+const unBlock = async (id) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.delete(`${baseUrl}/desbloquear/${id}`, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
 export {
   userPost,
   userAdminPost,
@@ -170,5 +200,7 @@ export {
   userProfile,
   follow,
   unFollow,
-  deleteAccount
+  deleteAccount,
+  block,
+  unBlock
 }

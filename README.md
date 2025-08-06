@@ -28,7 +28,7 @@ El registro se realiza mediante formularios diferentes. Para registrarse como **
 | Ver perfiles (propios y ajenos)       | ✅            | ✅            |
 | Dar like/dislike a personajes         | ✅            | ✅            |
 | Ver personajes que le dio like        | ✅            | ✅            |
-| Bloquear y desbloquear usuarios       | ✅            | ✅            |
+| Bloquear y desbloquear usuarios       | ✅ (no admins)| ✅            |
 | Enviar mensajes (si no hay bloqueo)   | ✅            | ✅            |
 | Reactivar cuentas eliminadas          | ❌            | ✅            |
 | Realizar denuncias                    | ✅            | ✅            |

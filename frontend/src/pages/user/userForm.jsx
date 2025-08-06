@@ -152,7 +152,7 @@ const UserForm = ({ isAdmin }) => {
             <input
               id="userName"
               type="text"
-              placeholder="Ej: adaWong88"
+              placeholder="Ej: adawong88"
               {...register('userName', userNameValidation)}
             />
             <div className="contador">{userName.length}/10</div>

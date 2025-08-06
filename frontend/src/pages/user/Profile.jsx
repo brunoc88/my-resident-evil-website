@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAuth } from '../../context/AuthContext'
 import { useOutletContext, useParams, Link } from "react-router-dom"
-import { myProfile, userProfile, follow, unFollow, deleteAccount } from '../../services/user.js'
+import { myProfile, userProfile, follow, unFollow, deleteAccount, block, unBlock } from '../../services/user.js'
 import './Profile.css'
 
 const Profile = () => {
@@ -10,6 +10,8 @@ const Profile = () => {
   const [seguidores, setSeguidores] = useState(null)
   const [seguidos, setSeguidos] = useState(null)
   const [loSigo, setLoSigo] = useState(null)
+  const [isBlock, setIsBlock] = useState(null)
+  const [imBlock, setImBlock] = useState(null)
   const { setNotification } = useOutletContext()
   const { user, navigate, handleLogout } = useAuth()
   const { userName } = useParams()
@@ -31,6 +33,18 @@ const Profile = () => {
             setProfile(res.user)
             setSeguidos(res.user.seguidos.length)
             setSeguidores(res.user.seguidores.length)
+            if (user.bloqueos.includes(res.user.id)) {
+              setIsBlock(true)
+            } else {
+              setIsBlock(false)
+            }
+
+            if (res.user.bloqueos.includes(user.id)) {
+              setImBlock(true)
+            } else {
+              setImBlock(false)
+            }
+
             if (user.seguidos.includes(res.user.id)) {
               setLoSigo(true)
             } else {
@@ -97,7 +111,7 @@ const Profile = () => {
       if (confirm(msj)) {
         if (userName && user.rol === 'admin') { // <-- pregunto si estoy viendo el perfil de un usuario y si mi rol es admin
           res = await deleteAccount(profile.id) // <-- si es asi paso el perfil de ese usuario
-        } else{
+        } else {
           res = await deleteAccount(user.id) // <-- si es mi propio perfil paso mi id
         }
         if (res && !userName) {
@@ -108,6 +122,44 @@ const Profile = () => {
       } else {
         return
       }
+    } catch (error) {
+      setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
+      setTimeout(() => {
+        setNotification({ error: '', exito: '' })
+      }, 5000)
+    }
+  }
+
+  const handleBlockUser = async () => {
+    try {
+      if (isBlock) {
+        let msj = `Deseas desbloquar a ${profile.userName}?`
+        if (confirm(msj)) {
+          const res = await unBlock(profile.id)
+          if (res && res.msj) {
+            setNotification({ error: '', exito: res.msj })
+            setTimeout(() => {
+              setNotification({ error: '', exito: '' })
+            }, 5000)
+            setIsBlock(false)
+          }
+        }
+      } else {
+        let msj = `Desear bloquear a ${profile.userName}?`
+        if (confirm(msj)) {
+          const res = await block(profile.id)
+          if (res && res.msj) {
+            setNotification({ error: '', exito: res.msj })
+            setTimeout(() => {
+              setNotification({ error: '', exito: '' })
+            }, 5000)
+            setIsBlock(true)
+          }
+        } else {
+          return
+        }
+      }
+
     } catch (error) {
       setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
       setTimeout(() => {
@@ -164,7 +216,9 @@ const Profile = () => {
               <>
                 <button className="action">Mandar Mensaje</button>
                 <button className="action">Denunciar</button>
-                <button className="action">Bloquear</button>
+                {(user.rol !== 'admin' && profile.rol === 'admin') || (imBlock) ?
+                  <></> :
+                  <button className="action" onClick={handleBlockUser}>{isBlock ? 'Desbloquear' : 'Bloquear'}</button>}
               </>
             }
             {(user?.userName === profile?.userName) ||
