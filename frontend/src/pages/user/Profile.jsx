@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useAuth } from '../../context/AuthContext'
 import { useOutletContext, useParams, Link } from "react-router-dom"
-import { myProfile, userProfile, follow, unFollow } from '../../services/user.js'
+import { myProfile, userProfile, follow, unFollow, deleteAccount } from '../../services/user.js'
 import './Profile.css'
 
 const Profile = () => {
@@ -11,7 +11,7 @@ const Profile = () => {
   const [seguidos, setSeguidos] = useState(null)
   const [loSigo, setLoSigo] = useState(null)
   const { setNotification } = useOutletContext()
-  const { user, navigate } = useAuth()
+  const { user, navigate, handleLogout } = useAuth()
   const { userName } = useParams()
 
   useEffect(() => {
@@ -90,6 +90,31 @@ const Profile = () => {
     }
   }
 
+  const handleDeleteAccount = async () => {
+    try {
+      let res = ''
+      let msj = 'Realmente desea eliminar la cuenta?'
+      if (confirm(msj)) {
+        if (userName && user.rol === 'admin') { // <-- pregunto si estoy viendo el perfil de un usuario y si mi rol es admin
+          res = await deleteAccount(profile.id) // <-- si es asi paso el perfil de ese usuario
+        } else{
+          res = await deleteAccount(user.id) // <-- si es mi propio perfil paso mi id
+        }
+        if (res && !userName) {
+          handleLogout() // <-- si elimine mi propia cuenta me desloguea y manda al login
+        } else {
+          navigate('/personajes/index') //<-- si elimine otra cuenta como admin me manda al index personajes
+        }
+      } else {
+        return
+      }
+    } catch (error) {
+      setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
+      setTimeout(() => {
+        setNotification({ error: '', exito: '' })
+      }, 5000)
+    }
+  }
 
   if (loading) return <p>Cargando...</p>
 
@@ -112,12 +137,12 @@ const Profile = () => {
             alt={`profile${profile.nombre}`}
             className="user-profile-img"
           />
-          {userName?<div className="user-stats-box">
+          {userName ? <div className="user-stats-box">
             Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}
-          </div>:
-          <div className="user-stats-box">
-            <Link to='/user/followList'> Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}</Link> 
-          </div>
+          </div> :
+            <div className="user-stats-box">
+              <Link to='/user/followList'> Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}</Link>
+            </div>
           }
         </div>
 
@@ -144,7 +169,7 @@ const Profile = () => {
             }
             {(user?.userName === profile?.userName) ||
               (user?.rol === 'admin' && profile?.rol !== 'admin')
-              ? <button className="action">Eliminar</button>
+              ? <button className="action" onClick={handleDeleteAccount}>Eliminar</button>
               : null}
           </div>
         </div>

@@ -144,6 +144,20 @@ const unFollow = async (id) => {
   }
 }
 
+const deleteAccount = async (id) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.patch(`${baseUrl}/eliminar/${id}`, {}, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
 
 export {
   userPost,
@@ -155,5 +169,6 @@ export {
   myFollowed,
   userProfile,
   follow,
-  unFollow
+  unFollow,
+  deleteAccount
 }
