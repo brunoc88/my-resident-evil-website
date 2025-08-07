@@ -56,4 +56,6 @@ router.get('/misSeguidos', userController.misSeguidos)
 
 router.get('/misSeguidores', userController.misSeguidores)
 
+router.get('/all', userController.getUsers)
+
 module.exports = router

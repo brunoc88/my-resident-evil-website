@@ -60,6 +60,7 @@ const NavBar = () => {
                             <div className="dropdown-content">
                                 <NavLink to="user/bloqueados">Lista de Bloqueados</NavLink>
                                 {user.rol === 'admin' && <NavLink to="user/baneados">Lista de Baneados</NavLink>}
+                                <NavLink to="user/buscar">Buscar Usuario</NavLink>
                             </div>
                         </li>
                     }

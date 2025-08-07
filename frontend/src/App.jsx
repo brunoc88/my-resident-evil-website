@@ -14,6 +14,7 @@ import Profile from "./pages/user/Profile"
 import FollowList from "./pages/user/FollowList"
 import BlockList from "./pages/user/BlockList"
 import BannedList from "./pages/user/BannedList"
+import Searching from "./pages/user/Searching"
 
 const App = () => {
 
@@ -40,6 +41,7 @@ const App = () => {
             <Route path="followList" element={<FollowList/>}/>
             <Route path="bloqueados" element={<BlockList/>}/>
             <Route path="baneados" element={<BannedList/>}/>
+            <Route path="buscar" element={<Searching/>}/>
           </Route>
           <Route path="personajes/" element={<ProtectedRoutes />}>
             <Route path="registro" element={<CharacterForm />} />

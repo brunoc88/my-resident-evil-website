@@ -584,7 +584,14 @@ exports.misSeguidores = async (req, res, next) => {
   }
 }
 
-
+exports.getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({estado:true})
+    return res.status(200).json(users)
+  } catch (error) {
+    next(error)
+  }
+}
 const generarPasswordAleatoria = (longitud = 12) => {
   return crypto.randomBytes(longitud).toString('hex').slice(0, longitud)  // ej: "a9d0e3f1b2c4"
 }

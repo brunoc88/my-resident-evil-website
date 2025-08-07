@@ -219,6 +219,21 @@ const bannedList = async () => {
   }
 }
 
+const getUsers = async () => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+    const res = await axios.get(`${baseUrl}/all`, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
 export {
   userPost,
   userAdminPost,
@@ -234,5 +249,6 @@ export {
   block,
   unBlock,
   blockList,
-  bannedList
+  bannedList, 
+  getUsers
 }
