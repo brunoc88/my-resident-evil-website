@@ -9,6 +9,7 @@ const BannedList = () => {
     const { setNotification } = useOutletContext()
     const [bannedUsers, setBannedUsers] = useState(null)
     const [filter, setFilter] = useState(null)
+    const [loading, setLoading] = useState(true) // <-- para evitar el parpadeo y esperar que se renderice el effect
     const { user, navigate } = useAuth()
 
 
@@ -24,6 +25,8 @@ const BannedList = () => {
                 setTimeout(() => {
                     setNotification({ error: '', exito: '' })
                 }, 5000)
+            } finally {
+                setLoading(false)
             }
         }
         if (!bannedUsers) loadBannedList()
@@ -42,10 +45,10 @@ const BannedList = () => {
     const handleReActivarCuenta = async (id) => {
         try {
             const res = await reactivateAccount(id)
-            if(res){
-                setNotification({error:'', exito: res.msj || 'Cuenta activada!'})
+            if (res) {
+                setNotification({ error: '', exito: res.msj || 'Cuenta activada!' })
                 setTimeout(() => {
-                    setNotification({error:'', exito:''})
+                    setNotification({ error: '', exito: '' })
                 }, 5000)
                 const update = bannedUsers.filter(user => String(user.id).trim() !== String(id).trim())
                 setBannedUsers(update)
@@ -62,6 +65,8 @@ const BannedList = () => {
 
     if (user.rol !== 'admin') {
         navigate('/login')
+    } else if (loading) {
+        return <p>Cargando...</p>
     } else {
         return (
             <div className="list-container">

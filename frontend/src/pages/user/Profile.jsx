@@ -192,7 +192,7 @@ const Profile = () => {
             alt={`profile${profile.nombre}`}
             className="user-profile-img"
           />
-          {userName ? <div className="user-stats-box">
+          {userName && userName !== user.userName? <div className="user-stats-box">
             Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}
           </div> :
             <div className="user-stats-box">

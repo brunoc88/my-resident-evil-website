@@ -8,6 +8,7 @@ const BlockList = () => {
     const { setNotification } = useOutletContext()
     const [blockUsers, setBlockUsers] = useState(null)
     const [filter, setFilter] = useState(null)
+    const [loading, setLoading] = useState(true) // <-- para evitar el parpadeo y esperar que se renderice el effect
 
     useEffect(() => {
         const loadBlockList = async () => {
@@ -22,6 +23,8 @@ const BlockList = () => {
                 setTimeout(() => {
                     setNotification({ error: '', exito: '' })
                 }, 5000)
+            }finally{
+                setLoading(false)
             }
         }
         if (!blockUsers) loadBlockList()
@@ -51,6 +54,7 @@ const BlockList = () => {
 
     let filterList = filter ? filter : blockUsers
 
+    if(loading) return <p>Cargando...</p>
     return (
         <div className="list-container">
             <h1>Lista de Bloqueados</h1>
