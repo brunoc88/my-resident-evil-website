@@ -170,6 +170,9 @@ const Profile = () => {
 
   if (loading) return <p>Cargando...</p>
 
+  if(!profile){
+    return <h1>La cuenta que intentas ver a sido eliminada o suspendida</h1>
+  }else{
   return (
     <div className="user-profile-container">
       <div className="user-header">
@@ -231,6 +234,6 @@ const Profile = () => {
       </div>
     </div>
   )
-}
+}}
 
 export default Profile

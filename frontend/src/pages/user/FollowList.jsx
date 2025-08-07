@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
-import { myFollowed, myFollowers } from "../../services/user"
+import { follow, myFollowed, myFollowers, unFollow } from "../../services/user"
 import { useOutletContext, Link } from "react-router-dom"
+import { useAuth } from "../../context/AuthContext"
 import './List.css'
+
 
 const FollowList = () => {
   const { setNotification } = useOutletContext()
@@ -9,7 +11,9 @@ const FollowList = () => {
   const [seguidores, setSeguidores] = useState([])
   const [verFollowed, setVerFollowed] = useState(true)
   const [filterValue, setFilterValue] = useState("")
-  
+  const { user } = useAuth()
+  let yo = user // <-- cambio el nombre para no haya confucion en la comparacion
+
 
   useEffect(() => {
     if (verFollowed && seguidos.length === 0) {
@@ -44,6 +48,39 @@ const FollowList = () => {
       loadFollowers()
     }
   }, [verFollowed])
+
+
+  const handleAction = async (id) => {
+    try {
+      let res = ''
+
+      if (yo.seguidos.includes(id)) {
+        res = await unFollow(id)
+      } else {
+        res = await follow(id)
+      }
+
+
+      if (res) {
+        const nuevosSeguidos = await myFollowed()
+        setSeguidos(nuevosSeguidos.seguidos)
+      }
+
+      if (res && res.msj) {
+        setNotification({ error: '', exito: res.msj })
+        setTimeout(() => {
+          setNotification({ error: '', exito: '' })
+        }, 5000)
+      }
+
+    } catch (error) {
+      setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
+      setTimeout(() => {
+        setNotification({ error: '', exito: '' })
+      }, 5000)
+    }
+  }
+
 
   const handleFilter = (e) => {
     setFilterValue(e.target.value.toLowerCase())
@@ -99,7 +136,10 @@ const FollowList = () => {
                   {user.userName}
                 </Link>
               </div>
-              <button>Escribir</button>
+              {yo.seguidos.includes(user.id)
+                ? <button onClick={() => handleAction(user.id)}>Dejar de seguir</button>
+                : <button onClick={() => handleAction(user.id)}>Seguir</button>
+              }
             </li>
           ))}
         </ul>
