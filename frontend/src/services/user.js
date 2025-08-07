@@ -234,6 +234,23 @@ const getUsers = async () => {
   }
 }
 
+const reactivateAccount = async (id) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+
+    const res = await axios.patch(`${baseUrl}/reActivar/${id}`, null, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+
 export {
   userPost,
   userAdminPost,
@@ -249,6 +266,7 @@ export {
   block,
   unBlock,
   blockList,
-  bannedList, 
-  getUsers
+  bannedList,
+  getUsers,
+  reactivateAccount
 }

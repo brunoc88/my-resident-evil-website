@@ -79,3 +79,38 @@
   width: 100%; /* ⬅️ Esto hace que todas tengan el mismo largo */
   box-sizing: border-box;
 }
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 4px;
+}
+
+.tab.active {
+  border-bottom: 2px solid white;
+  font-weight: bold;
+}
+
+.user-list button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.user-list button:hover {
+  background-color: darkred;
+}

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import { useOutletContext } from "react-router-dom"
-import { bannedList } from "../../services/user"
+import { bannedList, reactivateAccount } from "../../services/user"
 import { useAuth } from "../../context/AuthContext"
 import './List.css'
-
 
 
 const BannedList = () => {
@@ -40,6 +39,25 @@ const BannedList = () => {
         setFilter(usersFilter)
     }
 
+    const handleReActivarCuenta = async (id) => {
+        try {
+            const res = await reactivateAccount(id)
+            if(res){
+                setNotification({error:'', exito: res.msj || 'Cuenta activada!'})
+                setTimeout(() => {
+                    setNotification({error:'', exito:''})
+                }, 5000)
+                const update = bannedUsers.filter(user => String(user.id).trim() !== String(id).trim())
+                setBannedUsers(update)
+            }
+        } catch (error) {
+            setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
+            setTimeout(() => {
+                setNotification({ error: '', exito: '' })
+            }, 5000)
+        }
+    }
+
     let filterList = filter ? filter : bannedUsers
 
     if (user.rol !== 'admin') {
@@ -69,7 +87,7 @@ const BannedList = () => {
                                             {b.userName}
                                         </span>
                                     </div>
-                                    <button onClick={() => { }}>Activar</button>
+                                    <button onClick={() => { handleReActivarCuenta(b.id) }}>Activar</button>
                                 </li>
                             ))}
                         </ul>
