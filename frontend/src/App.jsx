@@ -15,6 +15,7 @@ import FollowList from "./pages/user/FollowList"
 import BlockList from "./pages/user/BlockList"
 import BannedList from "./pages/user/BannedList"
 import Searching from "./pages/user/Searching"
+import Complaint from "./pages/complaints/Complaint"
 
 const App = () => {
 
@@ -46,6 +47,10 @@ const App = () => {
           <Route path="personajes/" element={<ProtectedRoutes />}>
             <Route path="registro" element={<CharacterForm />} />
             <Route path="editar/:id" element={<CharacterForm editMode = {true} />} />
+          </Route>
+          <Route path="denuncias/" element={<ProtectedRoutes />}>
+            <Route path="crear/:userName/:id" element={<Complaint/>}/>
+            <Route path="crear/:personaje/:id" element={<Complaint/>}/>
           </Route>
           {/* Ruta 404 fuera del layout */}
           <Route path="*" element={<NotFound />} />
