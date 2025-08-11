@@ -10,9 +10,8 @@ const CharacterComments = ({ id, setComments }) => {
     const [allComments, setAllComments] = useState(null)
     const [editComment, setEditComment] = useState(false)
     const [visibleComments, setVisibleComments] = useState(2)
-
     const { setNotification } = useOutletContext()
-    const { user } = useAuth()
+    const { user, navigate } = useAuth()
 
     useEffect(() => {
         const loadComments = async () => {
@@ -115,6 +114,10 @@ const CharacterComments = ({ id, setComments }) => {
         }
     }
 
+    const handleMakeComplaintUser = (id, userName) => {
+        navigate(`/denuncias/crear/${userName}/${id}`)
+    }
+
     return (
         <div className="comment-section">
             <hr />
@@ -154,7 +157,7 @@ const CharacterComments = ({ id, setComments }) => {
                                     {(user?.id === c.usuario.id || (user?.rol === 'admin' && c.usuario.rol !== 'admin')) && (
                                         <span onClick={() => handleDeleteComment(c._id)} className='action-link'>Eliminar</span>
                                     )}
-                                    {user.id !== c.usuario.id && <span className='action-link'>Denunciar</span>}
+                                    {user.id !== c.usuario.id && <span onClick={()=>handleMakeComplaintUser(c.usuario.id, c.usuario.userName)}className='action-link'>Denunciar</span>}
                                 </div>
                             </div>
                         ))}
