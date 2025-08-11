@@ -49,8 +49,8 @@ const App = () => {
             <Route path="editar/:id" element={<CharacterForm editMode = {true} />} />
           </Route>
           <Route path="denuncias/" element={<ProtectedRoutes />}>
-            <Route path="crear/:userName/:id" element={<Complaint/>}/>
-            <Route path="crear/:personaje/:id" element={<Complaint/>}/>
+            <Route path="crear/usuario/:userName/:id" element={<Complaint/>}/>
+            <Route path="crear/personaje/:personaje/:id" element={<Complaint/>}/>
           </Route>
           {/* Ruta 404 fuera del layout */}
           <Route path="*" element={<NotFound />} />

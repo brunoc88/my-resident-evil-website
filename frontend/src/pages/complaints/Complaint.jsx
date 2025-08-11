@@ -1,15 +1,13 @@
-import { useParams, useOutletContext } from "react-router-dom"
+import { useParams, useSearchParams, useOutletContext } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { motivoValidation, mensajeValidation } from "../../utils/complaintValidations"
 import { useAuth } from "../../context/AuthContext"
 import { makeComplaint } from "../../services/complaints"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { userProfile } from "../../services/user"
 
 const Complaint = () => {
-    const { personaje, userName, id } = useParams() // <-- aca vamos a extraer de la app.jsx 
-    // si el parametro es personaje osea si no es null hacemos la denuncia del personaje
-    // sino hacemos la denuncia de un usaurio
-    //const [loading, setLoading] = useState(true)
+    const { personaje, userName, id } = useParams()
     const { setNotification } = useOutletContext()
     const { navigate } = useAuth()
     const {
@@ -18,83 +16,108 @@ const Complaint = () => {
         watch,
         formState: { errors }
     } = useForm({ mode: 'onChange' })
+    const [isActive, setIsActive] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [searchParams] = useSearchParams();
+    const fromCharacter = searchParams.get("fromCharacter")
 
     let mensaje = watch('mensaje', '')
     let motivo = watch('motivo', '')
 
     useEffect(() => {
-        // Caso: denuncia a usuario
-        if (userName && id) return;
-
-        // Caso: denuncia a personaje
-        if (personaje && id) return;
-
-        // Si no entra en ninguno de los dos casos, manda a login
+        if ((userName && id) || (personaje && id)) return
         navigate('/login');
     }, [userName, personaje, id, navigate]);
 
+    useEffect(() => {
+        const checkUserState = async () => {
+            try {
+                const res = await userProfile(userName)
+                if (res?.user) setIsActive(!!res.user.estado)
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setLoading(false)
+            }
+        }
+        if (userName) checkUserState()
+    }, [userName])
 
     const onSubmit = async (data) => {
         try {
             const res = await makeComplaint(data)
             if (res) {
                 setNotification({ error: '', exito: 'Denuncia Realizada' })
-                setTimeout(() => {
-                    setNotification({ error: '', exito: '' })
-                }, 5000)
+                setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
                 handleBackTo()
             }
         } catch (error) {
-            setNotification({ error: error.message ? error.message : `Hubo un problema: ${error}` })
-            setTimeout(() => {
-                setNotification({ error: '', exito: '' })
-            }, 5000)
+            setNotification({ error: error.message || `Hubo un problema: ${error}` })
+            setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
         }
     }
 
     const handleBackTo = () => {
-        if (userName) {
-            navigate(`/user/perfil/${userName}`)
-        } else {
+        if (fromCharacter) {
+            navigate(`/personajes/${fromCharacter}`)
+        } else if (personaje) {
             navigate(`/personajes/${id}`)
+        } else {
+            navigate(`/user/perfil/${userName}`)
         }
     }
 
-
-    
-    return (
-        <div>
-            <div>
-                <h1>Realice su denuncia:</h1>
-            </div>
-            <div>
-                <form onSubmit={handleSubmit(onSubmit)} method="post">
-                    <div>
-                        <input type="hidden" {...register("tipo")} defaultValue={userName ? "User" : "Personaje"} />
-                        <input type="hidden" {...register("id")} defaultValue={id} />
+    if (userName && !isActive && !loading) {
+        return (
+            <div className="user-form-layout">
+                <div className="formulario">
+                    <h1>Cuenta eliminada</h1>
+                    <p>Lo sentimos, pero la cuenta que intenta denunciar ha sido eliminada.</p>
+                    <div className="botones">
+                        <button onClick={handleBackTo}>Volver</button>
                     </div>
-                    <div>
+                </div>
+            </div>
+        )
+    }
+
+    if (userName && loading) return <p>Cargando...</p>
+
+    return (
+        <div className="user-form-layout">
+            <div className="formulario">
+                <h1>Realice su denuncia:</h1>
+                <p>Complete el formulario para reportar un usuario o personaje.</p>
+                <form onSubmit={handleSubmit(onSubmit)} method="post">
+                    <input type="hidden" {...register("tipo")} defaultValue={userName ? "User" : "Personaje"} />
+                    <input type="hidden" {...register("id")} defaultValue={id} />
+
+                    <div className="campo">
                         <label htmlFor="motivo">Motivo:</label>
-                        <input type="text"
+                        <input
+                            type="text"
                             id="motivo"
                             placeholder="Ingrese su motivo..."
-                            {...register('motivo', motivoValidation)} />
-                        <div className="">{motivo.length}/100</div>
+                            {...register('motivo', motivoValidation)}
+                        />
+                        <div className="contador">{motivo.length}/100</div>
                         {errors.motivo && <span>{errors.motivo.message}</span>}
                     </div>
-                    <div>
+
+                    <div className="campo">
                         <label htmlFor="mensaje">Mensaje:</label>
-                        <textarea name="mensaje"
+                        <textarea
                             id="mensaje"
                             placeholder="Escriba su denuncia..."
                             {...register('mensaje', mensajeValidation)}
                         />
-                        <div className="">{mensaje.length}/500</div>
+                        <div className="contador">{mensaje.length}/500</div>
                         {errors.mensaje && <span>{errors.mensaje.message}</span>}
                     </div>
-                    <div>
+
+                    <div className="botones">
                         <button type="submit">Enviar</button>
-                        <button onClick={handleBackTo}>Volver</button>
+                        <button type="button" onClick={handleBackTo}>Volver</button>
                     </div>
                 </form>
             </div>

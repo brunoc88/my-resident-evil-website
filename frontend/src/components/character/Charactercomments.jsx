@@ -114,8 +114,8 @@ const CharacterComments = ({ id, setComments }) => {
         }
     }
 
-    const handleMakeComplaintUser = (id, userName) => {
-        navigate(`/denuncias/crear/${userName}/${id}`)
+    const handleMakeComplaintUser = (idUsuario, userName) => {
+        navigate(`/denuncias/crear/usuario/${userName}/${idUsuario}?fromCharacter=${id}`)
     }
 
     return (

@@ -218,7 +218,7 @@ const Profile = () => {
               </> :
               <>
               {!isBlock && !imBlock && <button className="action">Mandar Mensaje</button>}
-                <Link className="action" to = {`/denuncias/crear/${profile.userName}/${profile.id}`}>Denunciar</Link>
+                <Link className="action" to = {`/denuncias/crear/usuario/${profile.userName}/${profile.id}`}>Denunciar</Link>
                 
                 {(user.rol !== 'admin' && profile.rol === 'admin') || (imBlock) ?
                   <></> :

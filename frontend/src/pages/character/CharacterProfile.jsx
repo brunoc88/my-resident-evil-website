@@ -142,6 +142,9 @@ const CharacterProfile = () => {
         }
     }
 
+    const handleMakeComplaint = () => {
+        navigate(`/denuncias/crear/personaje/${character.nombre}/${character.id}`)
+    }
     return (
         <div className="character-container">
             <h1>{character.nombre}</h1>
@@ -197,7 +200,7 @@ const CharacterProfile = () => {
                         {isAuth && (
                             <>
                                 <button onClick={handleEditCharacterViewForm}>Editar</button>
-                                <button>Denunciar</button>
+                                <button onClick={handleMakeComplaint}>Denunciar</button>
                             </>
                         )}
                         {user?.rol === 'admin' && <button onClick={handleDeleteCharacter}>Eliminar</button>}
