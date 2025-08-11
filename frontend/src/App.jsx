@@ -16,6 +16,8 @@ import BlockList from "./pages/user/BlockList"
 import BannedList from "./pages/user/BannedList"
 import Searching from "./pages/user/Searching"
 import Complaint from "./pages/complaints/Complaint"
+import ComplaintLinst from "./pages/complaints/ComplaintList"
+import ComplaintInfo from "./pages/complaints/ComplaintInfo"
 
 const App = () => {
 
@@ -49,6 +51,8 @@ const App = () => {
             <Route path="editar/:id" element={<CharacterForm editMode = {true} />} />
           </Route>
           <Route path="denuncias/" element={<ProtectedRoutes />}>
+            <Route path="lista" element={<ComplaintLinst/>}/>
+            <Route path="info/:id" element={<ComplaintInfo/>}/>
             <Route path="crear/usuario/:userName/:id" element={<Complaint/>}/>
             <Route path="crear/personaje/:personaje/:id" element={<Complaint/>}/>
           </Route>

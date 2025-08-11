@@ -1,0 +1,66 @@
+.complaint-container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 25px;
+     background-color: #131212;
+    border-radius: 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+}
+
+.title {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #f02121;
+    text-align: center;
+}
+
+.complaint-detail {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.complaint-detail strong {
+    color: #ffffff;
+    width: 110px;
+    display: inline-block;
+}
+
+.mensaje {
+    margin-top: 5px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border-left: 4px solid #e74c3c;
+    white-space: pre-wrap;
+}
+
+
+.error {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #e74c3c;
+    margin-top: 50px;
+}
+
+.complaint-container > div:last-child {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.complaint-container button {
+    background-color: #a80000; /* rojo */
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.complaint-container button:hover {
+    background-color: #700b00; /* rojo oscuro */
+}

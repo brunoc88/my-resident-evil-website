@@ -1,0 +1,87 @@
+.complaint-list {
+  background-color: #1e1e1e;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+  color: white;
+}
+
+.complaint-list h1 {
+  color: #ff3c3c;
+  margin-bottom: 1rem;
+}
+
+.tabla-denuncias {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #2a2a2a;
+}
+
+.tabla-denuncias th, 
+.tabla-denuncias td {
+  border: 1px solid #444;
+  padding: 0.8rem;
+  text-align: left;
+}
+
+.tabla-denuncias th {
+  background-color: #a80000;
+  color: white;
+}
+
+.tabla-denuncias tr:nth-child(even) {
+  background-color: #333;
+}
+
+.tabla-denuncias tr:hover {
+  background-color: #444;
+}
+
+/* contenedor de botones dentro de la celda */
+.botones {
+  display: inline-flex;          /* inline para no ocupar todo el td */
+  align-items: center;
+  gap: 6px;                      /* pequeño espacio entre botones */
+  padding: 0;                    /* sin padding extra */
+}
+
+/* estilo base de botones */
+.botones button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.38rem 0.9rem;
+  background-color: #a80000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.15s ease, transform 0.06s ease;
+  box-shadow: none;              /* sin sombras que puedan crear diagnóstico visual */
+  outline: none;
+}
+
+/* radio solo en extremos para que parezcan grupo */
+.botones button:first-child {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+.botones button:last-child {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+/* hover / active */
+.botones button:hover { background-color: #c30b0b; transform: translateY(-1px); }
+.botones button:active { transform: translateY(0); }
+.botones button:focus { box-shadow: 0 0 0 3px rgba(200,0,0,0.12); }
+
+/* botón secundario (opcional: distinto color para eliminar) */
+.botones .eliminar {
+  background-color: #8b0000;
+}
+.botones .eliminar:hover { background-color: #a10000; }
+
+/* si querés que los botones se vean un "grupo" sólido, podés reducir gap a 2px */
