@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { useParams, useOutletContext } from 'react-router-dom'
-import { sendMessage, userProfile } from '../../services/user'
+import { sendMessage, getUsers } from '../../services/user'
 import { useEffect, useState } from 'react'
 import { mensajeValidation } from '../../utils/messageValidations'
 
@@ -10,51 +10,58 @@ const Message = () => {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors }
     } = useForm({ mode: 'onChange' })
-    const { setNotificaiton } = useOutletContext()
+    const { setNotification } = useOutletContext()
     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
     //const [chatMessages, setChatMessages] = useState(null)
     const mensaje = watch('mensaje', '')
 
     useEffect(() => {
         const loadUser = async () => {
             try {
-                const res = await userProfile(id)
-                if (res && res.user) {
-                    setUser(res.user)
+                const res = await getUsers()
+                if (res) {
+                    setUser(res.find(user => user.id === id))
                 }
             } catch (error) {
-                setNotificaiton({ error: error.message || `hubo un problema ${error}`, exito: '' })
+                setNotification({ error: error.message || `hubo un problema ${error}`, exito: '' })
                 setTimeout(() => {
-                    setNotificaiton({ error: '', exito: '' })
+                    setNotification({ error: '', exito: '' })
                 }, 5000)
+            }finally{
+                setLoading(false)
             }
         }
-        loadUser()
-    }, [id])
+        if(loading) loadUser()
+    }, [])
 
 
     const onSubmit = async (data) => {
         try {
             const res = await sendMessage(id, data)
             if (res && res.msj) {
-                setNotificaiton({ error: '', exito: 'Mansaje enviado' })
+                setNotification({ error: '', exito: 'Mansaje enviado' })
                 setTimeout(() => {
-                    setNotificaiton({ error: '', exito: '' })
+                    setNotification({ error: '', exito: '' })
                 }, 5000)
+                reset()
             }
         } catch (error) {
-            setNotificaiton({ error: error.message || `hubo un problema ${error}`, exito: '' })
+            setNotification({ error: error.message || `hubo un problema ${error}`, exito: '' })
             setTimeout(() => {
-                setNotificaiton({ error: '', exito: '' })
+                setNotification({ error: '', exito: '' })
             }, 5000)
         }
     }
+
+    if(loading) return <p>Cargando...</p>
     return (
         <div>
             <div>
-                {user.userName}
+                 <h2>{user.userName}</h2>
             </div>
             <div>
                 <form onSubmit={handleSubmit(onSubmit)} method="post">

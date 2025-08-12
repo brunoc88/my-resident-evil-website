@@ -168,6 +168,8 @@ const Profile = () => {
     }
   }
 
+
+
   if (loading) return <p>Cargando...</p>
 
   if(!profile){
@@ -217,7 +219,7 @@ const Profile = () => {
                 <button className="action" onClick={handleGoToEditProfile}>Editar</button>
               </> :
               <>
-              {!isBlock && !imBlock && <button className="action">Mandar Mensaje</button>}
+              {!isBlock && !imBlock && <Link to={`/user/mensajes/${profile.id}`}className="action">Mandar Mensaje</Link>}
                 <Link className="action" to = {`/denuncias/crear/usuario/${profile.userName}/${profile.id}`}>Denunciar</Link>
                 
                 {(user.rol !== 'admin' && profile.rol === 'admin') || (imBlock) ?
