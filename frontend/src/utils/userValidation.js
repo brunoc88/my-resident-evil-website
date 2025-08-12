@@ -2,7 +2,11 @@
 export const userNameValidation = {
   required: 'Nombre requerido',
   minLength: { value: 5, message: 'Mínimo 5 caracteres' },
-  maxLength: { value: 10, message: 'Máximo 10 caracteres' }
+  maxLength: { value: 10, message: 'Máximo 10 caracteres' },
+  pattern: {
+    value: /^[a-z0-9._-]+$/, // solo minúsculas, números, punto, guion bajo y guion
+    message: 'Solo se permiten letras minúsculas, números, punto, guion y guion bajo'
+  }
 }
 
 export const passwordValidation = (isAuth) => ({
@@ -23,8 +27,8 @@ export const password2Validation = (watch, isAuth) => ({
 export const emailValidation = {
   required: 'Email requerido',
   pattern: {
-    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    message: 'Email inválido'
+    value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/, // solo minúsculas permitidas
+    message: 'Email inválido (solo minúsculas permitidas)'
   }
 }
 
