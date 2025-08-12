@@ -18,6 +18,7 @@ import Searching from "./pages/user/Searching"
 import Complaint from "./pages/complaints/Complaint"
 import ComplaintLinst from "./pages/complaints/ComplaintList"
 import ComplaintInfo from "./pages/complaints/ComplaintInfo"
+import MessageList from "./pages/user/MessageList"
 
 const App = () => {
 
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="bloqueados" element={<BlockList/>}/>
             <Route path="baneados" element={<BannedList/>}/>
             <Route path="buscar" element={<Searching/>}/>
+            <Route path="mensajes/resumen" element={<MessageList/>}/>
           </Route>
           <Route path="personajes/" element={<ProtectedRoutes />}>
             <Route path="registro" element={<CharacterForm />} />

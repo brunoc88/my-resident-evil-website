@@ -250,6 +250,37 @@ const reactivateAccount = async (id) => {
   }
 }
 
+const messageResumen = async () => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+
+    const res = await axios.get(`${baseUrl}/mensajes/resumen`, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
+const sendMessage = async (id, data) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+
+    const res = await axios.post(`${baseUrl}/mensaje/${id}`, data, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
 
 export {
   userPost,
@@ -268,5 +299,7 @@ export {
   blockList,
   bannedList,
   getUsers,
-  reactivateAccount
+  reactivateAccount,
+  messageResumen,
+  sendMessage
 }

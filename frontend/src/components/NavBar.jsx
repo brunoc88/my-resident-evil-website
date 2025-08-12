@@ -62,6 +62,7 @@ const NavBar = () => {
                                 {user.rol === 'admin' && <NavLink to="user/baneados">Lista de Baneados</NavLink>}
                                 {user.rol === 'admin' && <NavLink to="denuncias/lista">Lista de Denuncias</NavLink>}
                                 <NavLink to="user/buscar">Buscar Usuario</NavLink>
+                                <NavLink to="user/mensajes/resumen">Mensajes</NavLink>
                             </div>
                         </li>
                     }
