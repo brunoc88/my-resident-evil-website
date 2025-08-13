@@ -298,6 +298,22 @@ const getChats = async (id) => {
   }
 }
 
+const deleteMessage = async (id) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+
+    const res = await axios.patch(`${baseUrl}/mensaje/${id}`, {}, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
 export {
   userPost,
   userAdminPost,
@@ -318,5 +334,6 @@ export {
   reactivateAccount,
   messageResumen,
   sendMessage,
-  getChats
+  getChats,
+  deleteMessage
 }

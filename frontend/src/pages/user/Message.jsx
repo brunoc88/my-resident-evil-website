@@ -46,7 +46,7 @@ const Message = () => {
         const loadChats = async () => {
             try {
                 const res = await getChats(user.id)
-                if (res && res.mensajes) setChatMessages(res.mensajes)
+                if (res && res.mensajes) setChatMessages(res.mensajes.filter(m=> m.estado))
             } catch (error) {
                 setNotification({ error: error.message || `hubo un problema ${error}`, exito: '' })
                 setTimeout(() => {

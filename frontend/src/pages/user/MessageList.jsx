@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react"
 import { useOutletContext, Link } from 'react-router-dom'
-import { messageResumen } from "../../services/user"
+import { deleteMessage, messageResumen } from "../../services/user"
 import './MessageList.css'
 
 const MessageList = () => {
-    const { setNotificaiton } = useOutletContext()
+    const { setNotification } = useOutletContext()
     const [loading, setLoading] = useState(true)
     const [messages, setMessages] = useState(null)
 
@@ -16,9 +16,9 @@ const MessageList = () => {
                     setMessages(res.mensajes)
                 }
             } catch (error) {
-                setNotificaiton({ error: error.message || `hubo un problema ${error}`, exito: '' })
+                setNotification({ error: error.message || `hubo un problema ${error}`, exito: '' })
                 setTimeout(() => {
-                    setNotificaiton({ error: '', exito: '' })
+                    setNotification({ error: '', exito: '' })
                 }, 5000)
             } finally {
                 setLoading(false)
@@ -27,6 +27,30 @@ const MessageList = () => {
 
         if (loading) loadInboxMessages()
     }, [])
+
+    const handleDeleteMessage = async (id, userName) => {
+        try {
+            let msj = `Desea eliminar el mensaje de ${userName}`
+            if (confirm(msj)) {
+                const res = await deleteMessage(id)
+                if (res) {
+                    setNotification({ error: '', exito: '' })
+                    setTimeout(() => {
+                        setNotification({ error: '', exito: '' })
+                    }, 5000)
+                    setMessages(messages.filter(m => m._id !== id && m.de.userName !== userName))
+                }
+
+            } else {
+                return
+            }
+        } catch (error) {
+            setNotification({ error: error.message || `hubo un problema ${error}`, exito: '' })
+            setTimeout(() => {
+                setNotification({ error: '', exito: '' })
+            }, 5000)
+        }
+    }
 
     if (loading) return <p>Cargando...</p>
 
@@ -56,8 +80,8 @@ const MessageList = () => {
                         </div>
                         <p className="comment-message">{m.mensaje}</p>
                         <div className="comment-options">
-                            <Link to={`/user/mensajes/${m.de.id}`}className='action-link'>Responder</Link>
-                            <span className='action-link'>Eliminar</span>
+                            <Link to={`/user/mensajes/${m.de.id}`} className='action-link'>Responder</Link>
+                            <span onClick={() => handleDeleteMessage(m._id, m.de.userName)} className='action-link'>Eliminar</span>
                         </div>
                     </div>
                 ))}
