@@ -282,6 +282,22 @@ const sendMessage = async (id, data) => {
   }
 }
 
+const getChats = async (id) => {
+  try {
+    let token = getToken()
+    if (!token) throw new Error('Acceso invalido!')
+
+    let config = {
+      headers: { Authorization: token }
+    }
+
+    const res = await axios.get(`${baseUrl}/mensajes/chat/${id}`, config)
+    return res.data
+  } catch (error) {
+    handleAxiosError(error)
+  }
+}
+
 export {
   userPost,
   userAdminPost,
@@ -301,5 +317,6 @@ export {
   getUsers,
   reactivateAccount,
   messageResumen,
-  sendMessage
+  sendMessage,
+  getChats
 }

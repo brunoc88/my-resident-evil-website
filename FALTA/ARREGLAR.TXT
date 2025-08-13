@@ -10,3 +10,7 @@ DESLOGUEARDO MANDARLO AL LOGIN
 NOTICACIONES DE EXITO
 
 ARREGLAR VISTA DE SEGUIDOS Y SEGUIDORES
+
+vista del chat y que se actualizen los mensajes unas vez mandados
+
+arreglar la seccion de comentarios, cuando se pasan los 58 caracteres se salen las letras

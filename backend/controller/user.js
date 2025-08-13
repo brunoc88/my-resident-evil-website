@@ -385,7 +385,7 @@ exports.getHiloConversacion = async (req, res, next) => {
 // Permita después hacer clic y ver el hilo (si decidís implementarlo luego).
 exports.resumenMensajes = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id).populate('mensajes.usuario', 'userName email')
+    const user = await User.findById(req.user.id).populate('mensajes.usuario', 'userName email picture')
 
     if (!user) return res.status(404).json({ error: "Usuario no encontrado" })
 
@@ -404,7 +404,8 @@ exports.resumenMensajes = async (req, res, next) => {
           de: {
             id: m.usuario._id,
             userName: m.usuario.userName,
-            email: m.usuario.email
+            email: m.usuario.email,
+            picture: m.usuario.picture
           },
           mensaje: m.mensaje,
           fecha: m.fecha

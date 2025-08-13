@@ -1,0 +1,101 @@
+/* Contenedor principal del chat */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background-color: #111;
+  height: 60vh; /* un poco menos de altura */
+  overflow-y: auto;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+
+/* Mensajes */
+.chat-message {
+  max-width: 60%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: white;
+  word-break: break-word;
+}
+
+.chat-message.self {
+  align-self: flex-end;
+  background-color: #ff4d4d;
+  border-bottom-right-radius: 4px;
+  margin-right: 10px; /* separa del borde derecho */
+}
+
+.chat-message.other {
+  align-self: flex-start;
+  background-color: #333;
+  border-bottom-left-radius: 4px;
+  margin-left: 10px; /* separa del borde izquierdo */
+}
+
+
+/* Hora y metadatos */
+.chat-meta {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: black;
+  padding: 10px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+textarea {
+  width: 100%;
+  resize: none;
+  min-height: 80px;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: white;
+  background-color: #222;
+}
+
+button {
+  align-self: flex-start;
+  background-color: red;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: darkred;
+}
+
+div > img.profile-pic {
+  display: block;
+  margin: 0 auto 10px auto; /* Centrar y separar del texto */
+  border: 3px solid #ff4d4d; /* Opcional: borde para destacar */
+}
+
+h2 {
+  text-align: center;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.header-chat {
+  padding: 10px 0;
+  background-color: black;
+  text-align: center;
+}
