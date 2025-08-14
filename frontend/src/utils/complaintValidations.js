@@ -5,5 +5,5 @@ export const motivoValidation = {
 
 export const mensajeValidation = {
     required: 'Escibra su denuncia!',
-    maxLength: {value: 500, message: 'Máximo 100 caracteres'}
+    maxLength: {value: 500, message: 'Máximo 500 caracteres'}
 }

@@ -5,6 +5,7 @@ import { useAuth } from "../../context/AuthContext"
 import { makeComplaint } from "../../services/complaints"
 import { useEffect, useState } from "react"
 import { userProfile } from "../../services/user"
+import styles from './Complaint.module.css'
 
 const Complaint = () => {
     const { personaje, userName, id } = useParams()
@@ -69,8 +70,8 @@ const Complaint = () => {
 
     if (userName && !isActive && !loading) {
         return (
-            <div className="user-form-layout">
-                <div className="formulario">
+            <div className={styles.complaintFormLayout}>
+                <div className={styles.complaintFormulario}>
                     <h1>Cuenta eliminada</h1>
                     <p>Lo sentimos, pero la cuenta que intenta denunciar ha sido eliminada.</p>
                     <div className="botones">
@@ -84,8 +85,8 @@ const Complaint = () => {
     if (userName && loading) return <p>Cargando...</p>
 
     return (
-        <div className="user-form-layout">
-            <div className="formulario">
+        <div className={styles.complaintFormLayout}>
+            <div className={styles.complaintFormulario}>
                 <h1>Realice su denuncia:</h1>
                 <p>Complete el formulario para reportar un usuario o personaje.</p>
                 <form onSubmit={handleSubmit(onSubmit)} method="post">
@@ -104,7 +105,7 @@ const Complaint = () => {
                         {errors.motivo && <span>{errors.motivo.message}</span>}
                     </div>
 
-                    <div className="campo">
+                    <div className={styles.complaintCampo}>
                         <label htmlFor="mensaje">Mensaje:</label>
                         <textarea
                             id="mensaje"
@@ -115,7 +116,7 @@ const Complaint = () => {
                         {errors.mensaje && <span>{errors.mensaje.message}</span>}
                     </div>
 
-                    <div className="botones">
+                    <div className={styles.buttonGroup}>
                         <button type="submit">Enviar</button>
                         <button type="button" onClick={handleBackTo}>Volver</button>
                     </div>

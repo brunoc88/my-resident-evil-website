@@ -1,0 +1,101 @@
+.complaintFormLayout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4rem 0;
+  gap: 2rem;
+}
+
+.complaintFormulario {
+  background-color: #1e1e1e;
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+  color: #fff;
+  width: 600px;
+}
+
+.complaintFormulario h1 {
+  font-size: 24px;
+  color: #ff3c3c;
+  margin-bottom: 0.5rem;
+}
+
+.complaintFormulario p {
+  margin-bottom: 2rem;
+  color: #ccc;
+  font-style: italic;
+}
+.complaintFormulario form {
+    background-color: rgb(30, 30, 30);
+}
+.complaintCampo {
+  display: flex;
+  flex-direction: column;
+}
+
+.complaintCampo label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.complaintCampo input,
+.complaintCampo select,
+.complaintCampo textarea {
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(51, 51, 51) !important;
+  resize: none;
+  height: 80px;
+  color: white;
+}
+
+.complaintCampo span {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+
+.contador {
+  font-size: 0.8rem;
+  text-align: right;
+  color: #aaa;
+}
+
+
+/* --- BOTONERA --- */
+.buttonGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.2rem;
+  width: fit-content;
+}
+/* Botón normal y submit */
+.buttonGroup button,
+.buttonGroup button[type="submit"] {
+  padding: 0.5rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background-color: #ff0000 !important;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  font-size: 1rem;
+  margin: 0;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Hover para ambos */
+.buttonGroup button:hover,
+.buttonGroup button[type="submit"]:hover {
+  background-color: darkred !important;
+}
+
+/* --- FIN BOTONERA --- */
