@@ -1,7 +1,0 @@
-| Vista                     | Endpoint sugerido                                 |
-| ------------------------- | ------------------------------------------------- |
-| 📨 Bandeja de entrada     | `GET /user/mensajes/resumen`                      |
-| 💬 Chat con usuario X     | `GET /user/mensajes/chat/:id` (usando `hiloChat`) |
-| 🗑 Eliminar mensaje       | `PATCH /user/mensaje/:id`                         |
-| ➕ Enviar mensaje          | `POST /user/mensaje/:id`                          |
-| 📋 Ver todos mis mensajes | `GET /user/mensajes` (actual `allMsj`)            |
