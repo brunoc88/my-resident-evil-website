@@ -1,19 +1,28 @@
-.comment-card {
+.commentSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.commentCard {
   background-color: #1e1e1e;
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
   color: white;
   width: 500px;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
-.comment-header {
+.commentHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.profile-pic {
+.profilePic {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -21,7 +30,7 @@
   margin-right: 0.8rem;
 }
 
-.comment-meta {
+.commentMeta {
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
@@ -37,40 +46,44 @@
   color: #aaa;
 }
 
-.comment-message {
+.commentMessage {
   margin: 0.8rem 0;
 }
 
-.comment-options {
+.commentOptions {
   display: flex;
   gap: 1rem;
   font-size: 0.85rem;
   color: #777;
   cursor: pointer;
-  justify-content: right;
+  justify-content: flex-end;
 }
 
-.comment-form {
+.commentForm {
   margin-top: 2rem;
+  width: 500px; /* Misma anchura que los comentarios */
   padding: 10px;
+  background-color: black
 }
 
-.comment-form textarea {
+.commentForm textarea {
   width: 100%;
   min-height: 80px;
   border-radius: 8px;
   padding: 0.5rem;
   resize: none;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
-.form-footer {
+.formFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 0.5rem;
 }
 
-.comment-form button {
+.commentForm button {
   background-color: red;
   color: white;
   border: none;
@@ -79,17 +92,17 @@
   cursor: pointer;
 }
 
-.action-link {
+.actionLink {
   text-decoration: none;
-  color: inherit; /* o el color que quieras */
+  color: inherit;
   transition: text-decoration 0.2s;
 }
 
-.action-link:hover {
+.actionLink:hover {
   text-decoration: underline;
 }
 
-.ver-mas-btn {
+.verMasBtn {
   background-color: transparent;
   border: 1px solid red;
   padding: 6px 12px;
@@ -100,6 +113,13 @@
   transition: background-color 0.3s;
 }
 
-.ver-mas-btn:hover {
+.verMasBtn:hover {
   background-color: #a30000;
+}
+
+hr {
+  width: 100%;
+  border: none;
+  border-top: 3px solid red;
+  margin-bottom: 1rem;
 }

@@ -4,8 +4,7 @@ import CharacterComments from "../../components/character/Charactercomments"
 import { getCharacterById, sendLike, sendUnlike, deleteCharacterById } from "../../services/character"
 import { useAuth } from "../../context/AuthContext"
 import { FaThumbsUp, FaRegComment } from "react-icons/fa"
-import './CharacterProfile.css'
-
+import styles from './CharacterProfile.module.css'
 
 const CharacterProfile = () => {
     const { id } = useParams()
@@ -13,9 +12,9 @@ const CharacterProfile = () => {
     const [loading, setLoading] = useState(true)
     const [litteNote, setLittleNote] = useState({ comentarios: '', likes: '' })
     const [plus, setPlus] = useState(false)
-    const [likes, setLikes] = useState(null) //<-- contador de likes
-    const [liked, setLiked] = useState(false) //<-- si le di like o no
-    const [comments, setComments] = useState(null)//<-- contador de comentarios
+    const [likes, setLikes] = useState(null)
+    const [liked, setLiked] = useState(false)
+    const [comments, setComments] = useState(null)
     const [verComments, setVerComments] = useState(false)
     const { isAuth, user, navigate } = useAuth()
     const { setNotification } = useOutletContext()
@@ -37,62 +36,44 @@ const CharacterProfile = () => {
                 setLoading(false)
             }
         }
-
         loadCharacter()
     }, [id])
 
     useEffect(() => {
         if (!character || !character.likes || !user?.id) return
-
         const myLike = character.likes.some(l => {
             const likeId = l?._id?.toString?.() || l?.toString?.()
             return likeId === user.id.toString()
         })
-
-        if (myLike) {
-            setLiked(true)
-        }
+        if (myLike) setLiked(true)
     }, [character, user])
 
     if (loading) return <p>Cargando...</p>
-
     if (!character) return <p>Personaje no encontrado.</p>
 
     const handleLike = async () => {
         try {
             setLittleNote({ comentarios: '', likes: '' })
             if (isAuth) {
-
                 if (!liked) {
                     setLiked(true)
                     setLikes(prev => prev + 1)
-                    const id = character.id
-                    const res = await sendLike(id)
+                    const res = await sendLike(character.id)
                     if (res && res.likes) {
-                        setNotification({ error: '', exito: 'Gracias por el like!' })
-                        setTimeout(() => {
-                            setNotification({ error: '', exito: '' })
-                        }, 5000)
+                        setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
                     }
                 } else {
                     setLiked(false)
                     setLikes(prev => prev - 1)
-                    const id = character.id
-                    await sendUnlike(id)
+                    await sendUnlike(character.id)
                 }
-
             } else {
                 setLittleNote({ comentarios: '', likes: 'Debes logearte o registrarte para dar like!' })
-                setTimeout(() => {
-                    setLittleNote({ comentarios: '', likes: '' })
-                }, 5000)
+                setTimeout(() => setLittleNote({ comentarios: '', likes: '' }), 5000)
             }
-
         } catch (error) {
             setNotification({ error: error.message })
-            setTimeout(() => {
-                setNotification({ error: '', exito: '' })
-            }, 5000)
+            setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
         }
     }
 
@@ -100,76 +81,64 @@ const CharacterProfile = () => {
         setLittleNote('')
         if (!isAuth) {
             setLittleNote({ comentarios: 'Registrate o Logeate para ver los comentarios', likes: '' })
-            setTimeout(() => {
-                setLittleNote('')
-            }, 5000)
+            setTimeout(() => setLittleNote(''), 5000)
         }
-        if (isAuth && verComments) {
-            setVerComments(false)
-        } else {
-            setVerComments(true)
-        }
-
+        setVerComments(prev => isAuth ? !prev : false)
     }
 
     const handleDeleteCharacter = async () => {
         try {
-            
-            let msj = 'Seguro que quiere eliminar este personaje?'
-            if(confirm(msj)){
+            if (confirm('Seguro que quiere eliminar este personaje?')) {
                 const res = await deleteCharacterById(id)
-                if(res) {
-                    setNotification({error:'', exito:'Personaje eliminado!'})
-                    setTimeout(() => {
-                        setNotification({error:'', exito:''})
-                    }, 5000)
+                if (res) {
+                    setNotification({ error: '', exito: 'Personaje eliminado!' })
+                    setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
                     navigate('/personajes/index')
                 }
             }
         } catch (error) {
-            setNotification({error:error.message, exito:''})
-            setTimeout(() => {
-                setNotification({error:'', exito:''})
-            }, 5000)
+            setNotification({ error: error.message, exito: '' })
+            setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
         }
     }
 
-    const handleEditCharacterViewForm = async () => {
-        try {
-            navigate(`/personajes/editar/${id}`)
-        } catch (error) {
-            setNotification({error: error.message || `Hubo un error: ${error}`})
-        }
+    const handleEditCharacterViewForm = () => {
+        navigate(`/personajes/editar/${id}`)
     }
 
     const handleMakeComplaint = () => {
         navigate(`/denuncias/crear/personaje/${character.nombre}/${character.id}`)
     }
+
     return (
-        <div className="character-container">
-            <h1>{character.nombre}</h1>
-            {litteNote.likes && (
-                <div className="note note-center">{litteNote.likes}</div>
-            )}
-            <div className="character-content">
-                {/* COLUMNA: IMAGEN + ICONOS */}
-                <div className="card">
+        <div className={styles.characterContainer}>
+            <h1 className={styles.allWhite}>{character.nombre}</h1>
+
+            {litteNote.likes && <div className={styles.note}>{litteNote.likes}</div>}
+
+            <div className={styles.characterContent}>
+                {/* Imagen + Iconos */}
+                <div className={styles.card}>
                     <img
                         src={`http://localhost:3000/uploads/${character.picture}`}
                         alt={`profile${character.nombre}`}
-                        className="character-img"
+                        className={styles.characterImg}
                     />
-                    <div className="icon-stats">
-                        <span onClick={handleLike} className={`like-icon ${liked ? 'liked' : 'not-liked'}`}>
+                    <div className={styles.iconStats}>
+                        <span
+                            onClick={handleLike}
+                            className={`${styles.likeIcon} ${liked ? styles.likeIconLiked : styles.likeIconNotLiked}`}
+                        >
                             <FaThumbsUp /> {likes}
                         </span>
-                        <span><FaRegComment onClick={handleVerComentarios}/> {comments}</span>
+                        <span>
+                            <FaRegComment onClick={handleVerComentarios} /> {comments}
+                        </span>
                     </div>
-
                 </div>
 
-                {/* COLUMNA: DATOS + BOTONES */}
-                <div className="character-details">
+                {/* Datos + Botones */}
+                <div className={styles.characterDetails}>
                     <table>
                         <tbody>
                             <tr><td>Nombre: {character.nombre}</td></tr>
@@ -192,11 +161,14 @@ const CharacterProfile = () => {
                         </tbody>
                     </table>
 
-                    {!plus ? (
-                        <button className="plus-button" onClick={() => setPlus(true)}>+</button>
-                    ) : <button className="plus-button" onClick={() => setPlus(false)}>-</button>}
+                    <button
+                        className={styles.plusButton}
+                        onClick={() => setPlus(prev => !prev)}
+                    >
+                        {plus ? '-' : '+'}
+                    </button>
 
-                    <div className="action-buttons">
+                    <div className={styles.actionButtons}>
                         {isAuth && (
                             <>
                                 <button onClick={handleEditCharacterViewForm}>Editar</button>
@@ -206,19 +178,21 @@ const CharacterProfile = () => {
                         {user?.rol === 'admin' && <button onClick={handleDeleteCharacter}>Eliminar</button>}
                     </div>
 
-                    {litteNote.comentarios && <div className="note">{litteNote.comentarios}</div>}
+                    {litteNote.comentarios && <div className={styles.note}>{litteNote.comentarios}</div>}
 
-                    <button className="comments-button" onClick={handleVerComentarios}>{verComments && isAuth?'Ocultar':'Ver Comentarios'}</button>
+                    <button className={styles.commentsButton} onClick={handleVerComentarios}>
+                        {verComments && isAuth ? 'Ocultar' : 'Ver Comentarios'}
+                    </button>
                 </div>
             </div>
-            {isAuth && verComments &&
+
+            {isAuth && verComments && (
                 <div>
-                    <CharacterComments id={id} setComments={setComments}/>
+                    <CharacterComments id={id} setComments={setComments} />
                 </div>
-            }
+            )}
         </div>
     )
-
 }
 
 export default CharacterProfile

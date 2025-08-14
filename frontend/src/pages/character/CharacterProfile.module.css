@@ -1,0 +1,216 @@
+/* CharacterProfile.module.css */
+
+.characterContainer {
+  padding: 2rem;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+h1.allWhite {
+  color: white;
+}
+
+/* Contenedor principal de imagen + detalles */
+.characterContent {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Imagen + likes/comentarios */
+.card {
+  background-color: #111;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.characterImg {
+  width: 200px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.iconStats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.8rem;
+}
+
+.iconStats span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.1rem;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.iconStats svg {
+  font-size: 1.2rem;
+}
+
+.likeIcon {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1.2rem;
+  transition: color 0.3s, opacity 0.3s;
+}
+
+.likeIconLiked {
+  color: #4caf50;
+}
+
+.likeIconNotLiked {
+  color: #999;
+  opacity: 0.5;
+}
+
+.likeIcon:hover svg {
+  transform: scale(1.1);
+}
+
+/* Datos del personaje */
+.characterDetails {
+  max-width: 500px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+table {
+  width: 100%;
+  background-color: #111;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+td {
+  padding: 0.5rem 0;
+  font-size: 1rem;
+}
+
+.plusButton {
+  background-color: #8b0000;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plusButton:hover {
+  background-color: #a30000;
+}
+
+
+/* Botones de acción */
+.actionButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.actionButtons button {
+  background-color: #8b0000;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actionButtons button:hover {
+  background-color: #a30000;
+}
+
+.note {
+  color: #ff4d4d;
+  margin-top: 1rem;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.commentsButton {
+  background-color: #444;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.commentsButton:hover {
+  background-color: #666;
+}
+
+@media (max-width: 768px) {
+  .characterContent {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .characterDetails {
+    width: 100%;
+  }
+}
+
+/* Sección de comentarios */
+.commentSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.commentSection textarea {
+  width: 100%;
+  max-width: 750px;
+  height: 120px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: none;
+}
+
+.commentSection button {
+  margin-top: 0.5rem;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.commentSection hr {
+  width: 100%;
+  max-width: 750px;
+  margin-top: 2rem;
+  border: none;
+  border-top: 3px solid red;
+}
