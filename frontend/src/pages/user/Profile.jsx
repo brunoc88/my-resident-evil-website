@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useAuth } from '../../context/AuthContext'
 import { useOutletContext, useParams, Link } from "react-router-dom"
 import { myProfile, userProfile, follow, unFollow, deleteAccount, block, unBlock } from '../../services/user.js'
-import './Profile.css'
+import styles from './Profile.module.css'
 
 const Profile = () => {
   const [profile, setProfile] = useState(null)
@@ -176,35 +176,35 @@ const Profile = () => {
     return <h1>La cuenta que intentas ver a sido eliminada o suspendida</h1>
   }else{
   return (
-    <div className="user-profile-container">
-      <div className="user-header">
-        <h1>Perfil de {profile.userName}</h1>
+    <div className={styles.userProfileContainer}>
+      <div className={styles.userHeader}>
+        <h1>{profile.userName}</h1>
         {(user.userName !== profile.userName) && (!isBlock && !imBlock) && (
           loSigo
-            ? <button className="follow-button" onClick={() => handleFollow(profile.id)}>Dejar de Seguir</button>
-            : <button className="follow-button" onClick={() => handleFollow(profile.id)}>Seguir</button>
+            ? <button className={styles.followButton} onClick={() => handleFollow(profile.id)}>Dejar de Seguir</button>
+            : <button className={styles.followButton} onClick={() => handleFollow(profile.id)}>Seguir</button>
         )}
       </div>
 
-      <div className="user-profile-content">
+      <div className={styles.userProfileContent}>
         {/* FOTO Y ESTADÍSTICAS */}
-        <div className="user-image-box">
+        <div className={styles.userImageBox}>
           <img
             src={`http://localhost:3000/uploads/${profile.picture}`}
             alt={`profile${profile.nombre}`}
-            className="user-profile-img"
+            className={styles.userProfileImg}
           />
-          {userName && userName !== user.userName? <div className="user-stats-box">
+          {userName && userName !== user.userName? <div className={styles.userStatsBox}>
             Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}
           </div> :
-            <div className="user-stats-box">
+            <div className={styles.userStatsBox}>
               <Link to='/user/followList'> Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}</Link>
             </div>
           }
         </div>
 
         {/* DATOS */}
-        <div className="user-info-box">
+        <div className={styles.userInfoBox}>
           <p><strong>Usuario:</strong> {profile.userName}</p>
           <p><strong>Email:</strong> {profile.email}</p>
           {profile.rol === 'admin' && <p><strong>Puesto:</strong> Moderador/a</p>}
@@ -213,23 +213,23 @@ const Profile = () => {
             year: 'numeric', month: 'long', day: 'numeric'
           })}</p>
 
-          <div className="user-buttons">
+          <div className={styles.userButtons}>
             {user.userName === profile.userName ?
               <>
-                <button className="action" onClick={handleGoToEditProfile}>Editar</button>
+                <button className={styles.action} onClick={handleGoToEditProfile}>Editar</button>
               </> :
               <>
-              {!isBlock && !imBlock && <Link to={`/user/mensajes/${profile.id}`}className="action">Mandar Mensaje</Link>}
-                <Link className="action" to = {`/denuncias/crear/usuario/${profile.userName}/${profile.id}`}>Denunciar</Link>
+              {!isBlock && !imBlock && <Link to={`/user/mensajes/${profile.id}`} className={styles.action}>Mandar Mensaje</Link>}
+                <Link className={styles.action} to = {`/denuncias/crear/usuario/${profile.userName}/${profile.id}`}>Denunciar</Link>
                 
                 {(user.rol !== 'admin' && profile.rol === 'admin') || (imBlock) ?
                   <></> :
-                  <button className="action" onClick={handleBlockUser}>{isBlock ? 'Desbloquear' : 'Bloquear'}</button>}
+                  <button className={styles.action} onClick={handleBlockUser}>{isBlock ? 'Desbloquear' : 'Bloquear'}</button>}
               </>
             }
             {(user?.userName === profile?.userName) ||
               (user?.rol === 'admin' && profile?.rol !== 'admin')
-              ? <button className="action" onClick={handleDeleteAccount}>Eliminar</button>
+              ? <button className={styles.action} onClick={handleDeleteAccount}>Eliminar</button>
               : null}
           </div>
         </div>
@@ -237,5 +237,6 @@ const Profile = () => {
     </div>
   )
 }}
+
 
 export default Profile

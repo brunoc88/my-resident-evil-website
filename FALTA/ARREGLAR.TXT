@@ -11,3 +11,5 @@ arreglar la seccion de comentarios, cuando se pasan los 58 caracteres se salen l
 
 chat:
 
+pensar si al momento de borrar el mensaje de la bandeja de entrada y al recibir uno del mismo
+usuario y abrirlo se ve todos los mensajes anteriores

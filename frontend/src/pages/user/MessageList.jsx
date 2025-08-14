@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useOutletContext, Link } from 'react-router-dom'
 import { deleteMessage, messageResumen } from "../../services/user"
-import './MessageList.css'
+import styles from './MessageList.module.css'
 
 const MessageList = () => {
     const { setNotification } = useOutletContext()
@@ -38,6 +38,8 @@ const MessageList = () => {
                     setTimeout(() => {
                         setNotification({ error: '', exito: '' })
                     }, 5000)
+                    // en esta linea tuve que filtrar tanto por id como username
+                    // ya que al borrar el ultimo mensaje de ese usuario me aparecia el siguiente
                     setMessages(messages.filter(m => m._id !== id && m.de.userName !== userName))
                 }
 
@@ -56,7 +58,7 @@ const MessageList = () => {
 
     if (!messages || messages.length === 0) {
         return (
-            <div>
+            <div className={styles.inbox}>
                 <h1>Bandeja de entrada</h1>
                 <p>No tiene mensajes!</p>
             </div>
@@ -66,22 +68,22 @@ const MessageList = () => {
     return (
         <div>
             <div>
-                <h1>Bandeja de Entrada</h1>
+                <h1 className={styles.inbox}>Bandeja de Entrada</h1>
             </div>
-            <div className="comments-container">
+            <div className={styles.commentsContainer}>
                 {messages.map(m => (
-                    <div key={m._id} className="comment-card">
-                        <div className="comment-header">
-                            <img src={`http://localhost:3000/uploads/${m.de.picture}`} alt="profile" className="profile-pic" />
-                            <div className="comment-meta">
+                    <div key={m._id} className={styles.commentCard}>
+                        <div className={styles.commentHeader}>
+                            <img src={`http://localhost:3000/uploads/${m.de.picture}`} alt="profile" className={styles.profilePic} />
+                            <div className={styles.commentMeta}>
                                 <Link to={`/user/perfil/${m.de.userName}`}>{m.de.userName}</Link>
-                                <span className="date">{new Date(m.fecha).toLocaleDateString('es-AR')}</span>
+                                <span className={styles.date}>{new Date(m.fecha).toLocaleDateString('es-AR')}</span>
                             </div>
                         </div>
-                        <p className="comment-message">{m.mensaje}</p>
-                        <div className="comment-options">
-                            <Link to={`/user/mensajes/${m.de.id}`} className='action-link'>Responder</Link>
-                            <span onClick={() => handleDeleteMessage(m._id, m.de.userName)} className='action-link'>Eliminar</span>
+                        <p className={styles.commentMessage}>{m.mensaje}</p>
+                        <div className={styles.commentOptions}>
+                            <Link to={`/user/mensajes/${m.de.id}`} className={styles.actionLink}>Responder</Link>
+                            <span onClick={() => handleDeleteMessage(m._id, m.de.userName)} className={styles.actionLink}>Eliminar</span>
                         </div>
                     </div>
                 ))}

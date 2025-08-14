@@ -1,56 +1,66 @@
-.user-profile-container {
+.userProfileContainer {
   color: white;
   padding: 2rem;
   min-height: 100vh;
   font-family: sans-serif;
 }
 
-.user-header {
+.userHeader {
   display: flex;
-  align-items: center;
-  justify-content: center; /* 👉 centrado horizontal */
-  gap: 1rem;
+  flex-direction: row;     /* ← en fila */
+  align-items: center;     /* centra verticalmente */
+  justify-content: center; /* centra horizontalmente */
+  gap: 2rem;               /* espacio entre nombre y botón */
   margin-bottom: 2rem;
 }
 
+.userHeader h1 {
+  color: #e53935;
+  font-size: 2.3rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 1px;
+  margin: 0;
+}
 
-.follow-button {
+.followButton {
   background-color: #a80000;
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1.2rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 1.2rem;
+  margin: 0;
 }
 
-.user-profile-content {
+.userProfileContent {
   display: flex;
   gap: 2rem;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.user-info-box p {
-  margin: 0.5rem 0;
-  line-height: 1.6; /* 👉 mayor espacio vertical */
-}
-
-.user-info-box {
+.userInfoBox {
   background-color: #111;
-  padding: 2rem;         /* 👉 más aire interno */
+  padding: 2rem;
   border-radius: 10px;
   min-width: 280px;
   max-width: 400px;
 }
 
+.userInfoBox p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
 
-.user-profile-img {
+.userProfileImg {
   width: 300px;
   border-radius: 10px;
 }
 
-.user-stats-box {
+.userStatsBox {
   margin-top: 1rem;
   background-color: #a80000;
   color: white;
@@ -60,26 +70,16 @@
   text-align: center;
 }
 
-.user-info-box {
-  background-color: #111;
-  padding: 1.5rem;
-  border-radius: 10px;
-  min-width: 280px;
-  max-width: 400px;
-}
+.userImageBox {}
 
-.user-info-box p {
-  margin: 0.5rem 0;
-}
-
-.user-buttons {
+.userButtons {
   margin-top: 1.5rem;
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-.user-buttons .action {
+.action {
   background-color: #a80000;
   color: white;
   border: none;
@@ -88,6 +88,6 @@
   cursor: pointer;
 }
 
-.user-buttons .delete {
+.delete {
   background-color: darkred;
 }
