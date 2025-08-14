@@ -13,20 +13,24 @@ import { useState } from "react"
 import { validarPassword } from "../utils/validarLogin"
 import { useNavigate } from "react-router-dom"
 import login from "../services/login"
-import './Login.css'
+import { useAuth } from "../context/AuthContext"
+import { applyToken } from "../services/token"
+import styles from "./Login.module.css"
 ```
 
 - `useState`: Manejo del estado local.
-- `useNavigate`: Permite la navegación programática a otras rutas.
 - `validarPassword`: Función auxiliar para validar el formato del password.
+- `useNavigate`: Permite la navegación programática a otras rutas.
 - `login`: Función que realiza la petición de autenticación al backend.
-- `Login.css`: Estilos asociados al componente.
+- `useAuth`: Funcion de la que vamos a extrar props como isAuth, user, setUser, setToken
+- `applyToken`: Funcion de la carpeta servicios donde vamos a setear el token 
+- `Login.module.css`: Estilos asociados al componente.
 
 ---
 
 ## ⚙️ Props
 
-El componente recibe las siguientes props desde el componente `App.jsx`:
+El componente extrae las siguientes props desde `useAuth`:
 
 - `setToken`: Función para guardar el token de sesión.
 - `setUser`: Función para guardar los datos del usuario autenticado.
@@ -48,6 +52,21 @@ const [dbErrorMsj, setDbErrorMsj] = useState('')
 - `dbErrorMsj`: Guarda errores provenientes del backend (credenciales incorrectas, usuario inexistente, etc.).
 
 ---
+
+## 🧠 Estados & funciones importados
+```js
+const { setToken, setUser, isAuth, user } = useAuth()
+const navigate = useNavigate()
+```
+- `setToken`: Para establecer el token una vez logrado el login exitoso.
+- `setUser`: Para establecer la información del usuario.
+- `isAuth`: Indica si el usuario está autenticado o no.
+- `user`: Información del usuario.
+- `useNavigate`: Función que permite navegar a otra ruta del sitio.
+
+---
+
+
 
 ## 🔄 Lógica del componente
 
@@ -105,36 +124,6 @@ const handleNavigate = () => {
 
 ---
 
-## 🛄 Validación de contraseña
-
-Archivo: `utils/validarLogin.js`
-
-```js
-const validarPassword = (password) => {
-    let error = { password: '', flag: false }
-
-    if (password) {
-        if (password.length < 5) {
-            error.password = 'Password inválido!'
-            error.flag = true
-            return error
-        }
-        if (/\s/.test(password)) {
-            error.password = 'El password no debe contener espacios'
-            error.flag = true
-            return error
-        }
-    }
-
-    return error
-}
-```
-
-- Valida que el `password` tenga al menos 5 caracteres y no contenga espacios.
-- Devuelve un objeto con el mensaje de error y una bandera (`flag`) que indica si hubo fallo.
-
----
-
 ## 🧱 Renderizado condicional
 
 ### Si el usuario **NO** está autenticado (`!isAuth`):
@@ -157,7 +146,7 @@ const validarPassword = (password) => {
 
 ## 📸 Estética
 
-- Usa `Login.css` para el diseño visual.
+- Usa `Login.module.css` para el diseño visual.
 - Divide la vista en dos secciones:
   - Formulario
   - Imagen y texto emocional
