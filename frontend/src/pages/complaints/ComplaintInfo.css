@@ -33,8 +33,11 @@
     border-radius: 5px;
     border-left: 4px solid #e74c3c;
     white-space: pre-wrap;
+    word-wrap: break-word; /* Fuerza a romper palabras largas */
+    overflow-wrap: break-word; /* Compatibilidad con todos los navegadores */
+    max-height: 300px; /* Limita altura si es muy largo */
+    overflow-y: auto; /* Scroll vertical si se excede la altura */
 }
-
 
 .error {
     text-align: center;
