@@ -151,7 +151,7 @@ const CharacterForm = ({ editMode }) => {
                 <div>
                     <CharacterSelects register={register} watch={watch} reset={reset} errors={errors} />
                 </div>
-                <div className="botones">
+                <div className="buttonGroup">
                     <button type="submit">Enviar</button>
                     <button type="button" onClick={handleBackProfileCharacter}>Volver</button>
                 </div>

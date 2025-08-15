@@ -244,7 +244,7 @@ const UserForm = ({ isAdmin }) => {
           )}
         </div>
 
-        <div className="botones">
+        <div className="buttonGroup">
           <button type="submit">Enviar</button>
           <button onClick={onVolver}>Volver</button>
         </div>

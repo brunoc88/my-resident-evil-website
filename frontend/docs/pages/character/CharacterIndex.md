@@ -64,7 +64,7 @@ useEffect(() => {
         }
     }
     loadCharacters()
-}, [setNotification])
+}, [setNotification, loading])
 ```
 
 Al montarse el componente, `useEffect` ejecuta la función asincrónica `loadCharacters`, que realiza una llamada a `characterList()` para obtener la lista de personajes. Si la respuesta es exitosa, se actualiza el estado `characters`. En caso de error, se lanza una notificación. Finalmente, `loading` se marca como `false`.

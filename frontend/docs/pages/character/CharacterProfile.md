@@ -2,7 +2,7 @@
 
 ## 📌 Descripción General
 
-El componente `CharacterProfile` muestra el perfil completo de un personaje individual de la saga *Resident Evil*, incluyendo sus datos personales, cantidad de likes, comentarios y botones de acción para usuarios autenticados. Soporta funcionalidades como dar "like", ver comentarios, editar o eliminar personajes.
+El componente `CharacterProfile` muestra el perfil completo de un personaje individual de la saga *Resident Evil*, incluyendo sus datos personales, cantidad de likes, comentarios y botones de acción para usuarios autenticados. Soporta funcionalidades como dar "like", ver comentarios, editar, denunciar o eliminar personajes.
 
 ---
 
@@ -15,7 +15,7 @@ import CharacterComments from "../../components/character/Charactercomments"
 import { getCharacterById, sendLike, sendUnlike, deleteCharacterById } from "../../services/character"
 import { useAuth } from "../../context/AuthContext"
 import { FaThumbsUp, FaRegComment } from "react-icons/fa"
-import './CharacterProfile.css'
+import styles from './CharacterProfile.module.css'
 ```
 
 - `useParams`: obtiene el ID del personaje desde la URL.
@@ -32,7 +32,7 @@ import './CharacterProfile.css'
 
 - `FaThumbsUp`, FaRegComment: íconos de interacción.
 
-- `CharacterProfile.css`: estilos del componente.
+- `CharacterProfile.module.css`: estilos del componente.
 
 ---
 
@@ -236,6 +236,17 @@ La funcion `handleDeleteCharacter` se va a ejecutar cuando el usuario de rol "ad
 
 La funcion `handleEditCharacterViewForm` se va a llamar cuando el usuario autenticado haga click en el botono editar. Automaticamente navegamos al form de editar usuario `userForm.jsx` mandando el id del personaje por paramentro. Si llegara a pasar un error el `Cath` lo mostrara con una notifiacion.
 
+
+## `handleMakeComplaint`
+
+```js
+const handleMakeComplaint = () => {
+        navigate(`/denuncias/crear/personaje/${character.nombre}/${character.id}`)
+    }
+```
+
+La funcion `handleMakeComplaint` permite al usuario autenticado navegar a un formulario donde va a poder realizar una denuncia. Por ejemplo: si hay algo que esta mal en la biografia del personaje o cree que es perjudicial para la experiencia del usuario.
+
 ---
 
 ## 🧱 Renderizado
@@ -260,30 +271,34 @@ Si `character` es null mostrara el mensaje `Personaje no encontrado.`
 
 ```js
 return (
-        <div className="character-container">
-            <h1>{character.nombre}</h1>
-            {litteNote.likes && (
-                <div className="note note-center">{litteNote.likes}</div>
-            )}
-            <div className="character-content">
-                {/* COLUMNA: IMAGEN + ICONOS */}
-                <div className="card">
+        <div className={styles.characterContainer}>
+            <h1 className={styles.allWhite}>{character.nombre}</h1>
+
+            {litteNote.likes && <div className={styles.note}>{litteNote.likes}</div>}
+
+            <div className={styles.characterContent}>
+                {/* Imagen + Iconos */}
+                <div className={styles.card}>
                     <img
                         src={`http://localhost:3000/uploads/${character.picture}`}
                         alt={`profile${character.nombre}`}
-                        className="character-img"
+                        className={styles.characterImg}
                     />
-                    <div className="icon-stats">
-                        <span onClick={handleLike} className={`like-icon ${liked ? 'liked' : 'not-liked'}`}>
+                    <div className={styles.iconStats}>
+                        <span
+                            onClick={handleLike}
+                            className={`${styles.likeIcon} ${liked ? styles.likeIconLiked : styles.likeIconNotLiked}`}
+                        >
                             <FaThumbsUp /> {likes}
                         </span>
-                        <span><FaRegComment onClick={handleVerComentarios}/> {comments}</span>
+                        <span>
+                            <FaRegComment onClick={handleVerComentarios} /> {comments}
+                        </span>
                     </div>
-
                 </div>
 
-                {/* COLUMNA: DATOS + BOTONES */}
-                <div className="character-details">
+                {/* Datos + Botones */}
+                <div className={styles.characterDetails}>
                     <table>
                         <tbody>
                             <tr><td>Nombre: {character.nombre}</td></tr>
@@ -306,30 +321,36 @@ return (
                         </tbody>
                     </table>
 
-                    {!plus ? (
-                        <button className="plus-button" onClick={() => setPlus(true)}>+</button>
-                    ) : <button className="plus-button" onClick={() => setPlus(false)}>-</button>}
+                    <button
+                        className={styles.plusButton}
+                        onClick={() => setPlus(prev => !prev)}
+                    >
+                        {plus ? '-' : '+'}
+                    </button>
 
-                    <div className="action-buttons">
+                    <div className={styles.actionButtons}>
                         {isAuth && (
                             <>
                                 <button onClick={handleEditCharacterViewForm}>Editar</button>
-                                <button>Denunciar</button>
+                                <button onClick={handleMakeComplaint}>Denunciar</button>
                             </>
                         )}
                         {user?.rol === 'admin' && <button onClick={handleDeleteCharacter}>Eliminar</button>}
                     </div>
 
-                    {litteNote.comentarios && <div className="note">{litteNote.comentarios}</div>}
+                    {litteNote.comentarios && <div className={styles.note}>{litteNote.comentarios}</div>}
 
-                    <button className="comments-button" onClick={handleVerComentarios}>{verComments && isAuth?'Ocultar':'Ver Comentarios'}</button>
+                    <button className={styles.commentsButton} onClick={handleVerComentarios}>
+                        {verComments && isAuth ? 'Ocultar' : 'Ver Comentarios'}
+                    </button>
                 </div>
             </div>
-            {isAuth && verComments &&
+
+            {isAuth && verComments && (
                 <div>
-                    <CharacterComments id={id} setComments={setComments}/>
+                    <CharacterComments id={id} setComments={setComments} />
                 </div>
-            }
+            )}
         </div>
     )
 ```
@@ -339,7 +360,7 @@ Se renderiza:
 - Una carta que contendra la imagen del personaje, el icono likes & comentarios con su respectiva cantidad.
 - Una tabla con los datos del personaje.
 - Un boton `+` que mostrara informacion extendia del personaje y boton `-` para volver a ocultar esa informacione extra.
-- Si el usuario esta autenticado se renderizaran los botonos `editar` y `eliminar`.
+- Si el usuario esta autenticado se renderizaran los botonos `editar`, `denunciar` y `eliminar`.
 - Si el rol del usuario es `admin` se renderiza el boton `eliminar`.
 - Si llega a haber un error como dar click en el icono de comentarios o ver comentarios `littleNote` mostrara mensaje de error.
 - El boton de comentarios segun si esta autenticado `isAuth` y si ver comentarios `verComments` es verdadero mostrar el mensaje de `ocultar` una vez desplegado la lista de comentarios, si no muestra `Ver Comentarios`.
