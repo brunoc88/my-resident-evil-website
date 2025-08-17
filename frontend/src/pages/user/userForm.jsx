@@ -14,6 +14,7 @@ import login from '../../services/login'
 import { useEffect } from 'react'
 import './UserForm.css'
 import { useAuth } from '../../context/AuthContext'
+import { applyToken } from '../../services/token'
 
 const UserForm = ({ isAdmin }) => {
   const { setToken, setUser, isAuth, navigate } = useAuth()
@@ -86,13 +87,19 @@ const UserForm = ({ isAdmin }) => {
           user: data.userName,
           password: data.password
         })
-        setToken(loginRes.token)
-        setUser(loginRes.user)
-        localStorage.setItem(
-          'loggerReAppUser',
-          JSON.stringify({ token: loginRes.token, user: loginRes.user })
-        )
-        navigate('/')
+
+        if (loginRes && loginRes.msj) {
+          setToken(loginRes.token)
+          setUser(loginRes.user)
+         
+          localStorage.setItem(
+            'loggerReAppUser',
+            JSON.stringify({ token: loginRes.token, user: loginRes.user })
+          )
+          applyToken(loginRes.token)
+          navigate('/personajes/index')
+        }
+
       }
     } catch (error) {
       setNotification({ error: error.message || 'Palabra secreta incorrecta!', exito: '' })
