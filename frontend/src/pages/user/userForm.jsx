@@ -134,13 +134,12 @@ const UserForm = ({ isAdmin }) => {
       const res = await userEdit(data.id, formData)
       if (res && res.msj) {
         setNotification({ error: '', exito: res.msj })
+        setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
       }
-      navigate('/')
+      navigate('/user/miPerfil')
     } catch (error) {
       setNotification({ error: error.message, exito: '' })
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      setTimeout(() => setNotification({ error: '', exito: '' }), 5000)
     }
   }
   return (
