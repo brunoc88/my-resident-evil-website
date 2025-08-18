@@ -1,3 +1,4 @@
+import './Notification.css'
 
 const Notification = ({ error, exito }) => {
   if (!error && !exito) return null

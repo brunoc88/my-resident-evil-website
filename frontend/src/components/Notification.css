@@ -1,13 +1,27 @@
 .error-msg {
   color: red;
-  font-size: 0.9rem;
   font-weight: bold;
   text-align: center;
+  background-color: #ffe6e6; /* un rojito claro de fondo */
+  border: 1px solid red;
+  border-radius: 8px; /* esquinas redondeadas */
+  padding: 10px 15px;
+  margin: 10px auto;
+  width: fit-content; /* se ajusta al texto */
+  min-width: 250px; /* ancho mínimo */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .succes-msg {
-  color: green;
-  font-size: 0.9rem;
+ color: green;
   font-weight: bold;
   text-align: center;
+  background-color: #e6ffe6; /* verde clarito */
+  border: 1px solid green;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin: 10px auto;
+  width: fit-content;
+  min-width: 250px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

@@ -13,7 +13,7 @@ const Profile = () => {
   const [isBlock, setIsBlock] = useState(null)
   const [imBlock, setImBlock] = useState(null)
   const { setNotification } = useOutletContext()
-  const { user, navigate, handleLogout } = useAuth()
+  const { user, setUser, navigate, handleLogout } = useAuth()
   const { userName } = useParams()
 
   useEffect(() => {
@@ -75,24 +75,24 @@ const Profile = () => {
       if (!loSigo) {
         const res = await follow(id)
         if (res && res.msj) {
-          setNotification({ error: '', exito: res.msj })
-          setTimeout(() => {
-            setNotification({ error: '', exito: '' })
-          }, 5000)
           setSeguidores(prev => prev + 1)
           setLoSigo(true)
+          setUser({ // <-- persintencia
+            ...user,
+            seguidos: [...user.seguidos, id]
+          })
         }
 
 
       } else {
         const res = await unFollow(id)
         if (res && res.msj) {
-          setNotification({ error: '', exito: res.msj })
-          setTimeout(() => {
-            setNotification({ error: '', exito: '' })
-          }, 5000)
           setSeguidores(prev => prev - 1)
           setLoSigo(false)
+          setUser({// <-- persintencia
+            ...user,
+            seguidos: user.seguidos.filter(uid => uid !== id)
+          })
         }
       }
 
@@ -142,6 +142,7 @@ const Profile = () => {
               setNotification({ error: '', exito: '' })
             }, 5000)
             setIsBlock(false)
+            setUser({ ...user, bloqueos: user.bloqueos.filter(u => u.id !== profile.id) })// <-- persintencia
           }
         }
       } else {
@@ -154,6 +155,7 @@ const Profile = () => {
               setNotification({ error: '', exito: '' })
             }, 5000)
             setIsBlock(true)
+            setUser({ ...user, bloqueos: [user.bloqueos, profile.id] }) // <-- persintencia
           }
         } else {
           return
@@ -172,71 +174,72 @@ const Profile = () => {
 
   if (loading) return <p>Cargando...</p>
 
-  if(!profile){
+  if (!profile) {
     return <h1>La cuenta que intentas ver a sido eliminada o suspendida</h1>
-  }else{
-  return (
-    <div className={styles.userProfileContainer}>
-      <div className={styles.userHeader}>
-        <h1>{profile.userName}</h1>
-        {(user.userName !== profile.userName) && (!isBlock && !imBlock) && (
-          loSigo
-            ? <button className={styles.followButton} onClick={() => handleFollow(profile.id)}>Dejar de Seguir</button>
-            : <button className={styles.followButton} onClick={() => handleFollow(profile.id)}>Seguir</button>
-        )}
-      </div>
-
-      <div className={styles.userProfileContent}>
-        {/* FOTO Y ESTADÍSTICAS */}
-        <div className={styles.userImageBox}>
-          <img
-            src={`http://localhost:3000/uploads/${profile.picture}`}
-            alt={`profile${profile.nombre}`}
-            className={styles.userProfileImg}
-          />
-          {userName && userName !== user.userName? <div className={styles.userStatsBox}>
-            Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}
-          </div> :
-            <div className={styles.userStatsBox}>
-              <Link to='/user/followList'> Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}</Link>
-            </div>
-          }
+  } else {
+    return (
+      <div className={styles.userProfileContainer}>
+        <div className={styles.userHeader}>
+          <h1>{profile.userName}</h1>
+          {(user.userName !== profile.userName) && (!isBlock && !imBlock) && (
+            loSigo
+              ? <button className={styles.followButton} onClick={() => handleFollow(profile.id)}>Dejar de Seguir</button>
+              : <button className={styles.followButton} onClick={() => handleFollow(profile.id)}>Seguir</button>
+          )}
         </div>
 
-        {/* DATOS */}
-        <div className={styles.userInfoBox}>
-          <p><strong>Usuario:</strong> {profile.userName}</p>
-          <p><strong>Email:</strong> {profile.email}</p>
-          {profile.rol === 'admin' && <p><strong>Puesto:</strong> Moderador/a</p>}
-          <p><strong>Sobre Mi:</strong><br />{profile.sobreMi}</p>
-          <p><strong>Usuario desde:</strong> {new Date(profile.fechaCreacion).toLocaleDateString('es-AR', {
-            year: 'numeric', month: 'long', day: 'numeric'
-          })}</p>
-
-          <div className={styles.userButtons}>
-            {user.userName === profile.userName ?
-              <>
-                <button className={styles.action} onClick={handleGoToEditProfile}>Editar</button>
-              </> :
-              <>
-              {!isBlock && !imBlock && <Link to={`/user/mensajes/${profile.id}`} className={styles.action}>Mandar Mensaje</Link>}
-                <Link className={styles.action} to = {`/denuncias/crear/usuario/${profile.userName}/${profile.id}`}>Denunciar</Link>
-                
-                {(user.rol !== 'admin' && profile.rol === 'admin') || (imBlock) ?
-                  <></> :
-                  <button className={styles.action} onClick={handleBlockUser}>{isBlock ? 'Desbloquear' : 'Bloquear'}</button>}
-              </>
+        <div className={styles.userProfileContent}>
+          {/* FOTO Y ESTADÍSTICAS */}
+          <div className={styles.userImageBox}>
+            <img
+              src={`http://localhost:3000/uploads/${profile.picture}`}
+              alt={`profile${profile.nombre}`}
+              className={styles.userProfileImg}
+            />
+            {userName && userName !== user.userName ? <div className={styles.userStatsBox}>
+              Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}
+            </div> :
+              <div className={styles.userStatsBox}>
+                <Link to='/user/followList'> Seguidores: {seguidores} &nbsp; Seguidos: {seguidos}</Link>
+              </div>
             }
-            {(user?.userName === profile?.userName) ||
-              (user?.rol === 'admin' && profile?.rol !== 'admin')
-              ? <button className={styles.action} onClick={handleDeleteAccount}>Eliminar</button>
-              : null}
+          </div>
+
+          {/* DATOS */}
+          <div className={styles.userInfoBox}>
+            <p><strong>Usuario:</strong> {profile.userName}</p>
+            <p><strong>Email:</strong> {profile.email}</p>
+            {profile.rol === 'admin' && <p><strong>Puesto:</strong> Moderador/a</p>}
+            <p><strong>Sobre Mi:</strong><br />{profile.sobreMi}</p>
+            <p><strong>Usuario desde:</strong> {new Date(profile.fechaCreacion).toLocaleDateString('es-AR', {
+              year: 'numeric', month: 'long', day: 'numeric'
+            })}</p>
+
+            <div className={styles.userButtons}>
+              {user.userName === profile.userName ?
+                <>
+                  <button className={styles.action} onClick={handleGoToEditProfile}>Editar</button>
+                </> :
+                <>
+                  {!isBlock && !imBlock && <Link to={`/user/mensajes/${profile.id}`} className={styles.action}>Mandar Mensaje</Link>}
+                  <Link className={styles.action} to={`/denuncias/crear/usuario/${profile.userName}/${profile.id}`}>Denunciar</Link>
+
+                  {(user.rol !== 'admin' && profile.rol === 'admin') || (imBlock) ?
+                    <></> :
+                    <button className={styles.action} onClick={handleBlockUser}>{isBlock ? 'Desbloquear' : 'Bloquear'}</button>}
+                </>
+              }
+              {(user?.userName === profile?.userName) ||
+                (user?.rol === 'admin' && profile?.rol !== 'admin')
+                ? <button className={styles.action} onClick={handleDeleteAccount}>Eliminar</button>
+                : null}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
-}}
+    )
+  }
+}
 
 
 export default Profile
