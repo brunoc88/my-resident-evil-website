@@ -1,13 +1,10 @@
-import axios from 'axios'
 import handleAxiosError from '../utils/handleAxiosError'
 import { getToken } from './token'
-
-
-const baseUrl = 'http://localhost:3000/user'
+import api from './api'
 
 const userPost = async (user) => {
   try {
-    const res = await axios.post(`${baseUrl}/registro`, user)
+    const res = await api.post(`user/registro`, user)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -16,7 +13,7 @@ const userPost = async (user) => {
 
 const userAdminPost = async (user) => {
   try {
-    const res = await axios.post(`${baseUrl}/registroAdmin`, user)
+    const res = await api.post(`user/registroAdmin`, user)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -25,7 +22,7 @@ const userAdminPost = async (user) => {
 
 const passwordRecovery = async (data) => {
   try {
-    const res = await axios.post(`${baseUrl}/recuperar-password`, data)
+    const res = await api.post(`user/recuperar-password`, data)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -43,7 +40,7 @@ const myProfile = async () => {
       headers: { Authorization: token }
     }
 
-    const res = await axios.get(`${baseUrl}/miPerfil`, config)
+    const res = await api.get(`user/miPerfil`, config)
 
     return res.data
   } catch (error) {
@@ -61,7 +58,7 @@ const userEdit = async (id, data) => {
       headers: { Authorization: token }
     }
 
-    const res = await axios.put(`${baseUrl}/editar/${id}`, data, config)
+    const res = await api.put(`user/editar/${id}`, data, config)
 
     return res.data
   } catch (error) {
@@ -77,7 +74,7 @@ const myFollowers = async () => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.get(`${baseUrl}/misSeguidores`, config)
+    const res = await api.get(`user/misSeguidores`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -92,7 +89,7 @@ const myFollowed = async () => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.get(`${baseUrl}/misSeguidos`, config)
+    const res = await api.get(`user/misSeguidos`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -107,7 +104,7 @@ const userProfile = async (userName) => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.get(`${baseUrl}/perfil/${userName}`, config)
+    const res = await api.get(`user/perfil/${userName}`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -122,7 +119,7 @@ const follow = async (id) => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.patch(`${baseUrl}/seguir/${id}`, {}, config)
+    const res = await api.patch(`user/seguir/${id}`, {}, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -137,7 +134,7 @@ const unFollow = async (id) => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.patch(`${baseUrl}/dejarDeSeguir/${id}`, {}, config)
+    const res = await api.patch(`user/dejarDeSeguir/${id}`, {}, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -152,7 +149,7 @@ const deleteAccount = async (id) => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.patch(`${baseUrl}/eliminar/${id}`, {}, config)
+    const res = await api.patch(`user/eliminar/${id}`, {}, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -167,7 +164,7 @@ const block = async (id) => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.post(`${baseUrl}/bloquear/${id}`, {}, config)
+    const res = await api.post(`user/bloquear/${id}`, {}, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -182,7 +179,7 @@ const unBlock = async (id) => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.delete(`${baseUrl}/desbloquear/${id}`, config)
+    const res = await api.delete(`user/desbloquear/${id}`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -197,7 +194,7 @@ const blockList = async () => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.get(`${baseUrl}/bloqueados`, config)
+    const res = await api.get(`user/bloqueados`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -212,7 +209,7 @@ const bannedList = async () => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.get(`${baseUrl}/baneados`, config)
+    const res = await api.get(`user/baneados`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -227,7 +224,7 @@ const getUsers = async () => {
     let config = {
       headers: { Authorization: token }
     }
-    const res = await axios.get(`${baseUrl}/all`, config)
+    const res = await api.get(`user/all`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -243,7 +240,7 @@ const reactivateAccount = async (id) => {
       headers: { Authorization: token }
     }
 
-    const res = await axios.patch(`${baseUrl}/reActivar/${id}`, null, config)
+    const res = await api.patch(`user/reActivar/${id}`, null, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -259,7 +256,7 @@ const messageResumen = async () => {
       headers: { Authorization: token }
     }
 
-    const res = await axios.get(`${baseUrl}/mensajes/resumen`, config)
+    const res = await api.get(`user/mensajes/resumen`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -275,7 +272,7 @@ const sendMessage = async (id, data) => {
       headers: { Authorization: token }
     }
 
-    const res = await axios.post(`${baseUrl}/mensaje/${id}`, data, config)
+    const res = await api.post(`user/mensaje/${id}`, data, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -291,7 +288,7 @@ const getChats = async (id) => {
       headers: { Authorization: token }
     }
 
-    const res = await axios.get(`${baseUrl}/mensajes/chat/${id}`, config)
+    const res = await api.get(`user/mensajes/chat/${id}`, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)
@@ -307,7 +304,7 @@ const deleteMessage = async (id) => {
       headers: { Authorization: token }
     }
 
-    const res = await axios.patch(`${baseUrl}/mensaje/${id}`, {}, config)
+    const res = await api.patch(`user/mensaje/${id}`, {}, config)
     return res.data
   } catch (error) {
     handleAxiosError(error)

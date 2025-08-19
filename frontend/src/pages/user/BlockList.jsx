@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useOutletContext, Link } from "react-router-dom"
 import { blockList, unBlock } from "../../services/user"
+import { useAuth } from "../../context/AuthContext"
 import './List.css'
 
 
@@ -9,6 +10,7 @@ const BlockList = () => {
     const [blockUsers, setBlockUsers] = useState(null)
     const [filter, setFilter] = useState(null)
     const [loading, setLoading] = useState(true) // <-- para evitar el parpadeo y esperar que se renderice el effect
+    const { user, setUser } = useAuth()
 
     useEffect(() => {
         const loadBlockList = async () => {
@@ -23,7 +25,7 @@ const BlockList = () => {
                 setTimeout(() => {
                     setNotification({ error: '', exito: '' })
                 }, 5000)
-            }finally{
+            } finally {
                 setLoading(false)
             }
         }
@@ -36,6 +38,10 @@ const BlockList = () => {
             const res = await unBlock(id)
             if (res) {
                 setBlockUsers(u => u.filter(user => user.id !== id))
+                setUser({
+                    ...user,
+                    bloqueos: user.bloqueos.filter(uid => uid !== id)
+                })
             }
         } catch (error) {
             setNotification({ error: error.message || `hubo un problema: ${error}`, exito: '' })
@@ -54,7 +60,7 @@ const BlockList = () => {
 
     let filterList = filter ? filter : blockUsers
 
-    if(loading) return <p>Cargando...</p>
+    if (loading) return <p>Cargando...</p>
     return (
         <div className="list-container">
             <h1>Lista de Bloqueados</h1>

@@ -11,7 +11,7 @@ const FollowList = () => {
   const [seguidores, setSeguidores] = useState([])
   const [verFollowed, setVerFollowed] = useState(true)
   const [filterValue, setFilterValue] = useState("")
-  const { user } = useAuth()
+  const { user, setUser } = useAuth()
   let yo = user // <-- cambio el nombre para no haya confucion en la comparacion
 
 
@@ -56,11 +56,28 @@ const FollowList = () => {
 
       if (yo.seguidos.includes(id)) {
         res = await unFollow(id)
+
+        if (res) {
+          // actualizar user en contexto
+          setUser({
+            ...user,
+            seguidos: user.seguidos.filter(uid => uid !== id)
+          })
+        }
+
       } else {
         res = await follow(id)
+
+        if (res) {
+          // actualizar user en contexto
+          setUser({
+            ...user,
+            seguidos: [...user.seguidos, id]
+          })
+        }
       }
 
-
+      // refrescar la lista local de seguidos
       if (res) {
         const nuevosSeguidos = await myFollowed()
         setSeguidos(nuevosSeguidos.seguidos)

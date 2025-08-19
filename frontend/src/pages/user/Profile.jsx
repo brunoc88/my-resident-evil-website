@@ -142,7 +142,10 @@ const Profile = () => {
               setNotification({ error: '', exito: '' })
             }, 5000)
             setIsBlock(false)
-            setUser({ ...user, bloqueos: user.bloqueos.filter(u => u.id !== profile.id) })// <-- persintencia
+            setUser({
+              ...user,
+              bloqueos: user.bloqueos.filter(uid => uid !== profile.id)
+            })
           }
         }
       } else {
@@ -155,7 +158,10 @@ const Profile = () => {
               setNotification({ error: '', exito: '' })
             }, 5000)
             setIsBlock(true)
-            setUser({ ...user, bloqueos: [user.bloqueos, profile.id] }) // <-- persintencia
+            setUser({
+              ...user,
+              bloqueos: [...user.bloqueos, profile.id]
+            })
           }
         } else {
           return
