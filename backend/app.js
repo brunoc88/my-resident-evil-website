@@ -28,7 +28,7 @@ mongoose.connect(MONGODB_URI)
     })
 
 // middlewares
-app.use(express.static(path.join(__dirname, 'dist')))
+app.use(express.static('dist'))
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
 app.use(cors())
 app.use(express.json())
@@ -44,12 +44,12 @@ app.use('/user', userRouter)
 app.use('/personaje', personajeRouter)
 app.use('/denuncias', denunciasRouter)
 
-// 👉 fallback: si no es API, devolver React index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
-})
+
 app.use(unknownEndpoint)
 app.use(errorHandler)
 
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
+})
 
 module.exports = app
