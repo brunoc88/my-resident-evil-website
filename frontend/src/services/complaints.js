@@ -1,8 +1,7 @@
-import axios from 'axios'
 import { getToken } from "./token"
 import handleAxiosError from '../utils/handleAxiosError'
+import api from './api'
 
-const baseUrl = 'http://localhost:3000/denuncias'
 
 const makeComplaint = async (data) => {
     try {
@@ -13,7 +12,7 @@ const makeComplaint = async (data) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.post(`${baseUrl}`, data, config)
+        const res = await api.post(`denuncias`, data, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)
@@ -29,7 +28,7 @@ const getComplaits = async () => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.get(`${baseUrl}/`, config)
+        const res = await api.get(`denuncias/`, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)
@@ -45,7 +44,7 @@ const deleteComplaint = async (id) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.patch(`${baseUrl}/${id}/resolver`, {}, config)
+        const res = await api.patch(`denuncias/${id}/resolver`, {}, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)

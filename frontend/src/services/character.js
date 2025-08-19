@@ -1,8 +1,7 @@
-import axios from 'axios'
 import { getToken } from "./token"
 import handleAxiosError from '../utils/handleAxiosError'
+import api from './api'
 
-const baseUrl = 'http://localhost:3000/personaje'
 
 
 const characterPost = async (data) => {
@@ -14,7 +13,7 @@ const characterPost = async (data) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.post(`${baseUrl}/alta`, data, config)
+        const res = await api.post(`personaje/alta`, data, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)
@@ -30,7 +29,7 @@ const sendLike = async (id) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.patch(`${baseUrl}/${id}/like`, {}, config)
+        const res = await api.patch(`personaje/${id}/like`, {}, config)
         return res.data
 
     } catch (error) {
@@ -47,7 +46,7 @@ const sendUnlike = async (id) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.patch(`${baseUrl}/${id}/unlike`, {}, config)
+        const res = await api.patch(`personaje/${id}/unlike`, {}, config)
         return res.data
 
     } catch (error) {
@@ -64,7 +63,7 @@ const getComments = async (id) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.get(`${baseUrl}/${id}/comentarios`, config)
+        const res = await api.get(`personaje/${id}/comentarios`, config)
         return res.data
 
     } catch (error) {
@@ -81,7 +80,7 @@ const postComment = async (id, data) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.post(`${baseUrl}/${id}/comentario`, data, config)
+        const res = await api.post(`personaje/${id}/comentario`, data, config)
         return res.data
 
     } catch (error) {
@@ -98,7 +97,7 @@ const deleteCommentById = async (id, idComentario) => {
             headers: { Authorization: token }
         }
         
-        const res = await axios.patch(`${baseUrl}/${id}/comentario/${idComentario}`, {}, config)
+        const res = await api.patch(`personaje/${id}/comentario/${idComentario}`, {}, config)
         return res.data 
 
     } catch (error) {
@@ -115,7 +114,7 @@ const editCommentById = async (id, idComentario, data) => {
             headers: { Authorization: token }
         }
         
-        const res = await axios.put(`${baseUrl}/${id}/comentario/${idComentario}`, data, config)
+        const res = await api.put(`personaje/${id}/comentario/${idComentario}`, data, config)
         return res.data 
 
     } catch (error) {
@@ -132,7 +131,7 @@ const deleteCharacterById = async (id) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.patch(`${baseUrl}/eliminar/${id}/`, {}, config)
+        const res = await api.patch(`personaje/eliminar/${id}/`, {}, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)
@@ -148,7 +147,7 @@ const editCharacterById = async (id, data) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.put(`${baseUrl}/editar/${id}/`, data, config)
+        const res = await api.put(`personaje/editar/${id}/`, data, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)
@@ -157,7 +156,7 @@ const editCharacterById = async (id, data) => {
 // rutas publica
 const characterList = async () => {
     try {
-        const res = await axios.get(`${baseUrl}/all`)
+        const res = await api.get(`personaje/all`)
         return res.data
     } catch (error) {
         handleAxiosError(error)
@@ -166,7 +165,7 @@ const characterList = async () => {
 
 const getCharacterById = async (id) => {
     try {
-        const res = await axios.get(`${baseUrl}/${id}`)
+        const res = await api.get(`personaje/${id}`)
         return res.data
     } catch (error) {
         handleAxiosError(error)

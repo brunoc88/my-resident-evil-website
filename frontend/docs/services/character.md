@@ -9,24 +9,16 @@ Este archivo contiene funciones para interactuar con el backend relacionadas con
 ## 🧹 Importaciones
 
 ```js
-import axios from 'axios'
 import { getToken } from './token'
 import handleAxiosError from '../utils/handleAxiosError'
+import api from './api'
 ```
-- `axios`: Para realizar llamadas HTTP.
 - `getToken`: Función que obtiene el token de autenticación del usuario.
 - `handleAxiosError`: Función auxiliar para manejar errores de Axios.
+- `api`: Instancia central de axios.
 
 ---
 
-## 🔹 Variables
-
-```js
-const baseUrl = 'http://localhost:3000/personaje'
-```
-- `baseUrl`: URL base del backend para la entidad personajes.
-
----
 
 ## 🔄 Funciones
 

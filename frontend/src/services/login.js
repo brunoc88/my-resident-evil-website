@@ -1,16 +1,14 @@
-import axios from 'axios'
 import handleAxiosError from '../utils/handleAxiosError'
-const baseUrl = 'http://localhost:3000/'
+import api from './api'
 
 const login = async ({ user, password }) => {
   try {
-    const res = await axios.post(baseUrl, { user, password })
+    const res = await api.post('',{ user, password })
     return res.data
   } catch (error) {
     // Aquí extraemos el mensaje que vino del backend, sea error o mensaje
     handleAxiosError(error)
   }
 }
-
 
 export default login

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { applyToken } from '../services/token'
 import { clearToken } from '../services/token'
 import { myProfile } from '../services/user'
+import { setLogoutCallback } from '../services/api'
 
 const AuthContext = createContext()
 
@@ -43,6 +44,9 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token])
 
+  useEffect(() => {
+    setLogoutCallback(handleLogout);
+  }, []);
 
 
   const handleLogout = () => {

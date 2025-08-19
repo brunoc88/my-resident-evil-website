@@ -9,24 +9,15 @@ Función que permite que un usuario se autentique en el sistema.
 ## 🧹 Importaciones 
 
 ```js
-import axios from 'axios'
 import handleAxiosError from '../utils/handleAxiosError'
+import api from './api'
 ```
 
-- `axios` Librería para realizar llamadas al backend.
+- `api` Instancia central de axios.
 - `handleAxiosError` Función auxiliar para manejar los errores que provienen del backend.
 
 ---
 
-## Variables
-
-```js
-const baseUrl = 'http://localhost:3000/'
-```
-
-- `baseUrl` Ruta del servidor backend. Durante desarrollo se utiliza localhost.
-
----
 
 ## 🔄 Lógica
 
@@ -35,7 +26,7 @@ const baseUrl = 'http://localhost:3000/'
 ```js
 const login = async ({ user, password }) => {
   try {
-    const res = await axios.post(baseUrl, { user, password })
+    const res = await api.post('',{ user, password })
     return res.data
   } catch (error) {
     // Aquí extraemos el mensaje que vino del backend, sea error o mensaje

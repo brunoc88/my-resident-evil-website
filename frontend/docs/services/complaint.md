@@ -10,24 +10,16 @@ Este archivo contiene funciones para interactuar con el backend relacionadas con
 ## 🧹 Importaciones
 
 ```js
-import axios from 'axios'
 import { getToken } from "./token"
 import handleAxiosError from '../utils/handleAxiosError'
+import api from './api'
 ```
-- `axios`: Para realizar llamadas HTTP.
 - `getToken`: Función que obtiene el token de autenticación del usuario.
 - `handleAxiosError`: Función auxiliar para manejar errores de Axios.
+- `api`: Instancia central de axios.
 
 ---
 
-## 🔹 Variables
-
-```js
-const baseUrl = 'http://localhost:3000/denuncias'
-```
-- `baseUrl`: URL base del backend para la entidad denuncias. En desarrollo apunta a `localhost`.
-
----
 
 ## 🔄 Funciones
 
@@ -42,7 +34,7 @@ const makeComplaint = async (data) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.post(`${baseUrl}`, data, config)
+        const res = await api.post(`denuncias`, data, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)
@@ -65,7 +57,7 @@ const getComplaits = async () => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.get(`${baseUrl}/`, config)
+        const res = await api.get(`denuncias/`, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)
@@ -88,7 +80,7 @@ const deleteComplaint = async (id) => {
             headers: { Authorization: token }
         }
 
-        const res = await axios.patch(`${baseUrl}/${id}/resolver`, {}, config)
+        const res = await api.patch(`denuncias/${id}/resolver`, {}, config)
         return res.data
     } catch (error) {
         handleAxiosError(error)
