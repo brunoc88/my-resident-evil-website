@@ -60,7 +60,7 @@ const MessageList = () => {
         return (
             <div className={styles.inbox}>
                 <h1>Bandeja de entrada</h1>
-                <p>No tiene mensajes!</p>
+                <p className="list-container">No tiene mensajes!</p>
             </div>
         )
     }

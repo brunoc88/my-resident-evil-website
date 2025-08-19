@@ -4,7 +4,7 @@ let logoutCallback = null
 
 export const setLogoutCallback = (callback) => {
   logoutCallback = callback
-};
+}
 
 // Instancia central de axios
 const api = axios.create({
