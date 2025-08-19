@@ -28,7 +28,6 @@ mongoose.connect(MONGODB_URI)
     })
 
 // middlewares
-app.use(express.static(path.join(__dirname, 'dist')));
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
 app.use(cors())
 app.use(express.json())
@@ -43,10 +42,6 @@ app.use('/', loginRouter)
 app.use('/user', userRouter)
 app.use('/personaje', personajeRouter)
 app.use('/denuncias', denunciasRouter)
-
-app.use((req, res) => {
-  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
-})
 
 
 app.use(unknownEndpoint)
