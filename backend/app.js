@@ -28,6 +28,7 @@ mongoose.connect(MONGODB_URI)
     })
 
 // middlewares
+app.use(express.static('dist'))
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')))
 app.use(cors())
 app.use(express.json())
