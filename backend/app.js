@@ -44,10 +44,6 @@ app.use('/user', userRouter)
 app.use('/personaje', personajeRouter)
 app.use('/denuncias', denunciasRouter)
 
-// SPA fallback
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
-})
 
 app.use(unknownEndpoint)
 app.use(errorHandler)
