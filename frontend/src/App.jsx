@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import LayOut from "./components/LayOut"
 import Login from "./pages/Login"
 import UserForm from "./pages/user/UserForm"
@@ -27,6 +27,9 @@ const App = () => {
     <>
       <Routes>
         <Route path="/" element={<LayOut />}>
+          {/* Redirige la raíz al índice de personajes */}
+          <Route index element={<Navigate to="personajes/index" replace />} />
+
           {/* Rutas publicas */}
           <Route path="login" element={<Login />} />
           <Route path="registro" element={<UserForm />} />
@@ -41,24 +44,24 @@ const App = () => {
           {/* Rutas protegidas */}
           <Route path="user/" element={<ProtectedRoutes />}>
             <Route path="editar" element={<UserForm />} />
-            <Route path="miPerfil" element={<Profile/>}/>
-            <Route path="perfil/:userName" element={<Profile/>}/>
-            <Route path="followList" element={<FollowList/>}/>
-            <Route path="bloqueados" element={<BlockList/>}/>
-            <Route path="baneados" element={<BannedList/>}/>
-            <Route path="buscar" element={<Searching/>}/>
-            <Route path="mensajes/resumen" element={<MessageList/>}/>
-            <Route path="mensajes/:id" element={<Message/>}/>
+            <Route path="miPerfil" element={<Profile />} />
+            <Route path="perfil/:userName" element={<Profile />} />
+            <Route path="followList" element={<FollowList />} />
+            <Route path="bloqueados" element={<BlockList />} />
+            <Route path="baneados" element={<BannedList />} />
+            <Route path="buscar" element={<Searching />} />
+            <Route path="mensajes/resumen" element={<MessageList />} />
+            <Route path="mensajes/:id" element={<Message />} />
           </Route>
           <Route path="personajes/" element={<ProtectedRoutes />}>
             <Route path="registro" element={<CharacterForm />} />
-            <Route path="editar/:id" element={<CharacterForm editMode = {true} />} />
+            <Route path="editar/:id" element={<CharacterForm editMode={true} />} />
           </Route>
           <Route path="denuncias/" element={<ProtectedRoutes />}>
-            <Route path="lista" element={<ComplaintLinst/>}/>
-            <Route path="info/:id" element={<ComplaintInfo/>}/>
-            <Route path="crear/usuario/:userName/:id" element={<Complaint/>}/>
-            <Route path="crear/personaje/:personaje/:id" element={<Complaint/>}/>
+            <Route path="lista" element={<ComplaintLinst />} />
+            <Route path="info/:id" element={<ComplaintInfo />} />
+            <Route path="crear/usuario/:userName/:id" element={<Complaint />} />
+            <Route path="crear/personaje/:personaje/:id" element={<Complaint />} />
           </Route>
           {/* Ruta 404 fuera del layout */}
           <Route path="*" element={<NotFound />} />
